@@ -9,6 +9,9 @@
 cmake_minimum_required( VERSION 3.0 )
 project(BacktraceException VERSION 0.1 LANGUAGES CXX)
 
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(BUILD_STATIC_LIBS "Build static libraries" ON)
+
 #Modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
 
@@ -20,26 +23,15 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 set(GCC_WARN_FLAGS "-W -Wall -Wextra -Werror -Wno-unused-parameter")
-set(GCC_STD_FLAGS "-std=c++11")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_WARN_FLAGS} ${GCC_STD_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_WARN_FLAGS}")
 
-if(${CMAKE_BUILD_TYPE} MATCHES Debug)
-    add_definitions(-DDEBUG)
-else()
-    add_definitions(-DNDEBUG)
-endif()
-set(CMAKE_DEBUG_POSTFIX ".debug" CACHE STRING "Debug file extension")
+set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG> $<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
+
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb -O2")
-#Release compiler options
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-if(${CMAKE_BUILD_TYPE} MATCHES Debug)
-    set(BacktraceException_DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
-else()
-    set(BacktraceException_DEBUG_POSTFIX "")
-endif()
-message(STATUS "[BacktraceException] DebugPostfix: ${BacktraceException_DEBUG_POSTFIX}")
+set(CMAKE_DEBUG_POSTFIX ".debug" CACHE STRING "Debug file extension") #Add debug postfix to libraries built in debug mode
 
-include(BacktraceException-PackageConfig) #Configure Package-Config and associated files for cmake exports
+include(PackageConfig) #Configure Package-Config and associated files for cmake exports
 
 add_subdirectory(src)

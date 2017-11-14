@@ -2,20 +2,28 @@
 # BacktraceException
 #
 
-set(BE_HDRS BacktraceException.h)
+set(HDRS BacktraceException.h)
 
-set(BE_SRCS BacktraceException.cpp)
+set(SRCS BacktraceException.cpp)
 
-add_library(BEObjects OBJECT ${BE_SRCS})
-set_target_properties(BEObjects PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-add_library(BEStatic STATIC $<TARGET_OBJECTS:BEObjects>)
-set_target_properties(BEStatic PROPERTIES OUTPUT_NAME BacktraceException_static)
-add_library(BEShared SHARED $<TARGET_OBJECTS:BEObjects>)
-set_target_properties(BEShared PROPERTIES OUTPUT_NAME BacktraceException)
-set_target_properties(BEStatic BEShared PROPERTIES PUBLIC_HEADER "${BE_HDRS}")
+if(BUILD_SHARED_LIBS)
+    add_library(${PROJECT_NAME} SHARED ${SRCS})
+    set(LIB_TARGETS ${PROJECT_NAME})
+endif()
 
+if(BUILD_STATIC_LIBS)
+    add_library(${PROJECT_NAME}_static STATIC ${SRCS})
+    set(LIB_TARGETS ${LIB_TARGETS} ${PROJECT_NAME}_static)
+    set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+endif()
+message(STATUS "LIB_TARGETS=${LIB_TARGETS}")
+foreach(target ${LIB_TARGETS})
+    target_compile_features(${target} PUBLIC cxx_std_11) #Declare C++11 required for building
+    set_target_properties(${target} PROPERTIES PUBLIC_HEADER "${HDRS}")
+    target_include_directories(${target} INTERFACE $<INSTALL_INTERFACE:include/${PROJECT_NAME}>)
+endforeach()
 
-install(TARGETS BEStatic BEShared EXPORT ${EXPORT_TARGETS_NAME}
+install(TARGETS ${LIB_TARGETS} EXPORT ${EXPORT_TARGETS_NAME}
         LIBRARY DESTINATION lib COMPONENT Runtime
         ARCHIVE DESTINATION lib COMPONENT Development
         PUBLIC_HEADER DESTINATION include/${PROJECT_NAME} COMPONENT Development)
