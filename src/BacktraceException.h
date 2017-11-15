@@ -30,7 +30,7 @@ public:
     */
     BacktraceException(std::string condition, std::string what);
     virtual const char* condition() const noexcept;
-    virtual const char* what() const noexcept;
+    const char* what() const noexcept override;
     virtual const char* backtrace() const noexcept;
     static std::string print_backtrace(); 
 protected:

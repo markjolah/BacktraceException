@@ -6,7 +6,7 @@
 # https://www.apache.org/licenses/LICENSE-2.0
 # See: LICENCE file
 
-cmake_minimum_required( VERSION 3.0 )
+cmake_minimum_required( VERSION 3.3 )
 project(BacktraceException VERSION 0.1 LANGUAGES CXX)
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
@@ -22,15 +22,17 @@ elseif(UNIX AND NOT APPLE)
     add_definitions( -DLINUX )
 endif()
 
-set(GCC_WARN_FLAGS "-W -Wall -Wextra -Werror -Wno-unused-parameter")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_WARN_FLAGS}")
-
-set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG> $<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
-
+# CFLAGS ##
+add_compile_options(-W -Wall -Wextra -Werror -Wno-unused-parameter)
+if(${CMAKE_BUILD_TYPE} MATCHES Debug)
+    add_definitions(-DDEBUG)
+elseif()
+    add_definitions(-DNDEBUG)
+endif()
+set(CMAKE_DEBUG_POSTFIX ".debug" CACHE STRING "Debug file extension")
 set(CMAKE_CXX_FLAGS_DEBUG "-ggdb -O2")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2")
-
-set(CMAKE_DEBUG_POSTFIX ".debug" CACHE STRING "Debug file extension") #Add debug postfix to libraries built in debug mode
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-ggdb -O3")
 
 include(PackageConfig) #Configure Package-Config and associated files for cmake exports
 
