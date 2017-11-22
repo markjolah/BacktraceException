@@ -8,12 +8,18 @@
 
 cmake_minimum_required( VERSION 3.3 )
 project(BacktraceException VERSION 0.1 LANGUAGES CXX)
+cmake_policy(SET CMP0054 NEW) #Don't derrefernce in if() statements
+cmake_policy(SET CMP0022 NEW) #LINK_INTERFACE_LIBRARIES fix
+
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_STATIC_LIBS "Build static libraries" ON)
 
 #Modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
+
+find_package(Boost REQUIRED COMPONENTS iostreams)
+
 
 # Compiler Definitions
 if (WIN32)

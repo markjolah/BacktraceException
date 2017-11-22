@@ -16,8 +16,10 @@ if(BUILD_STATIC_LIBS)
     set(LIB_TARGETS ${LIB_TARGETS} ${PROJECT_NAME}_static)
     set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 endif()
+
 foreach(target ${LIB_TARGETS})
     target_compile_features(${target} PUBLIC cxx_std_11) #Declare C++11 required for building
+    target_link_libraries(${target} PUBLIC Boost::iostreams)
     set_target_properties(${target} PROPERTIES PUBLIC_HEADER "${HDRS}")
     target_include_directories(${target} INTERFACE $<INSTALL_INTERFACE:include>)
 endforeach()
