@@ -19,7 +19,7 @@ endif()
 
 foreach(target ${LIB_TARGETS})
     target_compile_features(${target} PUBLIC cxx_std_11) #Declare C++11 required for building
-    target_link_libraries(${target} PUBLIC Boost::iostreams)
+    target_link_libraries(${target} PRIVATE Boost::iostreams)
     set_target_properties(${target} PROPERTIES PUBLIC_HEADER "${HDRS}")
     target_include_directories(${target} INTERFACE $<INSTALL_INTERFACE:include>)
 endforeach()
