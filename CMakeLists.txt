@@ -7,7 +7,7 @@
 # See: LICENCE file
 
 cmake_minimum_required( VERSION 3.3 )
-project(BacktraceException VERSION 0.1 LANGUAGES CXX)
+project(BacktraceException VERSION 0.2 LANGUAGES CXX)
 cmake_policy(SET CMP0054 NEW) #Don't derrefernce in if() statements
 cmake_policy(SET CMP0022 NEW) #LINK_INTERFACE_LIBRARIES fix
 

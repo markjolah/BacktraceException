@@ -26,6 +26,24 @@
 namespace io = boost::iostreams; //Namespace alias
 
 namespace backtrace_exception {
+
+static bool _backtraces_enabled = true;
+    
+void disable_backtraces()
+{
+    _backtraces_enabled = false;
+}
+
+void enable_backtraces()
+{
+    _backtraces_enabled = true;
+}
+
+bool backtraces_enabled()
+{    
+    return _backtraces_enabled;
+}
+    
     
 #if !defined(WIN32)
 namespace linux_debug {
@@ -92,6 +110,8 @@ BacktraceException::BacktraceException(std::string condition, std::string what) 
 
 std::string BacktraceException::print_backtrace()
 {
+    if(!backtraces_enabled()) return "Backtraces currently disabled";
+    
 #if defined (DEBUG) && !defined (WIN32)    
 //Linux -rdynamic symbols available.  Make as pretty as possible
     return linux_debug::print_trace_gdb();

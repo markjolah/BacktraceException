@@ -14,6 +14,10 @@
 
 namespace backtrace_exception {
 
+void disable_backtraces();
+void enable_backtraces();
+bool backtraces_enabled();
+    
 /** @brief Extension of std::exception that produces saved backtraces for debugging
  * 
  * 
@@ -23,9 +27,9 @@ class BacktraceException : public std::exception
 public:
     BacktraceException(std::string what);
 
-    /** @brief Create a BacktraceException with specifed condition
+    /** @brief Create a BacktraceException with specified condition
     * 
-    * @param condtion A string further classifying the error condition 
+    * @param condition A string further classifying the error condition 
     * @param what A general string describing the error condition.
     */
     BacktraceException(std::string condition, std::string what);
