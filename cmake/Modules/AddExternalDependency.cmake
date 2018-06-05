@@ -14,12 +14,11 @@
 # be quickly built on systems where the ExternalProject is already installed.
 #
 # useage: AddExternalDependency(<package-name> <package-git-clone-url> [SHARED] [STATIC])
-#cmake_policy(SET CMP0057 NEW)
 
 set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "Path of AddExternalDependency.cmake")
 
 macro(add_external_dependency)
-    cmake_parse_arguments(_ExtProject_ "SHARED;STATIC" "NAME;URL;INSTALL_PREFIX;CMAKELISTS_TEMPLATE" "" ${ARGN})
+    cmake_parse_arguments(_ExtProject "SHARED;STATIC" "NAME;URL;INSTALL_PREFIX;CMAKELISTS_TEMPLATE" "" ${ARGN})
     if(NOT _ExtProject_NAME)
         message(FATAL_ERROR "No package name given")
     endif()
@@ -38,7 +37,7 @@ macro(add_external_dependency)
     endif()
         
     find_package(${_ExtProject_NAME} CONFIG)
-    string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+    string(TOUPPER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
     if(NOT ${_ExtProject_NAME}_FOUND OR (${_ExtProject_NAME}_BUILD_TYPES AND (NOT ${BUILD_TYPE} IN_LIST ${_ExtProject_NAME}_BUILD_TYPES )))
         set(_ExtProject_Dir ${CMAKE_BINARY_DIR}/External/${_ExtProject_NAME})
         message(STATUS "[add_external_dependency] Not found: ${_ExtProject_NAME}")
