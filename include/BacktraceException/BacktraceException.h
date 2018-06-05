@@ -1,13 +1,12 @@
 /** @file BacktraceException.h
  * @author Mark J. Olah (mjo\@cs.unm DOT edu)
- * @date 2017
+ * @date 2017 - 2018
  * @copyright Licensed under the Apache License, Version 2.0.  See LICENSE file.
  * @brief BacktraceException class declaration and inline member functions
  *
  */
 
-#ifndef _BACKTRACE_EXCEPTION_BACKTRACEEXCEPTION_H
-#define _BACKTRACE_EXCEPTION_BACKTRACEEXCEPTION_H
+#pragma once
 
 #include <exception>
 #include <string>
@@ -57,5 +56,3 @@ const char* BacktraceException::backtrace() const noexcept
 
     
 } /* namespace backtrace_exception */
-
-#endif /* _BACKTRACE_EXCEPTION_BACKTRACEEXCEPTION_H */

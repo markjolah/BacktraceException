@@ -1,0 +1,33 @@
+# External.CMakeLists.txt.in
+#
+# Template to generate a CMAKE project in the build tree that will download config build and install
+# an external project dependency to CMAKE_INSTALL_PREFIX using ExternalProject_Add
+#
+cmake_minimum_required(VERSION 2.8.2)
+
+project(@_ExtProject_NAME@-External NONE)
+
+include(ExternalProject)
+
+set(CMAKE_ARGS -DCMAKE_CXX_COMPILER=@CMAKE_CXX_COMPILER@
+               -DCMAKE_INSTALL_PREFIX=@CMAKE_INSTALL_PREFIX@
+               -DCMAKE_TOOLCHAIN_FILE=@CMAKE_TOOLCHAIN_FILE@
+               -DBUILD_SHARED_LIBS=@_ExtProject_SHARED@
+               -DBUILD_STATIC_LIBS=@_ExtProject_STATIC@)
+
+include(ProcessorCount)
+ProcessorCount(NUM_PROCS)
+set(INSTALL_COMMAND  @CMAKE_COMMAND@ --build . --target install -- -j${NUM_PROCS})
+
+# CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 --- Causes the external project not to add itself to the build repository
+ExternalProject_Add(@_ExtProject_NAME@
+    GIT_REPOSITORY @_ExtProject_URL@
+    GIT_TAG master
+    GIT_SHALLOW 1
+    GIT_PROGRESS 0
+    SOURCE_DIR @_ExtProject_Dir@/@CMAKE_BUILD_TYPE@/source
+    BINARY_DIR @_ExtProject_Dir@/@CMAKE_BUILD_TYPE@/build
+    INSTALL_DIR @_ExtProject_INSTALL_PREFIX@
+    CMAKE_ARGS ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=@CMAKE_BUILD_TYPE@ -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=1
+    INSTALL_COMMAND ${INSTALL_COMMAND}
+    )

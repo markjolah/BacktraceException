@@ -1,30 +1,27 @@
-#
-# BacktraceException
-#
+# BacktraceException/src
+# Main CMake for BacktraceException libraries
 
-set(HDRS BacktraceException.h)
 
 set(SRCS BacktraceException.cpp)
+set(PUBLIC_HEADER_SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/../include)
 
-if(BUILD_SHARED_LIBS)
-    add_library(${PROJECT_NAME} SHARED ${SRCS})
-    set(LIB_TARGETS ${PROJECT_NAME})
-endif()
-
-if(BUILD_STATIC_LIBS)
-    add_library(${PROJECT_NAME}_static STATIC ${SRCS})
-    set(LIB_TARGETS ${LIB_TARGETS} ${PROJECT_NAME}_static)
-    set_target_properties(${PROJECT_NAME}_static PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
-endif()
+include(AddSharedStaticLibraries)
+add_shared_static_libraries("${SRCS}" BacktraceException) 
 
 foreach(target ${LIB_TARGETS})
-    target_compile_features(${target} PUBLIC cxx_std_11) #Declare C++11 required for building
-    target_link_libraries(${target} PRIVATE Boost::iostreams)
-    set_target_properties(${target} PROPERTIES PUBLIC_HEADER "${HDRS}")
-    target_include_directories(${target} INTERFACE $<INSTALL_INTERFACE:include>)
+    target_compile_features(${target} PUBLIC cxx_std_11)
+    target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${PUBLIC_HEADER_SRC_DIR}> 
+                                                $<INSTALL_INTERFACE:include>)
+    target_link_libraries(${target} PUBLIC Boost::iostreams)
+    if(WIN32)
+        target_compile_definitions(${target} PRIVATE WIN32)
+    elseif(UNIX AND NOT APPLE)
+        target_compile_definitions(${target} PRIVATE LINUX)
+    endif()
 endforeach()
 
-install(TARGETS ${LIB_TARGETS} EXPORT ${EXPORT_TARGETS_NAME}
+install(TARGETS ${LIB_TARGETS} EXPORT ${PROJECT_NAME}Targets
         LIBRARY DESTINATION lib COMPONENT Runtime
-        ARCHIVE DESTINATION lib COMPONENT Development
-        PUBLIC_HEADER DESTINATION include/${PROJECT_NAME} COMPONENT Development)
+        ARCHIVE DESTINATION lib COMPONENT Development)
+
+install(DIRECTORY ${PUBLIC_HEADER_SRC_DIR}/ DESTINATION include COMPONENT Development)

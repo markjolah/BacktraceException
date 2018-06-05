@@ -1,16 +1,18 @@
 /** @file BacktraceException.cpp
  * @author Mark J. Olah (mjo\@cs.unm DOT edu)
- * @date 2017
+ * @date 2017 - 2018
  * @copyright Licensed under the Apache License, Version 2.0.  See LICENSE file.
  * @brief BacktraceException class member function definitions
  *
  */
 
-#include "BacktraceException.h"
+#include "BacktraceException/BacktraceException.h"
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
+
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/stream_buffer.hpp>
 
@@ -23,11 +25,15 @@
 
 #endif
 
-namespace io = boost::iostreams; //Namespace alias
+namespace io = boost::iostreams;
 
 namespace backtrace_exception {
 
+#ifdef NDEBUG
+static bool _backtraces_enabled = false;
+#else
 static bool _backtraces_enabled = true;
+#endif
     
 void disable_backtraces()
 {
@@ -110,23 +116,14 @@ BacktraceException::BacktraceException(std::string condition, std::string what) 
 
 std::string BacktraceException::print_backtrace()
 {
-    if(!backtraces_enabled()) return "Backtraces currently disabled";
-    
-#if defined (DEBUG) && !defined (WIN32)    
-//Linux -rdynamic symbols available.  Make as pretty as possible
+#if defined (DEBUG) && defined (LINUX)    
+    if(!backtraces_enabled()) return "Backtraces temporarily disabled.";
     return linux_debug::print_trace_gdb();
-#elif defined(LINUX) && !defined (WIN32)
-//Linux no -rdynamic symbols available
-    return linux_debug::print_trace_gdb();    
-#elif defined (DEBUG) && defined (WIN32)
-//Windows debug
-    return "WIN32 Backtrace Not Implemented";
-#elif defined (WIN32)
-//Windows
-    return "WIN32 Backtrace Not Implemented";
+#elif defined(WIN32)
+    return "Backtraces not implemented.";
+#else
+    return "Backtraces permanently disabled.";
 #endif 
 }
-
-
     
 } /* namespace backtrace_exception */

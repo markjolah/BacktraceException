@@ -1,0 +1,34 @@
+@PACKAGE_INIT@
+
+#Include targets file.  This will create IMPORTED target @PROJECT_NAME@
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_TARGETS_NAME@.cmake")
+check_required_components("@PROJECT_NAME@")
+
+
+include(CMakeFindDependencyMacro)
+# find_dependency is broken for COMPONENTS: https://gitlab.kitware.com/cmake/cmake/issues/17583
+# Attempt to use find_package here instead until a find_dependency is fixed
+#find_dependency(Boost COMPONENTS iostreams)
+find_package(Boost COMPONENTS iostreams REQUIRED)
+
+#Single-library package with eponymous library with static and shared build options
+#Sets:
+# @PROJECT_NAME@_LIBRARIES (set to shared libs if available)
+# @PROJECT_NAME@_SHARED_LIBRARIES
+# @PROJECT_NAME@_STATIC_LIBRARIES
+# @PROJECT_NAME@_BUILD_TYPES
+
+set(@PROJECT_NAME@_LIBRARIES @PROJECT_NAME@::@PROJECT_NAME@)
+set(@PROJECT_NAME@_SHARED_LIBRARIES)
+set(@PROJECT_NAME@_STATIC_LIBRARIES)
+if(@BUILD_SHARED_LIBS@)
+    set(@PROJECT_NAME@_SHARED_LIBRARIES @PROJECT_NAME@::@PROJECT_NAME@)
+    if(@BUILD_STATIC_LIBS@)
+        set(@PROJECT_NAME@_STATIC_LIBRARIES @PROJECT_NAME@::@PROJECT_NAME@_STATIC)
+    endif()
+else()
+    set(@PROJECT_NAME@_STATIC_LIBRARIES @PROJECT_NAME@::@PROJECT_NAME@)
+endif()
+
+get_target_property(BUILD_TYPES @PROJECT_NAME@::@PROJECT_NAME@ IMPORTED_CONFIGURATIONS)
+set(@PROJECT_NAME@_BUILD_TYPES ${BUILD_TYPES})
