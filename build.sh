@@ -9,6 +9,6 @@ rm -rf $INSTALL_PATH $BUILD_PATH
 set -e
 
 cmake -H. -B$BUILD_PATH/Debug -DCMAKE_BUILD_TYPE=Debug ${COMMON_ARGS}
-cmake -H. -B$BUILD_PATH/Release -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 -DCMAKE_BUILD_TYPE=Release ${COMMON_ARGS}
+cmake -H. -B$BUILD_PATH/Release -DCMAKE_BUILD_TYPE=Release ${COMMON_ARGS}
 cmake --build $BUILD_PATH/Debug --target install -- -j${NUM_PROCS}
 cmake --build $BUILD_PATH/Release --target install -- -j${NUM_PROCS}
