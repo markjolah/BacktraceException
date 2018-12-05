@@ -19,19 +19,15 @@ endif ()
 message(STATUS "OPTION: BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 message(STATUS "OPTION: BUILD_STATIC_LIBS: ${BUILD_STATIC_LIBS}")
 
-#Modules
-list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake/Modules)
+#Add UcommonCmakeModules git subpreo to path.
+list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake/UncommonCmakeModules)
 
 ### Dependencies
 find_package(Boost REQUIRED COMPONENTS iostreams)
 
 # CFLAGS ##
-add_compile_options($<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:GNU>>:-O0>)
-add_compile_options($<$<CONFIG:Debug>:-W>)
-add_compile_options($<$<CONFIG:Debug>:-Wall>)
-add_compile_options($<$<CONFIG:Debug>:-Wextra>)
-
-set(CMAKE_DEBUG_POSTFIX ".debug" CACHE STRING "Debug file extension")
+#Configure standard CFlags and definitions for debug builds
+include(ConfigureDebugBuilds)
 
 ### PackageConfig Exports
 include(ExportPackageWizzard)

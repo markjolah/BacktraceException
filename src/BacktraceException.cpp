@@ -69,7 +69,12 @@ namespace linux_debug {
         return ""; //Too big to handle.  Should never get here.
     }
 
-
+    //TODO use backtrace()
+    //Reference: https://sourceware.org/git/?p=glibc.git;a=blob;f=debug/segfault.c;hb=HEAD
+//     std::string print_trace_backtrace()
+//     {
+//     }
+//
     std::string print_trace_gdb() 
     {
         auto pid = std::to_string(getpid());
@@ -116,7 +121,7 @@ BacktraceException::BacktraceException(std::string condition, std::string what) 
 
 std::string BacktraceException::print_backtrace()
 {
-#if defined (DEBUG) && defined (LINUX)    
+#if defined (LINUX)
     if(!backtraces_enabled()) return "Backtraces temporarily disabled.";
     return linux_debug::print_trace_gdb();
 #elif defined(WIN32)
