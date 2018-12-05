@@ -82,7 +82,7 @@ set(_WIZ_PACKAGE_CONFIG_FILE ${_WIZ_NAME}Config.cmake) #<Package>Config.cmake na
 set(_WIZ_VERSION_CONFIG_FILE ${_WIZ_NAME}ConfigVersion.cmake)
 
 if(NOT _WIZ_DISABLE_BUILD_EXPORT)
-    set(_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE ${_WIZ_NAME}Config-install.cmake) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
+    set(_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE ${_WIZ_NAME}Config.cmake.install_tree) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
 else()
     set(_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE ${_WIZ_PACKAGE_CONFIG_FILE}) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
 endif()
