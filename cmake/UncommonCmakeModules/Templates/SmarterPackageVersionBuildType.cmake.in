@@ -1,0 +1,3 @@
+# Generated PackageConfigVersionBuildType-<BUILD_TYPE>.cmake by SmarterPackageVersionFile.cmake
+#
+list(APPEND PACKAGE_BUILD_TYPES @_SVF_EXPORTED_BUILD_TYPES@)

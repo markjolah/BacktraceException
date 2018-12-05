@@ -1,0 +1,18 @@
+# Generated PackageConfigVersion.cmake by SmarterPackageVersionFile.cmake
+# For BUILD_TYPE_COMPATABILITY=Exact
+
+# Each configuration will provide a file named @PROJECT_NAME@ConfigVersionBuildType-<BUILD_TYPE>.cmake
+# which will append to variable PACKAGE_BUILD_TYPES.
+set(PACKAGE_BUILD_TYPES)
+file(GLOB CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
+foreach(f ${CONFIG_FILES})
+  include(${f})
+endforeach()
+
+if(NOT ${CMAKE_BUILD_TYPE} IN_LIST ${PACKAGE_BUILD_TYPES})
+   set(PACKAGE_VERSION "${PACKAGE_VERSION} [${PACKAGE_BUILD_TYPES}]")
+   set(PACKAGE_VERSION_UNSUITABLE TRUE)
+else()
+    include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionNumber.cmake") #Regular version number check
+endif()
+

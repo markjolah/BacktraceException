@@ -14,12 +14,15 @@
 # be quickly built on systems where the ExternalProject is already installed.
 #
 # useage: AddExternalDependency(<package-name> <package-git-clone-url> [SHARED] [STATIC])
+# Options:
+# SHARED - Require shared libraries.  Build them if not found. [default=ON]
+# STATIC - Require static libraries.  Build them if not found. [default=OFF]
+# Single-Value arguments:
 # NAME - [required] Name of PROJECT_NAME of the external cmake project
 # URL - URL of git repository or local path to git repository (can be overwritten with ${PROJECT_NAME}URL environment variable giving alternate URL
 # INSTALL_PREFIX - [optional] install location for package [defaults to CMAKE_INSTALL_PREFIX]
 # CMAKELISTS_TEMPLATE - [optional] Template file for the CMakeLists.txt to the building and installing via ExternalProject_Add [default: Templates/External.CMakeLists.txt.in]
-# SHARED - Require shared libraries.  Build them if not found. [default=ON]
-# STATIC - Require static libraries.  Build them if not found. [default=OFF]
+# BUILD_TYPE_COMPATABILITY - [optional] Default: Exact  Options: Exact, Any
 set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "Path of AddExternalDependency.cmake")
 
 macro(add_external_dependency)
@@ -41,6 +44,10 @@ macro(add_external_dependency)
         set(_ExtProject_URL $ENV{${_ExtProject_NAME}URL})
     endif()
 
+    if(NOT _ExtProject_BUILD_TYPE_COMPATABILITY)
+        set(_ExtProject_BUILD_TYPE_COMPATABILITY Exact)
+    endif()
+
     #Build shared libraries by default if neither SHARED or STATIC are set
     if(NOT _ExtProject_SHARED AND NOT _ExtProject_STATIC)
         set(_ExtProject_SHARED ON)
@@ -51,8 +58,8 @@ macro(add_external_dependency)
     if(NOT ${_ExtProject_NAME}_FOUND OR (${_ExtProject_NAME}_BUILD_TYPES AND (NOT ${BUILD_TYPE} IN_LIST ${_ExtProject_NAME}_BUILD_TYPES )))
         set(_ExtProject_Dir ${CMAKE_BINARY_DIR}/External/${_ExtProject_NAME})
         message(STATUS "[add_external_dependency] Not found: ${_ExtProject_NAME}")
-        if(${_ExtProject_NAME}_BUILD_TYPES AND (NOT ${BUILD_TYPE} IN_LIST ${_ExtProject_NAME}_BUILD_TYPES))
-            message(STATUS "[add_external_dependency] ${_ExtProject_NAME} Build types: {${${_ExtProject_NAME}_BUILD_TYPES}}; Does not satisfy current build type: ${BUILD_TYPE}.")
+        if(${_ExtProject_BUILD_TYPE_COMPATABILITY} STREQUAL Exact AND ${_ExtProject_NAME}_BUILD_TYPES AND (NOT ${BUILD_TYPE} IN_LIST ${_ExtProject_NAME}_BUILD_TYPES))
+            message(STATUS "[add_external_dependency] ${_ExtProject_NAME} Build types: {${${_ExtProject_NAME}_BUILD_TYPES}}; Does not provide current build type: ${BUILD_TYPE}.")
         endif()
         if(NOT _ExtProject_INSTALL_PREFIX)
             message(FATAL_ERROR "[add_external_dependency]  CMAKE_INSTALL_PREFIX is not set and INSTALL_PREFIX argument is not set."
@@ -85,29 +92,23 @@ macro(add_external_dependency)
         get_target_property(_ExtProject_Found_Location ${_ExtProject_NAME}::${_ExtProject_NAME} IMPORTED_LOCATION)
         message(STATUS "[add_external_dependency] Found:${_ExtProject_NAME} Ver:${${_ExtProject_NAME}_VERSION}")
     endif()
-    message(STATUS "FIND_PACKAGE_CONSIDERED_CONFIGS: ${${_ExtProject_NAME}_CONSIDERED_CONFIGS}")
-    message(STATUS "FIND_PACKAGE_CONSIDERED_VERSIONS: ${${_ExtProject_NAME}_CONSIDERED_VERSIONS}")
-    set(_Target "${${_ExtProject_NAME}_LIBRARIES}")
-    message(STATUS "[add_external_dependency] Main Imported Library Target: ${_Target}")
-    get_target_property(_VAR ${_Target} TYPE)
-    message(STATUS "[add_external_dependency] [${_Target}] TYPE: ${_VAR}")
 
-    get_target_property(_VAR ${_Target} IMPORTED_LOCATION_${BUILD_TYPE})
-    message(STATUS "[add_external_dependency] [${_Target}] IMPORTED_LOCATION_${BUILD_TYPE}: ${_VAR}")
-    get_target_property(_VAR ${_Target} IMPORTED_CONFIGURATIONS)
-    message(STATUS "[add_external_dependency] [${_Target}] IMPORTED_CONFIGURATIONS: ${_VAR}")
-    get_target_property(_VAR ${_Target} INTERFACE_INCLUDE_DIRECTORIES)
-    message(STATUS "[add_external_dependency] [${_Target}] INTERFACE_INCLUDE_DIRECTORIES: ${_VAR}")
-
-    get_target_property(_VAR ${_Target} INTERFACE_LINK_LIBRARIES)
-    message(STATUS "[add_external_dependency] [${_Target}] INTERFACE_LINK_LIBRARIES: ${_VAR}")
-    get_target_property(_VAR ${_Target} INTERFACE_LINK_DIRECTORIES)
-    message(STATUS "[add_external_dependency] [${_Target}] INTERFACE_LINK_DIRECTORIES: ${_VAR}")
-
-    get_target_property(_VAR ${_Target} INTERFACE_COMPILE_FEATURES)
-    message(STATUS "[add_external_dependency] [${_Target}] INTERFACE_COMPILE_FEATURES: ${_VAR}")
-    get_target_property(_VAR ${_Target} INTERFACE_COMPILE_OPTIONS)
-    message(STATUS "[add_external_dependency] [${_Target}] INTERFACE_COMPILE_OPTIONS: ${_VAR}")
-    get_target_property(_VAR ${_Target} INTERFACE_LINK_OPTIONS)
-    message(STATUS "[add_external_dependency] [${_Target}] INTERFACE_LINK_OPTIONS: ${_VAR}")
+    message(STATUS "[add_external_dependency]: FIND_PACKAGE_CONSIDERED_CONFIGS: ${${_ExtProject_NAME}_CONSIDERED_CONFIGS}")
+    message(STATUS "[add_external_dependency]: FIND_PACKAGE_CONSIDERED_VERSIONS: ${${_ExtProject_NAME}_CONSIDERED_VERSIONS}")
+    set(_ExtProject_Target "${${_ExtProject_NAME}_LIBRARIES}")
+    set(_ExtProject_Print_Properties TYPE IMPORTED_CONFIGURATIONS INTERFACE_INCLUDE_DIRECTORIES INTERFACE_LINK_LIBRARIES INTERFACE_LINK_DIRECTORIES INTERFACE_COMPILE_FEATURES)
+    set(_ExtProject_Config_Properties IMPORTED_LOCATION  IMPORTED_LINK_DEPENDENT_LIBRARIES IMPORTED_LINK_INTERFACE_LIBRARIES)
+    set(_ExtProject_Config_Types RELEASE DEBUG RELWITHDEBINFO MINSIZEREL)
+    foreach(_ExtProject_Config_prop IN LIST _ExtProject_Config_Properties)
+        foreach(_ExtProject_Config_type IN LIST _ExtProject_Config_Types)
+            list(APPEND _ExtProject_Print_Properties ${_ExtProject_Config_prop}_${_ExtProject_Config_type})
+        endforeach()
+    endforeach()
+    message(STATUS "[add_external_dependency] Main Imported Library Target: ${_ExtProject_Target}")
+    foreach(_ExtProject_print_prop IN LIST ${_ExtProject_Print_Properties})
+        get_target_property(_VAR ${_ExtProject_Target} ${_ExtProject_print_prop})
+        if(_VAR)
+            message(STATUS "[add_external_dependency] [${_ExtProject_Target}] ${_ExtProject_print_prop}: ${_VAR}")
+        endif()
+    endforeach()
 endmacro()
