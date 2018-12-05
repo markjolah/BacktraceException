@@ -27,7 +27,7 @@
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${PROJECT_NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #
 # Multi-Argument Keywords
-#   EXPORT_FIND_MODULE_PATHS - List of find module files to install.
+#   FIND_MODULES - List of relative paths to provided custome find module files to propgate with export and install.
 include(CMakePackageConfigHelpers)
 
 function(export_package_wizzard)
@@ -35,7 +35,7 @@ function(export_package_wizzard)
 ### Parse arguments and set defaults
 cmake_parse_arguments(PARSE_ARGV 0 "_WIZ" 
                       "DISABLE_BUILD_EXPORT" 
-                      "NAME;NAMESPACE;EXPORT_TARGETS_NAME;PACKAGE_CONFIG_TEMPLATE;VERSION_COMPATABILITY"
+                      "NAME;NAMESPACE;EXPORT_TARGETS_NAME;PACKAGE_CONFIG_TEMPLATE_PATH;VERSION_COMPATABILITY;CONFIG_INSTALL_DIR;SHARED_CMAKE_INSTALL_DIR"
                       "FIND_MODULES")
 if(NOT _WIZ_NAME)
     set(_WIZ_NAME ${PROJECT_NAME})
@@ -57,6 +57,10 @@ if(NOT _WIZ_PACKAGE_CONFIG_TEMPLATE_PATH)
     endif()
 endif()
 
+if(NOT _WIZ_VERSION_COMPATABILITY)
+    set(_WIZ_VERSION_COMPATABILITY SameMajorVersion)
+endif()
+
 if(NOT _WIZ_CONFIG_INSTALL_DIR)
     set(_WIZ_CONFIG_INSTALL_DIR lib/cmake/${PROJECT_NAME}) #Where to install project Config.cmake and ConfigVersion.cmake files
 endif()
@@ -74,44 +78,64 @@ if(_WIZ_UNPARSED_ARGUMENTS)
 endif()
 
 set(_WIZ_CONFIG_DIR ${CMAKE_BINARY_DIR}) #Directory for generated .cmake config file.  Use CMAKE_CURRENT_BINARY_DIR to allow export of build dir.
-set(_WIZ_PACKAGE_CONFIG_FILE ${_WIZ_NAME}Config.cmake)
+set(_WIZ_PACKAGE_CONFIG_FILE ${_WIZ_NAME}Config.cmake) #<Package>Config.cmake name
 set(_WIZ_VERSION_CONFIG_FILE ${_WIZ_NAME}ConfigVersion.cmake)
+
+if(NOT _WIZ_DISABLE_BUILD_EXPORT)
+    set(_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE ${_WIZ_NAME}Config-install.cmake) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
+else()
+    set(_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE ${_WIZ_PACKAGE_CONFIG_FILE}) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
+endif()
 
 
 ### Generate Package Config files for downstream projects to utilize
 #Generate:${PROJECT_NAME}ConfigVersion.cmake
-write_basic_package_version_file(${_WIZ_CONFIG_DIR}/${_WIZ_VERSION_CONFIG_FILE} COMPATIBILITY SameMajorVersion)
+write_basic_package_version_file(${_WIZ_CONFIG_DIR}/${_WIZ_VERSION_CONFIG_FILE} COMPATIBILITY ${_WIZ_VERSION_COMPATABILITY})
 
 #Remove the _WIZ prefix if EXPORT_TARGETS_NAME is not in use.  This simplifies writing of PackageConfig.cmake.in
 if(NOT EXPORT_TARGETS_NAME)
     set(EXPORT_TARGETS_NAME ${_WIZ_EXPORT_TARGETS_NAME})
 endif()
 #Generate: ${PROJECT_NAME}Config.cmake
-configure_package_config_file(${_WIZ_PACKAGE_CONFIG_TEMPLATE_PATH} ${_WIZ_CONFIG_DIR}/${_WIZ_PACKAGE_CONFIG_FILE} 
+
+set(_WIZ_FIND_MODULES_PATH ${_WIZ_SHARED_CMAKE_INSTALL_DIR}) #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
+configure_package_config_file(${_WIZ_PACKAGE_CONFIG_TEMPLATE_PATH} ${_WIZ_CONFIG_DIR}/${_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE}
                               INSTALL_DESTINATION ${_WIZ_CONFIG_INSTALL_DIR}
-                              PATH_VARS _WIZ_CONFIG_INSTALL_DIR _WIZ_SHARED_CMAKE_INSTALL_DIR)
+                              PATH_VARS _WIZ_FIND_MODULES_PATH _WIZ_CONFIG_INSTALL_DIR _WIZ_SHARED_CMAKE_INSTALL_DIR)
 
 ### Install tree export
-#<Package>Config.cmake <Package>ConfigVersion.cmake
-install(FILES ${_WIZ_CONFIG_DIR}/${_WIZ_PACKAGE_CONFIG_FILE} ${_WIZ_CONFIG_DIR}/${_WIZ_VERSION_CONFIG_FILE}
+#<Package>ConfigVersion.cmake
+install(FILES ${_WIZ_CONFIG_DIR}/${_WIZ_VERSION_CONFIG_FILE}
+        DESTINATION ${_WIZ_CONFIG_INSTALL_DIR} COMPONENT Development)
+#<Package>Config.cmake
+install(FILES ${_WIZ_CONFIG_DIR}/${_WIZ_PACKAGE_CONFIG_INSTALL_TREE_FILE} RENAME ${_WIZ_VERSION_CONFIG_FILE}
         DESTINATION ${_WIZ_CONFIG_INSTALL_DIR} COMPONENT Development)
 #<Package>Targets.cmake
 install(EXPORT ${_WIZ_EXPORT_TARGETS_NAME} 
         NAMESPACE ${_WIZ_NAMESPACE}::
         DESTINATION ${_WIZ_CONFIG_INSTALL_DIR} COMPONENT Development)
 
+#install provided Find<XXX>.cmake modules into the install tree
 foreach(module_path IN ITEMS ${_WIZ_FIND_MODULES})
     install(FILES ${module_path} DESTINATION ${_WIZ_SHARED_CMAKE_INSTALL_DIR} COMPONENT Development)
 endforeach()
         
 ### Build tree export
 if(NOT _WIZ_DISABLE_BUILD_EXPORT)
+    #Generate: ${PROJECT_NAME}Config.cmake for use in exporting from the build-tree
+    set(_WIZ_FIND_MODULES_PATH ${_WIZ_CONFIG_DIR})  #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
+    #Note setting INSTALL_DESTINATION to ${_WIZ_CONFIG_DIR} for build tree PackageConfig.cmake as it is never installed to install tree
+    configure_package_config_file(${_WIZ_PACKAGE_CONFIG_TEMPLATE_PATH} ${_WIZ_CONFIG_DIR}/${_WIZ_PACKAGE_CONFIG_FILE}
+                              INSTALL_DESTINATION ${_WIZ_CONFIG_DIR}
+                              PATH_VARS _WIZ_FIND_MODULES_PATH _WIZ_CONFIG_INSTALL_DIR _WIZ_SHARED_CMAKE_INSTALL_DIR)
+    #copy provided Find<XXX>.cmake modules into the build tree
     foreach(module_path IN ITEMS ${_WIZ_FIND_MODULES})
         get_filename_component(module_name ${module_path} NAME)
         configure_file(${module_path} ${_WIZ_CONFIG_DIR}/${module_name} COPYONLY)
     endforeach()
-
+    #Make a ProjectTargets file for use in the build tree
     export(EXPORT ${_WIZ_EXPORT_TARGETS_NAME} FILE ${CMAKE_BINARY_DIR}/${_WIZ_EXPORT_TARGETS_NAME}.cmake NAMESPACE ${_WIZ_NAMESPACE}::)
+    #Add this project build tree to the CMake user package registry
     export(PACKAGE ${_WIZ_NAME})
 endif()
 
