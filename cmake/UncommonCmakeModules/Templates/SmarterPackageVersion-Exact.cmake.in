@@ -6,12 +6,17 @@
 set(PACKAGE_BUILD_TYPES)
 file(GLOB CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
 foreach(f ${CONFIG_FILES})
-  include(${f})
+    include(${f})
 endforeach()
 
-if(NOT ${CMAKE_BUILD_TYPE} IN_LIST ${PACKAGE_BUILD_TYPES})
-   set(PACKAGE_VERSION "${PACKAGE_VERSION} [${PACKAGE_BUILD_TYPES}]")
-   set(PACKAGE_VERSION_UNSUITABLE TRUE)
+string(TOUPPER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
+if(NOT ${BUILD_TYPE} IN_LIST PACKAGE_BUILD_TYPES)
+    set(PACKAGE_VERSION "@PROJECT_VERSION@ [${PACKAGE_BUILD_TYPES}]")
+    set(PACKAGE_VERSION_UNSUITABLE TRUE)
+elseif(NOT PACKAGE_FIND_VERSION)
+    #No version specified.  Accept any package with correct BUILD_TYPE
+    set(PACKAGE_VERSION "@PROJECT_VERSION@ [${PACKAGE_BUILD_TYPES}]")
+    set(PACKAGE_VERSION_COMPATIBLE TRUE)
 else()
     include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionNumber.cmake") #Regular version number check
 endif()
