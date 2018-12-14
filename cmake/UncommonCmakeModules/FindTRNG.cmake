@@ -7,8 +7,8 @@
 # Find the TRNG (Tina's Random Number Generator Library)
 # GIT: https://github.com/rabauke/trng4.git
 # URL: https://www.numbercrunch.de/trng/
-find_path(TRNG_INCLUDE_DIR NAMES trng/lcg64.hpp HINTS ${TRNG_PREFIX_HINTS} PATH_SUFFIXES include)
-find_library(TRNG_LIBRARY NAMES trng4 HINTS ${TRNG_PREFIX_HINTS} PATH_SUFFIXES lib lib64)
+find_path(TRNG_INCLUDE_DIR NAMES trng/lcg64.hpp PATHS ${TRNG_PREFIX_HINTS} PATH_SUFFIXES include)
+find_library(TRNG_LIBRARY NAMES trng4 PATHS ${TRNG_PREFIX_HINTS} PATH_SUFFIXES lib lib64)
 
 if(TRNG_INCLUDE_DIR)
     file(READ ${TRNG_INCLUDE_DIR}/trng/config.hpp TRNG_CONFIG)
