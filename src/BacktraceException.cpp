@@ -13,9 +13,6 @@
 #include <sstream>
 #include <vector>
 
-#include <boost/iostreams/device/file_descriptor.hpp>
-#include <boost/iostreams/stream_buffer.hpp>
-
 #if !defined(WIN32)
 //Linux only includes
 #include <unistd.h>
@@ -25,7 +22,6 @@
 
 #endif
 
-namespace io = boost::iostreams;
 
 namespace backtrace_exception {
 
@@ -51,7 +47,7 @@ bool backtraces_enabled()
 }
     
     
-#if !defined(WIN32)
+#if defined(__linux__)
 namespace linux_debug {
     std::string get_exename()
     {
@@ -101,11 +97,13 @@ namespace linux_debug {
             //Parent
             close(out_pipe_write); //Not needed
             waitpid(child_pid,NULL,0);
-
-            io::file_descriptor_source source(out_pipe_read, boost::iostreams::close_handle);
-            io::stream_buffer<io::file_descriptor_source> pipe_stream_buf(source);
+            static const int BUF_SIZE=1024;
+            char buf[BUF_SIZE];
+            ssize_t n_read = read(out_pipe,buf,BUF_SIZE,0);
             std::ostringstream os;
-            os<<&pipe_stream_buf;
+            while(n_read != 0) {
+                if(n_read>0) os.write(buf,n_read);
+            }
             return os.str();
         }
     }

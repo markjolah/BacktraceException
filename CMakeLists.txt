@@ -23,15 +23,13 @@ message(STATUS "OPTION: BUILD_STATIC_LIBS: ${BUILD_STATIC_LIBS}")
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake/UncommonCmakeModules)
 
 ### Dependencies
-find_package(Boost REQUIRED COMPONENTS iostreams)
 
-# CFLAGS ##
-#Configure standard CFlags and definitions for debug builds
-include(ConfigureDebugBuilds)
+### CFLAGS
+include(ConfigureDebugBuilds) #Configure standard CFlags and definitions for debug builds
 
 ### PackageConfig Exports
 include(ExportPackageWizzard)
-export_package_wizzard()
+export_package_wizzard() #setup build-tree and install-tree exports and packageconfig files
 
 ### Source directories
 add_subdirectory(src)
