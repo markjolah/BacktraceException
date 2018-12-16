@@ -99,7 +99,7 @@ namespace linux_debug {
             waitpid(child_pid,NULL,0);
             static const int BUF_SIZE=1024;
             char buf[BUF_SIZE];
-            ssize_t n_read = read(out_pipe,buf,BUF_SIZE,0);
+            ssize_t n_read = read(out_pipe_read,buf,BUF_SIZE);
             std::ostringstream os;
             while(n_read != 0) {
                 if(n_read>0) os.write(buf,n_read);

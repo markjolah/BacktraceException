@@ -46,7 +46,7 @@ function(install_smarter_package_version_file)
         set(ARG_BUILD_TYPE_COMPATIBILITY Exact)
     endif()
     if(NOT ARG_EXPORTED_BUILD_TYPES)
-        string(TOUPPER "${CMAKE_BUILD_TYPE}" ARG_EXPORTED_BUILD_TYPES)
+        string(TOLOWER "${CMAKE_BUILD_TYPE}" ARG_EXPORTED_BUILD_TYPES)
     endif()
 
     set(ARG_TEMPLATE_DIR ${_WriteSmarterPackageVersionFile_PATH}/Templates)

@@ -37,7 +37,7 @@
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #
 # Multi-Argument Keywords
-#   FIND_MODULES - List of relative paths to provided custome find module files to propgate with export and install.
+#   FIND_MODULES - List of relative paths to provided custom find module files to propagate with export and install.
 #   EXPORTED_BUILD_TYPES - [default:${BUILD_TYPE}] The list of BUILD_TYPES this export will provide.  Normally this should just
 #                           be the current BUILD_TYPE for single build-type generators like Make.
 include(CMakePackageConfigHelpers)
@@ -83,7 +83,7 @@ if(NOT ARG_BUILD_TYPE_COMPATIBILITY)
 endif()
 
 if(NOT ARG_EXPORTED_BUILD_TYPES)
-    string(TOUPPER "${CMAKE_BUILD_TYPE}" ARG_EXPORTED_BUILD_TYPES)
+    string(TOLOWER "${CMAKE_BUILD_TYPE}" ARG_EXPORTED_BUILD_TYPES)
 endif()
 if(NOT ARG_EXPORTED_BUILD_TYPES)
     message(FATAL_ERROR "No Exported build-types provided or CMAKE_BUILDT_TYPE is not set")
@@ -128,12 +128,11 @@ install_smarter_package_version_file(CONFIG_DIR ${ARG_CONFIG_DIR}
 #Generate: ${PROJECT_NAME}Config.cmake
 #Copy modules PATH_VARS to easier to use names for use in PackageConfig.cmake.in
 set(EXPORT_TARGETS_NAME ${ARG_EXPORT_TARGETS_NAME})
-set(FIND_MODULES_PATH ${ARG_FIND_MODULES_PATH})
 set(SHARED_CMAKE_INSTALL_DIR ${ARG_SHARED_CMAKE_INSTALL_DIR})
 set(ARG_FIND_MODULES_PATH ${ARG_SHARED_CMAKE_INSTALL_DIR}) #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
 configure_package_config_file(${ARG_PACKAGE_CONFIG_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE}
                               INSTALL_DESTINATION ${ARG_CONFIG_INSTALL_DIR}
-                              PATH_VARS FIND_MODULES_PATH SHARED_CMAKE_INSTALL_DIR)
+                              PATH_VARS SHARED_CMAKE_INSTALL_DIR)
 
 ### Install tree export
 #<Package>Config.cmake
