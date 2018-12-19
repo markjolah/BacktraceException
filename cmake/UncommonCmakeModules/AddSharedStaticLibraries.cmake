@@ -51,7 +51,7 @@ function(add_shared_static_libraries)
                         PUBLIC_LINK_LIBRARIES PRIVATE_LINK_LIBRARIESPRIVATE_LINK_LIBRARIES INTERFACE_LINK_LIBRARIES)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
     if(ARG_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "Unknown keywords given to install_smarter_package_version_file(): \"${ARG_UNPARSED_ARGUMENTS}\"")
+        message(FATAL_ERROR "Unknown keywords given to add_shared_static_libraries(): \"${ARG_UNPARSED_ARGUMENTS}\"")
     endif()
     if(NOT ARG_BUILD_SHARED_LIBS)
         set(ARG_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
@@ -109,7 +109,7 @@ function(add_shared_static_libraries)
             if(NOT ARG_PUBLIC_DEBUG_HEADER_DIR)
                 target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${ARG_PUBLIC_HEADER_DIR}>
                                                             $<INSTALL_INTERFACE:include>)
-            elseif()
+            else()
                 target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${ARG_PUBLIC_HEADER_DIR}>
                                                             $<BUILD_INTERFACE:$<$<CONFIG:Debug>:${ARG_PUBLIC_DEBUG_HEADER_DIR}>>
                                                             $<INSTALL_INTERFACE:include>)
