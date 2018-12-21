@@ -11,6 +11,6 @@ include(AddSharedStaticLibraries)
 # * Installs target libraries and headers
 # * returns lsit SHARED_STATIC_LIB_TARGETS of created targets for adjusting additional target properties
 add_shared_static_libraries(SOURCES ${SRCS}
-                            PUBLIC_COMPILE_FEATURES cxx_std_11
+                            COMPILE_FEATURES cxx_std_11
                             PUBLIC_HEADER_DIR ${CMAKE_SOURCE_DIR}/include)
 
