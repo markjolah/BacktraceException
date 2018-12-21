@@ -35,6 +35,7 @@
 #  CONFIG_DIR - [Default: ${CMAKE_BINARY_DIR}] Path within build directory to make configured files before installation.  Also serves as the exported build directory.
 #  CONFIG_INSTALL_DIR - [Default: lib/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
+#  SHARED_CMAKE_SOURCE_DIR - [Default: ${CMAKE_SOURCE_DIR}/cmake] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #
 # Multi-Argument Keywords
 #   FIND_MODULES - List of relative paths to provided custom find module files to propagate with export and install.
@@ -46,7 +47,8 @@ function(export_package_wizzard)
 
 ### Parse arguments and set defaults
 set(options DISABLE_BUILD_EXPORT)
-set(oneValueArgs NAME NAMESPACE EXPORT_TARGETS_NAME PACKAGE_CONFIG_TEMPLATE_PATH VERSION_COMPATIBILITY BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR)
+set(oneValueArgs NAME NAMESPACE EXPORT_TARGETS_NAME PACKAGE_CONFIG_TEMPLATE_PATH VERSION_COMPATIBILITY
+                 BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR SHARED_CMAKE_SOURCE_DIR)
 set(multiValueArgs FIND_MODULES EXPORTED_BUILD_TYPES)
 cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"  "${multiValueArgs}"  ${ARGN})
 if(ARG_UNPARSED_ARGUMENTS)
@@ -97,6 +99,10 @@ if(NOT ARG_SHARED_CMAKE_INSTALL_DIR)
     set(ARG_SHARED_CMAKE_INSTALL_DIR share/${ARG_NAME}/cmake) #Where to install shared .cmake build scripts for downstream
 endif()
 
+if(NOT ARG_SHARED_CMAKE_SOURCE_DIR)
+    set(ARG_SHARED_CMAKE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/cmake) #Source for shared .cmake build scripts for build-tree exports
+endif()
+
 if(NOT ARG_FIND_MODULES)
     set(ARG_FIND_MODULES)
 endif()
@@ -128,11 +134,11 @@ install_smarter_package_version_file(CONFIG_DIR ${ARG_CONFIG_DIR}
 #Generate: ${PROJECT_NAME}Config.cmake
 #Copy modules PATH_VARS to easier to use names for use in PackageConfig.cmake.in
 set(EXPORT_TARGETS_NAME ${ARG_EXPORT_TARGETS_NAME})
-set(SHARED_CMAKE_INSTALL_DIR ${ARG_SHARED_CMAKE_INSTALL_DIR})
+set(SHARED_CMAKE_DIR ${ARG_SHARED_CMAKE_INSTALL_DIR})
 set(ARG_FIND_MODULES_PATH ${ARG_SHARED_CMAKE_INSTALL_DIR}) #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
 configure_package_config_file(${ARG_PACKAGE_CONFIG_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE}
                               INSTALL_DESTINATION ${ARG_CONFIG_INSTALL_DIR}
-                              PATH_VARS SHARED_CMAKE_INSTALL_DIR)
+                              PATH_VARS SHARED_CMAKE_DIR)
 
 ### Install tree export
 #<Package>Config.cmake
@@ -155,9 +161,11 @@ if(NOT ARG_DISABLE_BUILD_EXPORT)
     #Generate: ${PROJECT_NAME}Config.cmake for use in exporting from the build-tree
     set(FIND_MODULES_PATH ${ARG_CONFIG_DIR})  #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
     #Note setting INSTALL_DESTINATION to ${ARG_CONFIG_DIR} for build tree PackageConfig.cmake as it is never installed to install tree
+    set(SHARED_CMAKE_DIR ${ARG_SHARED_CMAKE_SOURCE_DIR})
     configure_package_config_file(${ARG_PACKAGE_CONFIG_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_FILE}
-                              INSTALL_DESTINATION ${ARG_CONFIG_DIR}
-                              PATH_VARS FIND_MODULES_PATH SHARED_CMAKE_INSTALL_DIR)
+                              INSTALL_DESTINATION .
+                              INSTALL_PREFIX ${ARG_CONFIG_DIR}
+                              PATH_VARS FIND_MODULES_PATH SHARED_CMAKE_DIR)
     #copy provided Find<XXX>.cmake modules into the build tree
     foreach(module_path ${ARG_FIND_MODULES})
         get_filename_component(module_name ${module_path} NAME)

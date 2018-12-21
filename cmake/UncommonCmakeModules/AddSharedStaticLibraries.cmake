@@ -27,16 +27,10 @@
 #           If unset skip setting of target properties and installing debug headers.
 # Multi-value keywords:
 #  SOURCES - List of sources.
-#  PUBLIC_COMPILE_FEATURES - [optional] list of PUBLIC compile features for each target
-#  PUBLIC_INCLUDE_DIRECTORIES - [optional] list of PUBLIC include directories for each target
-#  PRIVATE_INCLUDE_DIRECTORIES - [optional] list of PRIVATE include directories for each target
-#  PUBLIC_LINK_LIBRARIES - [optional] list of PUBLIC link_libraries
-#  PRIVATE_LINK_LIBRARIES - [optional] list of PRIVATE link_libraries
-#  INTERFACE_LINK_LIBRARIES - [optional] list of INTERFACE link_libraries
+#  COMPILE_FEATURES - [optional] list of PUBLIC compile features for each target
+#  INCLUDE_DIRECTORIES - [optional] list of PUBLIC include directories for each target
+#  LINK_LIBRARIES - [optional] list of PUBLIC link_libraries
 #
-# Output:
-# Sets in patent scope:
-# SHARED_STATIC_LIB_TARGETS - list of all targets libraries created
 #
 # * POSITION_INDEPENDENT_CODE is enabled for static libraries by default.  This allows downstream
 #     projects to link statically and be bundled into a client that is itself a shared library.  Also
@@ -47,11 +41,10 @@ function(add_shared_static_libraries)
     set(oneValueArgs RETURN_TARGETS NAMESPACE LIBTARGET STATIC_LIBTARGET
                      BUILD_SHARED_LIBS BUILD_STATIC_LIBS
                      PUBLIC_HEADER_DIR PUBLIC_DEBUG_HEADER_DIR)
-    set(multiValueArgs SOURCES PUBLIC_COMPILE_FEATURES PUBLIC_INCLUDE_DIRECTORIES PRIVATE_INCLUDE_DIRECTORIES
-                        PUBLIC_LINK_LIBRARIES PRIVATE_LINK_LIBRARIESPRIVATE_LINK_LIBRARIES INTERFACE_LINK_LIBRARIES)
+    set(multiValueArgs SOURCES COMPILE_FEATURES INCLUDE_DIRECTORIES LINK_LIBRARIES)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
     if(ARG_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "Unknown keywords given to add_shared_static_libraries(): \"${ARG_UNPARSED_ARGUMENTS}\"")
+        message(FATAL_ERROR "add_shared_static_libraries: Unknown keywords given to add_shared_static_libraries(): \"${ARG_UNPARSED_ARGUMENTS}\"")
     endif()
     if(NOT ARG_BUILD_SHARED_LIBS)
         set(ARG_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
@@ -96,16 +89,22 @@ function(add_shared_static_libraries)
             LIBRARY DESTINATION lib COMPONENT Runtime
             ARCHIVE DESTINATION lib COMPONENT Development)
         if(ARG_PUBLIC_HEADER_DIR)
+            if(NOT EXISTS ${ARG_PUBLIC_HEADER_DIR})
+                message(FATAL_ERROR "add_shared_static_libraries: Cannot find PUBLIC_HEADER_DIR:${ARG_PUBLIC_HEADER_DIR}")
+            endif()
             install(DIRECTORY ${ARG_PUBLIC_HEADER_DIR}/ DESTINATION include COMPONENT Development)
         endif()
         if(ARG_PUBLIC_DEBUG_HEADER_DIR)
+            if(NOT EXISTS ${ARG_PUBLIC_DEBUG_HEADER_DIR})
+                message(FATAL_ERROR "add_shared_static_libraries: Cannot find PUBLIC_DEBUG_HEADER_DIR: ${ARG_PUBLIC_DEBUG_HEADER_DIR}")
+            endif()
             install(DIRECTORY ${ARG_PUBLIC_DEBUG_HEADER_DIR}/ DESTINATION include CONFIGURATIONS Debug COMPONENT Development)
         endif()
     endif()
 
     #Set target include directories if PUBLIC_HEADER_DIR or PUBLIC_DEBUG_HEADER_DIR were given
     if(ARG_PUBLIC_HEADER_DIR)
-        foreach(target ${LIB_TARGETS})
+        foreach(target IN LISTS LIB_TARGETS)
             if(NOT ARG_PUBLIC_DEBUG_HEADER_DIR)
                 target_include_directories(${target} PUBLIC $<BUILD_INTERFACE:${ARG_PUBLIC_HEADER_DIR}>
                                                             $<INSTALL_INTERFACE:include>)
@@ -117,36 +116,21 @@ function(add_shared_static_libraries)
         endforeach()
     endif()
     if(ARG_COMPILE_FEATURES)
-        foreach(target ${LIB_TARGETS})
-            target_compile_features(${target} ${ARG_COMPILE_FEATURES})
+        foreach(target IN LISTS LIB_TARGETS)
+            target_compile_features(${target} PUBLIC ${ARG_COMPILE_FEATURES})
         endforeach()
     endif()
-    if(ARG_PUBLIC_LINK_LIBRARIES)
-        foreach(target ${LIB_TARGETS})
-            target_link_libraries(${target} PUBLIC ${ARG_PUBLIC_LINK_LIBRARIES})
+    if(ARG_LINK_LIBRARIES)
+        foreach(target IN LISTS LIB_TARGETS)
+            target_link_libraries(${target} PUBLIC ${ARG_LINK_LIBRARIES})
         endforeach()
     endif()
-    if(ARG_PRIVATE_LINK_LIBRARIES)
-        foreach(target ${LIB_TARGETS})
-            target_link_libraries(${target} PRIVATE ${ARG_PRIVATE_LINK_LIBRARIES})
-        endforeach()
-    endif()
-    if(ARG_INTERFACE_LINK_LIBRARIES)
-        foreach(target ${LIB_TARGETS})
-            target_link_libraries(${target} INTERFACE ${ARG_INTERFACE_LINK_LIBRARIES})
-        endforeach()
-    endif()
-    if(ARG_PUBLIC_INCLUDE_DIRECTORIES)
-        foreach(target ${LIB_TARGETS})
-            target_include_directories(${target} PUBLIC ${ARG_PUBLIC_INCLUDE_DIRECTORIES})
-        endforeach()
-    endif()
-    if(ARG_PRIVATE_INCLUDE_DIRECTORIES)
-        foreach(target ${LIB_TARGETS})
-            target_include_directories(${target} PRIVATE ${ARG_PRIVATE_INCLUDE_DIRECTORIES})
+    if(ARG_INCLUDE_DIRECTORIES)
+        foreach(target IN LISTS LIB_TARGETS)
+            target_include_directories(${target} PUBLIC ${ARG_INCLUDE_DIRECTORIES})
         endforeach()
     endif()
     if(ARG_RETURN_TARGETS)
-        set(${ARG_RETURN_TARGETS} ${LIB_TARGETS} PARENT_SCOPE ) #Return list of created library targets
+        set(${ARG_RETURN_TARGETS} ${LIB_TARGETS} PARENT_SCOPE) #Return list of created library targets
     endif()
 endfunction()
