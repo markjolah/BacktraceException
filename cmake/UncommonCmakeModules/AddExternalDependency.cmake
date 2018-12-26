@@ -24,10 +24,13 @@
 # INSTALL_PREFIX - [optional] install location for package [defaults to CMAKE_INSTALL_PREFIX]
 # CMAKELISTS_TEMPLATE - [optional] Template file for the CMakeLists.txt to the building and installing via ExternalProject_Add [default: Templates/External.CMakeLists.txt.in]
 # BUILD_TYPE_COMPATABILITY - [optional] Default: Exact  Options: Exact, Any
+# TOOLCHAIN_FILE - [optional] [Only used if CMAKE_CROSSCOMPILING is true.  Uses CMAKE_TOOLCHAIN_FILE as the default.]
 set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "Path of AddExternalDependency.cmake")
 
 macro(add_external_dependency)
-    cmake_parse_arguments(_ExtProject "SHARED;STATIC" "NAME;URL;VERSION;INSTALL_PREFIX;CMAKELISTS_TEMPLATE" "" ${ARGN})
+    set(oneArgOpts NAME URL VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE
+               BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
+    cmake_parse_arguments(_ExtProject "SHARED;STATIC" "${oneArgOpts}" "" ${ARGN})
     if(NOT _ExtProject_NAME)
         message(FATAL_ERROR "No package name given")
     endif()
@@ -47,6 +50,10 @@ macro(add_external_dependency)
 
     if(NOT _ExtProject_BUILD_TYPE_COMPATABILITY)
         set(_ExtProject_BUILD_TYPE_COMPATABILITY Exact)
+    endif()
+
+    if(CMAKE_CROSSCOMPILING AND NOT _ExtProject_TOOLCHAIN_FILE)
+        set(_ExtProject_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE})
     endif()
 
     #Build shared libraries by default if neither SHARED or STATIC are set
@@ -80,7 +87,17 @@ macro(add_external_dependency)
         message(STATUS "[add_external_dependency] ExtProjectBuildTypes:${${_ExtProject_NAME}_BUILD_TYPES}")
         
         if(NOT _ExtProject_CMAKELISTS_TEMPLATE)
-            find_file(_ExtProject_CMAKELISTS_TEMPLATE NAME External.CMakeLists.txt.in PATHS ${AddExternalDependency_include_path}/Templates)
+            find_file(_ExtProject_CMAKELISTS_TEMPLATE NAME External.CMakeLists.txt.in PATHS ${AddExternalDependency_include_path}/Templates NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+            mark_as_advanced(_ExtProject_CMAKELISTS_TEMPLATE)
+            if(NOT _ExtProject_CMAKELISTS_TEMPLATE)
+                message(FATAL_ERROR "[add_external_dependency] Could not locate template file External.CMakeLists.txt.in in path ${AddExternalDependency_include_path}/Templates")
+            endif()
+        endif()
+
+        if(CMAKE_CROSSCOMPILING)
+            set(_ExtProject_TOOLCHAIN_ARGS -DCMAKE_TOOLCHAIN_FILE=${_ExtProject_TOOLCHAIN_FILE})
+        else()
+            set(_ExtProject_TOOLCHAIN_ARGS)
         endif()
         configure_file(${_ExtProject_CMAKELISTS_TEMPLATE} ${_ExtProject_Dir}/CMakeLists.txt @ONLY)
         execute_process(COMMAND ${CMAKE_COMMAND} . WORKING_DIRECTORY ${_ExtProject_Dir})

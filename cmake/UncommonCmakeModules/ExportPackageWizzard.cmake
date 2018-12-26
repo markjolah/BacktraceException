@@ -69,7 +69,7 @@ endif()
 
 if(NOT ARG_PACKAGE_CONFIG_TEMPLATE)
     find_file(ARG_PACKAGE_CONFIG_TEMPLATE PackageConfig.cmake.in PATHS "${CMAKE_SOURCE_DIR}/cmake"
-              PATH_SUFFIXES Modules modules Templates templates NO_DEFAULT_PATH)
+              PATH_SUFFIXES Modules modules Templates templates NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
     mark_as_advanced(ARG_PACKAGE_CONFIG_TEMPLATE)
     if(NOT ARG_PACKAGE_CONFIG_TEMPLATE)
         message(FATAL_ERROR "Unable to find PackageConfig.cmake.in. Cannot configure exports.")
@@ -157,7 +157,7 @@ foreach(module_path ${ARG_FIND_MODULES})
 endforeach()
         
 ### Build tree export
-if(NOT ARG_DISABLE_BUILD_EXPORT)
+if(NOT ARG_DISABLE_BUILD_EXPORT AND NOT CMAKE_EXPORT_NO_PACKAGE_REGISTRY AND NOT CMAKE_CROSSCOMPILING)
     #Generate: ${PROJECT_NAME}Config.cmake for use in exporting from the build-tree
     set(FIND_MODULES_PATH ${ARG_CONFIG_DIR})  #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
     #Note setting INSTALL_DESTINATION to ${ARG_CONFIG_DIR} for build tree PackageConfig.cmake as it is never installed to install tree
