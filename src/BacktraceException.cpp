@@ -13,7 +13,7 @@
 #include <sstream>
 #include <vector>
 
-#if !defined(WIN32)
+#if !defined(_WIN32)
 //Linux only includes
 #include <unistd.h>
 #include <sys/wait.h>
@@ -119,10 +119,10 @@ BacktraceException::BacktraceException(std::string condition, std::string what) 
 
 std::string BacktraceException::print_backtrace()
 {
-#if defined (LINUX)
+#if defined(__linux__)
     if(!backtraces_enabled()) return "Backtraces temporarily disabled.";
     return linux_debug::print_trace_gdb();
-#elif defined(WIN32)
+#elif defined(_WIN32)
     return "Backtraces not implemented.";
 #else
     return "Backtraces permanently disabled.";
