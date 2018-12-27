@@ -13,8 +13,8 @@ include(AddSharedStaticLibraries)
 add_shared_static_libraries(SOURCES ${SRCS}
                             COMPILE_FEATURES cxx_std_11
                             PUBLIC_HEADER_DIR ${CMAKE_SOURCE_DIR}/include
-                            RETURN_TARGETS ${libs})
-
-foreach(lib IN LISTS ${libs})
-    target_link_options(${lib} PUBLIC -rdynamic) #For backtraces to be usefull must export all symbols
+                            RETURN_TARGETS libs)
+message(STATUS "Got libs:${libs}")
+foreach(lib IN LISTS libs)
+    target_link_options(${lib} INTERFACE -rdynamic) #For backtraces to be usefull must export all symbols
 endforeach()
