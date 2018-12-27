@@ -8,6 +8,11 @@
 
 #include "BacktraceException/BacktraceException.h"
 
+#include <execinfo.h>
+#include <cstdlib>
+#include <memory>
+#include <cxxabi.h>
+
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -46,6 +51,42 @@ bool backtraces_enabled()
     
 #ifdef __linux__
 namespace linux_debug {
+    std::string demangle(std::string name)
+    {
+        int status = -4;
+        std::unique_ptr<char, void(*)(void*)> res{abi::__cxa_demangle(name.c_str(), NULL, NULL, &status),std::free};
+        return (status==0) ? res.get() : name;
+    }
+
+    std::string glibc_backtrace()
+    {
+        std::ostringstream bt;
+        const size_t N=250;
+        void *array[N];
+
+        auto bt_size = backtrace(array, N);
+        auto bt_names = backtrace_symbols(array, bt_size);
+        std::vector<std::string> bt_strings(bt_names,bt_names+bt_size);
+        free (bt_names);
+
+        for(auto &s:bt_strings) {
+            auto p0 = s.find("(");
+            if(p0>0) {
+                auto p1 = s.rfind("+");
+                if(p1>0) {
+                    auto count = p1-p0-1;
+                    auto name = demangle(s.substr(p0+1,count));
+                    s.replace(p0+1,count,name);
+                }
+            }
+        }
+
+        bt<<"Obtained "<<bt_size<<" stack frames.\n";
+        for(ssize_t i = 0; i < bt_size; i++) bt<<"["<<i<<"]: "<<bt_strings[i]<<"\n";
+        return bt.str();
+    }
+
+
     std::string get_exename()
     {
         ssize_t sz=512;
@@ -122,7 +163,8 @@ std::string BacktraceException::print_backtrace()
 {
 #ifdef __linux__
     if(!backtraces_enabled()) return "Backtraces temporarily disabled.";
-    return linux_debug::print_trace_gdb();
+    return linux_debug::glibc_backtrace();
+//     return linux_debug::print_trace_gdb();
 #elif defined(_WIN32)
     return "Backtraces not implemented.";
 #else
