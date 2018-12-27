@@ -17,9 +17,6 @@
 //Linux only includes
 #include <unistd.h>
 #include <sys/wait.h>
-#else
-//Windows only includes
-
 #endif
 
 
@@ -47,7 +44,7 @@ bool backtraces_enabled()
 }
     
     
-#if defined(__linux__)
+#ifdef __linux__
 namespace linux_debug {
     std::string get_exename()
     {
@@ -99,10 +96,11 @@ namespace linux_debug {
             waitpid(child_pid,NULL,0);
             static const int BUF_SIZE=1024;
             char buf[BUF_SIZE];
-            ssize_t n_read = read(out_pipe_read,buf,BUF_SIZE);
             std::ostringstream os;
+            ssize_t n_read = read(out_pipe_read,buf,BUF_SIZE);
             while(n_read != 0) {
                 if(n_read>0) os.write(buf,n_read);
+                n_read = read(out_pipe_read,buf,BUF_SIZE);
             }
             return os.str();
         }
@@ -112,6 +110,9 @@ namespace linux_debug {
 
 #endif
 
+BacktraceException::BacktraceException(std::string what) :
+   _condition("unspecified"), _what(what), _backtrace(print_backtrace())
+{ }
 
 BacktraceException::BacktraceException(std::string condition, std::string what) :
    _condition(condition), _what(what), _backtrace(print_backtrace())
@@ -119,7 +120,7 @@ BacktraceException::BacktraceException(std::string condition, std::string what) 
 
 std::string BacktraceException::print_backtrace()
 {
-#if defined(__linux__)
+#ifdef __linux__
     if(!backtraces_enabled()) return "Backtraces temporarily disabled.";
     return linux_debug::print_trace_gdb();
 #elif defined(_WIN32)
