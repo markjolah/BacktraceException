@@ -12,5 +12,9 @@ include(AddSharedStaticLibraries)
 # * returns lsit SHARED_STATIC_LIB_TARGETS of created targets for adjusting additional target properties
 add_shared_static_libraries(SOURCES ${SRCS}
                             COMPILE_FEATURES cxx_std_11
-                            PUBLIC_HEADER_DIR ${CMAKE_SOURCE_DIR}/include)
+                            PUBLIC_HEADER_DIR ${CMAKE_SOURCE_DIR}/include
+                            RETURN_TARGETS ${libs})
 
+foreach(lib IN LISTS ${libs})
+    target_link_options(${lib} PUBLIC -rdynamic) #For backtraces to be usefull must export all symbols
+endforeach()
