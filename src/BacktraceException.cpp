@@ -66,8 +66,15 @@ namespace linux_debug {
 
         auto bt_size = backtrace(array, N);
         auto bt_names = backtrace_symbols(array, bt_size);
+        auto orig_bt_names = bt_names;
+        const ssize_t bt_num_remove_frames=3; //Number of internal call frames to remove.
+        if(bt_size > bt_num_remove_frames) {
+            //Remove first few frames which are internal to BacktraceException and not relevent for debugging Exceptions.
+            bt_names += bt_num_remove_frames;
+            bt_size -= bt_num_remove_frames;
+        }
         std::vector<std::string> bt_strings(bt_names,bt_names+bt_size);
-        free (bt_names);
+        free (orig_bt_names);
 
         for(auto &s:bt_strings) {
             auto p0 = s.find("(");
