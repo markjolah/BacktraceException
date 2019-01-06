@@ -8,7 +8,6 @@
 
 #include "BacktraceException/BacktraceException.h"
 
-#include <execinfo.h>
 #include <cstdlib>
 #include <memory>
 #include <cxxabi.h>
@@ -22,6 +21,7 @@
 //Linux only includes
 #include <unistd.h>
 #include <sys/wait.h>
+#include <execinfo.h>
 #endif
 
 
