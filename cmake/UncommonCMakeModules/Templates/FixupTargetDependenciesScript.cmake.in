@@ -4,7 +4,7 @@
 # https://www.apache.org/licenses/LICENSE-2.0
 # See: LICENCE file
 #
-# FixupDependencies.cmake.in -
+# FixupTargetDependenciesScript.cmake.in -
 # This is a template file for use by the fixup_dependencies() function.
 # This scripts is configured and to be executed at install-time to copy necessary dependencies from the system and other
 # sources into the local install-tree of one or more targets
@@ -15,9 +15,9 @@ set(target @FIXUP_TARGET@)
 set(project_name @PROJECT_NAME@)
 set(install_prefix ${CMAKE_INSTALL_PREFIX}) #this should be set at install time
 
-set(target_file_name $<TARGET_FILE_NAME:${target}>)
-set(target_build_dir $<TARGET_FILE_DIR:${target}>)
-message(STATUS "[fixup_dependencies:install_phase] target_file:${target_file_name} target_dir:${target_build_dir}")
+set(target_file_name $<TARGET_FILE_NAME:@FIXUP_TARGET@>)
+set(target_build_dir $<TARGET_FILE_DIR:@FIXUP_TARGET@>)
+message(STATUS "[fixup_dependencies:install_phase] target_file:${target_file_name} target_build_dir:${target_build_dir}")
 #relative directory path from ${CMAKE_INSTALL_PREFIX} that target will be installed to
 set(target_destination @FIXUP_TARGET_DESTINATION@)
 if(NOT target_destination)
@@ -33,22 +33,22 @@ endif()
 message(STATUS "[fixup_dependencies:install_phase] install_prefix:${install_prefix} target_destination:${target_destination}")
 set(target_install_dir ${install_prefix}/${target_destination})
 set(target_install_file ${target_install_dir}/${target_file_name})
-set(lib_dest ${target_install_dir}/@FIXUP_COPY_DESTINATION@)
+set(lib_dest ${target_install_dir}/@FIXUP_COPY_RPATH@)
+message(STATUS "lib_dest: ${lib_dest}")
 get_filename_component(lib_dest ${lib_dest} REALPATH)
-set(rpath "@FIXUP_RPATH@")
 set(search_dirs "@FIXUP_LIB_SEARCH_PATHS@")
 set(system_dirs "@FIXUP_LIB_SYSTEM_PATHS@")
 
+set(RECURSE 1)
 if(@TARGET_OS@ STREQUAL LINUX)
+    message(STATUS "TARGET_OS:@TARGET_OS@ CROSS?:${CMAKE_CROSSCOMPILING}")
     set(gp_tool "ldd")
     set(EXCLUDE_SYSTEM_LIBS 0)
-    set(RECURSE 1)
     list(APPEND system_dirs /lib /lib64)
     set(system_libs libgcc_s)
 elseif(@TARGET_OS@ STREQUAL WIN64)
     set(gp_tool "objdump")
     set(EXCLUDE_SYSTEM_LIBS 1)
-    set(RECURSE 1)
     set(system_libs kernel32.dll user32.dll msvcrt.dll advapi32.dll)
 endif()
 
@@ -59,7 +59,6 @@ message(STATUS "  target_destination=${target_destination}")
 message(STATUS "  target_install_dir=${target_install_dir}")
 message(STATUS "  target_install_file=${target_install_file}")
 message(STATUS "  lib_dest=${lib_dest}")
-message(STATUS "  rpath=${rpath}")
 message(STATUS "  search_dirs=${search_dirs}")
 message(STATUS "  system_dirs=${system_dirs}")
 message(STATUS "  system_libs=${system_libs}")
@@ -93,7 +92,7 @@ function(gp_resolved_file_type_override resolved_file type)
 endfunction()
 
 include(GetPrerequisites)
-get_prerequisites(${target_install_file} deps ${EXCLUDE_SYSTEM_LIBS} ${RECURSE} "" "${search_dirs};${system_dirs}" "${rpath}")
+get_prerequisites(${target_install_file} deps ${EXCLUDE_SYSTEM_LIBS} ${RECURSE} "" "${search_dirs};${system_dirs}")
 message(STATUS "TARGET_OS= @TARGET_OS@")
 message(STATUS "gp_tool=${gp_tool}")
 message(STATUS "deps=${deps}")
