@@ -5,14 +5,15 @@
 
 using namespace backtrace_exception;
 
-void baz()
+template<class T>
+void baz(T)
 {
-    throw BacktraceException("Baz is done.");
+    throw BacktraceException("BazBorked","Baz is done.");
 }
 
 void bar()
 {
-    baz();
+    baz<int>(0);
 }
 
 void foo()
@@ -20,16 +21,35 @@ void foo()
     bar();
 }
 
-
-int main()
+int tryit()
 {
     try{
         foo();
     } catch(BacktraceException &e) {
-//         std::ostringstream msg;
         std::cout<<"Caught BacktraceException:\n\tCondition:"<<e.condition()<<"\n\twhat:"<<e.what()<<"\n\tbacktrace:\n"<<e.backtrace();
-
         return 0;
     }
-    return -1; //Should have caught
+    return -1;
+}
+
+int main()
+{
+    std::cout<<"===== Backtraces Disabled  =====\n";
+    disable_backtraces();
+    if(tryit()) return -1;
+#if defined(__linux__)
+    std::cout<<"\n===== BacktraceMethod::glibc  =====\n";
+    enable_backtraces();
+    set_backtrace_method(BacktraceMethod::glibc);
+    if(tryit()) return -1;
+    std::cout<<"\n===== BacktraceMethod::gdb  =====\n";
+    enable_backtraces();
+    set_backtrace_method(BacktraceMethod::gdb);
+    if(tryit()) return -1;
+#elif defined(_WIN32)
+    std::cout<<"\n===== BacktraceMethod::stackwalk  =====\n";
+    enable_backtraces();
+    set_backtrace_method(BacktraceMethod::stackwalk);
+    if(tryit()) return -1;
+#endif
 }

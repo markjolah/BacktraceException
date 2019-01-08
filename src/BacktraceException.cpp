@@ -10,18 +10,20 @@
 
 #include <cstdlib>
 #include <memory>
-#include <cxxabi.h>
-
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
 
-#if !defined(_WIN32)
+#if defined(__linux__)
 //Linux only includes
 #include <unistd.h>
+#include <cxxabi.h>
 #include <sys/wait.h>
 #include <execinfo.h>
+#elif defined(_WIN32)
+//Windows only includes
+#include <windows.h>
 #endif
 
 
@@ -32,7 +34,43 @@ static bool _backtraces_enabled = false;
 #else
 static bool _backtraces_enabled = true;
 #endif
-    
+
+
+
+#if  defined(__linux__)
+static BacktraceMethod _backtrace_method = BacktraceMethod::glibc;
+#elif defined(_WIN32)
+static BacktraceMethod _backtrace_method = BacktraceMethod::stackwalk;
+#endif
+
+BacktraceMethod get_backtrace_method()
+{
+    return _backtrace_method;
+}
+
+void set_backtrace_method(BacktraceMethod method)
+{
+#if defined(__linux__)
+    switch(method) {
+        case BacktraceMethod::glibc:
+        case BacktraceMethod::gdb:
+            _backtrace_method = method;
+            return;
+        default:
+            throw std::invalid_argument("BacktraceException::set_backtrace_method() - Invalid backtrace method for linux.");
+    }
+#elif defined(_WIN32)
+    switch(method) {
+        case BacktraceMethod::stackwalk:
+            _backtrace_method = method;
+            return;
+        default:
+            throw std::invalid_argument("BacktraceException::set_backtrace_method() - Invalid backtrace method for WIN32.");
+    }
+
+#endif
+}
+
 void disable_backtraces()
 {
     _backtraces_enabled = false;
@@ -58,7 +96,7 @@ namespace linux_debug {
         return (status==0) ? res.get() : name;
     }
 
-    std::string glibc_backtrace()
+    std::string backtrace_glibc()
     {
         std::ostringstream bt;
         const size_t N=250;
@@ -110,13 +148,7 @@ namespace linux_debug {
         return ""; //Too big to handle.  Should never get here.
     }
 
-    //TODO use backtrace()
-    //Reference: https://sourceware.org/git/?p=glibc.git;a=blob;f=debug/segfault.c;hb=HEAD
-//     std::string print_trace_backtrace()
-//     {
-//     }
-//
-    std::string print_trace_gdb() 
+    std::string backtrace_gdb()
     {
         auto pid = std::to_string(getpid());
         auto name = get_exename();
@@ -133,9 +165,11 @@ namespace linux_debug {
             close(out_pipe_read); //For parent
             close(out_pipe_write); //For parent
             std::cout<<"Stack trace for exename="<<name<<" pid="<<pid<<std::endl;
-            execlp("gdb", "gdb", "--batch", "-n", 
+            execlp("gdb", "gdb", "-q","--batch", "-n",
+                          "-ex", "up 4",
+                          "-ex", "info frame",
                           "-ex", "info threads",
-                          "-ex", "thread apply all info stack full", 
+                          "-ex", "thread apply all info stack",
                           name.c_str(), pid.c_str(), nullptr);
             abort(); /* If gdb failed to start */
         } else {
@@ -170,12 +204,18 @@ std::string BacktraceException::print_backtrace()
 {
 #ifdef __linux__
     if(!backtraces_enabled()) return "Backtraces temporarily disabled.";
-    return linux_debug::glibc_backtrace();
-//     return linux_debug::print_trace_gdb();
+    switch(_backtrace_method) {
+        case BacktraceMethod::glibc:
+            return linux_debug::backtrace_glibc();
+        case BacktraceMethod::gdb:
+            return linux_debug::backtrace_gdb();
+        default:
+            return "Backtrace method not implemented";
+    }
 #elif defined(_WIN32)
-    return "Backtraces not implemented.";
+    return "Backtraces not implemented on WIN32";
 #else
-    return "Backtraces permanently disabled.";
+    return "Unknown system: Backtraces permanently disabled.";
 #endif 
 }
     

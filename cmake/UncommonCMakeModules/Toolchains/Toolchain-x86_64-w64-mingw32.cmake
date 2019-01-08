@@ -13,7 +13,6 @@ set(MXE_TARGET_ARCH x86_64-w64-mingw32.shared)
 set(MXE_HOST_ARCH x86_64-unknown-linux-gnu)
 set(MXE_ARCH_ROOT ${MXE_ROOT}/usr/${MXE_TARGET_ARCH})
 set(MXE_BIN_DIR ${MXE_ROOT}/usr/bin)
-# set(CMAKE_MODULES_DIR ${MXE_ROOT}/usr/${MXE_HOST_ARCH}/share/cmake-3.7/Modules)
 
 message(STATUS "[MexIFace] MXE_ROOT: ${MXE_ROOT}")
 #Look here for libraries at install time

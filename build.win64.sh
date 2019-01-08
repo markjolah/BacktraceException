@@ -5,7 +5,7 @@
 #
 ARCH=win64
 FULL_ARCH=x86_64-w64-mingw32
-TOOLCHAIN_FILE=./cmake/Toolchains/Toolchain-${FULL_ARCH}.cmake
+TOOLCHAIN_FILE=./cmake/UncommonCMakeModules/Toolchains/Toolchain-${FULL_ARCH}.cmake
 INSTALL_PATH=_${ARCH}.install
 BUILD_PATH=_${ARCH}.build/Debug
 NUM_PROCS=`grep -c ^processor /proc/cpuinfo`

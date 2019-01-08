@@ -1,7 +1,8 @@
 test_nfs.sh
 _build
 _install
-
+_*.build
+_*.install
 
 # Prerequisites
 *.d

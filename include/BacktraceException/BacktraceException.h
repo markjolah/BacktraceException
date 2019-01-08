@@ -13,10 +13,14 @@
 
 namespace backtrace_exception {
 
+enum class BacktraceMethod { glibc, gdb, stackwalk };
+
 void disable_backtraces();
 void enable_backtraces();
 bool backtraces_enabled();
-    
+BacktraceMethod get_backtrace_method();
+void set_backtrace_method(BacktraceMethod method);
+
 /** @brief Extension of std::exception that produces saved backtraces for debugging
  * 
  * 

@@ -16,5 +16,10 @@ add_shared_static_libraries(SOURCES ${SRCS}
                             RETURN_TARGETS libs)
 message(STATUS "Got libs:${libs}")
 foreach(lib IN LISTS libs)
-    target_link_options(${lib} INTERFACE -rdynamic) #For backtraces to be usefull must export all symbols
+    if(UNIX)
+        target_link_options(${lib} INTERFACE -rdynamic) #For backtraces to be useful must export all symbols
+    endif()
+    if(WIN32)
+        fixup_dependencies(${lib})
+    endif()
 endforeach()
