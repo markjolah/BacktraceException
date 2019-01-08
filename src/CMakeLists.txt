@@ -4,6 +4,7 @@
 set(SRCS BacktraceException.cpp)
 
 include(AddSharedStaticLibraries)
+include(FixupDependencies)
 # add_shared_static_libraries()
 # * Add shared and static library targets to project namespace
 # * Sets target_include_directories
@@ -19,7 +20,7 @@ foreach(lib IN LISTS libs)
     if(UNIX)
         target_link_options(${lib} INTERFACE -rdynamic) #For backtraces to be useful must export all symbols
     endif()
-    if(WIN32)
-        fixup_dependencies(${lib})
-    endif()
 endforeach()
+if(WIN32)
+    fixup_dependencies(TARGETS ${libs})
+endif()
