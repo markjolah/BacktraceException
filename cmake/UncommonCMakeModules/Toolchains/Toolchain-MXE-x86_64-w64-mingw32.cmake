@@ -14,7 +14,7 @@ set(MXE_BIN_DIR ${MXE_ROOT}/usr/bin)
 
 message(STATUS "[MexIFace] MXE_ROOT: ${MXE_ROOT}")
 
-#Search paths for dependet libraries to copy into install dir
+#Search paths for dependent libraries to copy into install dir
 set(FIXUP_LIB_SEARCH_PATHS "${MXE_ROOT}/usr/${MXE_TARGET_ARCH}/bin")
 
 set(CMAKE_SYSTEM_NAME Windows)
