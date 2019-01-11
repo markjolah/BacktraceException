@@ -7,26 +7,23 @@
 # See: LICENCE file
 #
 # Single argument keywords:
-#   COPY_RPATH - [optional] [default: '.'] Relative path from the target install location to the lib dir  i.e., copy location.
+#   COPY_DESTINATION - [optional] [default: '.'] Relative path from the target install location to the lib dir  i.e., copy location.
 #   TARGET_DESTINATION - [suggested but optional] [default try to find_file in install prefix].  The relative path
 #       of the target under the install prefix.  This is the same value as given to DESTINATION keyword of install(TARGETS).
 #   FIXUP_SCRIPT_TEMPLATE - [optional] [default: look for script in ../Templates or ./Templates]
 # Multi-argument keywords:
 #   TARGETS - List of targets to copy dependencies for.  These targets should share all of the other keyword propoerties.
 #             If multiple targets require different options to fixup_dependencies, then multiple independent calls should be made.
-#   LIB_SEARCH_PATHS - Search path for libraries that should be copied into the install tree.
-#   LIB_SYSTEM_PATHS - Search paths for system libraries that should be assumed to be provided by the client system and should not be copied.
+#   PROVIDED_LIB_DIRS - Absolute paths to directories containaing libraries that will be provided by the system or parent program for dynamic imports.
+#                       Libraries found in these directories will not be copied as they are assumed provided.
+#   PROVIDED_LIBS - Names (with of without extensions) of provided libraries that should not be copied.
+#   SEARCH_LIB_DIRS - Additional directories to search for libraries.  These libraries will be copied into COPY_DESTINATION
 set(_fixup_dependencies_install_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(fixup_dependencies)
-    if(FIXUP_LIB_SEARCH_PATHS)
-        set(FIXUP_GLOBAL_LIB_SEARCH_PATHS ${FIXUP_LIB_SEARCH_PATHS})
-    endif()
-    if(FIXUP_LIB_SYSYEM_PATHS)
-        set(FIXUP_GLOBAL_LIB_SYSTEM_PATHS ${FIXUP_LIB_SYSTEM_PATHS})
-    endif()
-    cmake_parse_arguments(FIXUP "" "COPY_RPATH;TARGET_DESTINATION;SCRIPT_TEMPLATE" "TARGETS;LIB_SEARCH_PATHS;LIB_SYSTEM_PATHS" ${ARGN})
-    if(NOT FIXUP_COPY_RPATH)
-        set(FIXUP_COPY_RPATH ".")  #Must be relative to TARGET_DESTINATION
+    cmake_parse_arguments(FIXUP "" "COPY_DESTINATION;TARGET_DESTINATION;SCRIPT_TEMPLATE"
+                                   "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS" ${ARGN})
+    if(NOT FIXUP_COPY_DESTINATION)
+        set(FIXUP_COPY_DESTINATION ".")  #Must be relative to TARGET_DESTINATION
     endif()
     if(NOT FIXUP_TARGET_DESTINATION)
         set(FIXUP_TARGET_DESTINATION) #Signal to use find_file in FixupTarget script
@@ -41,20 +38,31 @@ function(fixup_dependencies)
         endif()
         set(FIXUP_SCRIPT_TEMPLATE ${FIXUP_SCRIPT_TEMPLATE_PATH})
     endif()
-    if(NOT FIXUP_LIB_SEARCH_PATHS)
-        set(FIXUP_LIB_SEARCH_PATHS ${FIXUP_GLOBAL_LIB_SEARCH_PATHS})
-    endif()
-    if(NOT FIXUP_LIB_SYSYEM_PATHS)
-        set(FIXUP_LIB_SYSTEM_PATHS ${FIXUP_GLOBAL_LIB_SYSTEM_PATHS})
-    endif()
 
+    #Normal variables WIN32 UNIX, etc. are not respected in install scrtipts
+    #(apparently due to toolchain file not being used at install time?)
     if(WIN32)
-        set(FIXUP_TARGET_OS WIN64)
+        set(FIXUP_TARGET_OS WIN32)
     elseif(UNIX AND NOT APPLE)
-        set(FIXUP_TARGET_OS LINUX)
+        set(FIXUP_TARGET_OS UNIX)
     else()
         set(FIXUP_TARGET_OS OSX)
     endif()
+
+    if(PROVIDED_LIBS)
+        list(LENGTH PROVIDED_LIBS ndirs)
+        math(EXPR niter "${ndirs} - 1")
+        foreach(idx RANGE ${niter})
+            list(GET PROVIDED_LIBS ${idx} _item)
+            get_filename_component(_name ${_item} NAME_WE)
+            list(REMOVE_AT PROVIDED_LIBS ${idx})
+            list(INSERT PROVIDED_LIBS ${idx} ${_name})
+        endforeach()
+        if(WIN32)
+            list(TRANSFORM PROVIDED_LIBS TOLOWER) #Case insensitive-match on windows
+        endif()
+    endif()
+
     foreach(FIXUP_TARGET IN LISTS FIXUP_TARGETS)
         if(NOT TARGET ${FIXUP_TARGET})
             message(FATAL_ERROR "[fixup_dependencies]  Got invalid target: ${FIXUP_TARGET}")
