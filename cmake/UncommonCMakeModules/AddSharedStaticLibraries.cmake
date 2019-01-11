@@ -10,7 +10,9 @@
 # Options:
 #  NO_INSTALL - Do not install the libraries
 # Single-value keywords:
-#  RETURN_TARGETS - [optional] A return variable that returns all targets created
+#  RETURN_TARGETS - [optional] A return variable that returns a list of all targets created.  To get individual shared/static targets use the specific versions below.
+#  RETURN_SHARED_TARGET - [optional] A return variable that returns just the shared target [if it was produced correctly]
+#  RETURN_STATIC_TARGET - [optional] A return variable that returns just the static target [if it was produced correctly]
 #  NAMESPACE - [Optional default: ${PROJECT_NAME}] The name of the namespace (without ::) intowhich the libraries will be exported
 #  LIBTARGET target_name - [Optional] The name of the library target to create and export (defaults to same as Namespace)
 #  STATIC_LIBTARGET target_name - [Optional] The name of the static library target to create
@@ -38,7 +40,8 @@
 
 function(add_shared_static_libraries)
     set(options NO_INSTALL)
-    set(oneValueArgs RETURN_TARGETS NAMESPACE LIBTARGET STATIC_LIBTARGET
+    set(oneValueArgs RETURN_TARGETS RETURN_SHARED_TARGET RETURN_STATIC_TARGET
+                     NAMESPACE LIBTARGET STATIC_LIBTARGET
                      BUILD_SHARED_LIBS BUILD_STATIC_LIBS
                      PUBLIC_HEADER_DIR PUBLIC_DEBUG_HEADER_DIR)
     set(multiValueArgs SOURCES COMPILE_FEATURES INCLUDE_DIRECTORIES LINK_LIBRARIES)
@@ -66,21 +69,26 @@ function(add_shared_static_libraries)
     message(STATUS "SOURCES:${ARG_SOURCES}")
 
     set(LIB_TARGETS ${ARG_LIBTARGET}) # List of targets to configure.  At most: the shared and static library targets.
+    set(SHARED_TARGET False)
+    set(STATIC_TARGET False)
     if(ARG_BUILD_SHARED_LIBS)
         add_library(${ARG_LIBTARGET} SHARED ${ARG_SOURCES})
         add_library(${ARG_NAMESPACE}::${ARG_LIBTARGET} ALIAS ${ARG_LIBTARGET})
+        set(SHARED_TARGET ${ARG_LIBTARGET})
         if(ARG_BUILD_STATIC_LIBS)
             add_library(${ARG_STATIC_LIBTARGET} STATIC ${ARG_SOURCES})
             add_library(${ARG_NAMESPACE}::${ARG_STATIC_LIBTARGET} ALIAS ${ARG_STATIC_LIBTARGET})
             set_target_properties(${ARG_STATIC_LIBTARGET} PROPERTIES OUTPUT_NAME ${ARG_LIBTARGET})
             set_target_properties(${ARG_STATIC_LIBTARGET} PROPERTIES POSITION_INDEPENDENT_CODE ON)
             list(APPEND LIB_TARGETS ${ARG_STATIC_LIBTARGET})
+            set(STATIC_TARGET ${ARG_STATIC_LIBTARGET})
         endif()
     else()
         #Build static only
         add_library(${ARG_LIBTARGET} STATIC ${ARG_SOURCES})
         add_library(${ARG_NAMESPACE}::${ARG_LIBTARGET} ALIAS ${ARG_LIBTARGET})
         set_target_properties(${ARG_LIBTARGET} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+        set(STATIC_TARGET ${ARG_LIBTARGET})
     endif()
 
     if(NOT ARG_NO_INSTALL)
@@ -131,6 +139,12 @@ function(add_shared_static_libraries)
         endforeach()
     endif()
     if(ARG_RETURN_TARGETS)
-        set(${ARG_RETURN_TARGETS} ${LIB_TARGETS} PARENT_SCOPE) #Return list of created library targets
+        set(${ARG_RETURN_TARGETS} ${LIB_TARGETS} PARENT_SCOPE)
+    endif()
+    if(ARG_RETURN_STATIC_TARGET)
+        set(${ARG_RETURN_STATIC_TARGET} ${STATIC_TARGET} PARENT_SCOPE)
+    endif()
+     if(ARG_RETURN_SHARED_TARGET)
+        set(${ARG_RETURN_SHARED_TARGET} ${SHARED_TARGET} PARENT_SCOPE)
     endif()
 endfunction()

@@ -4,7 +4,6 @@
 set(SRCS BacktraceException.cpp)
 
 include(AddSharedStaticLibraries)
-include(FixupDependencies)
 # add_shared_static_libraries()
 # * Add shared and static library targets to project namespace
 # * Sets target_include_directories
@@ -14,13 +13,15 @@ include(FixupDependencies)
 add_shared_static_libraries(SOURCES ${SRCS}
                             COMPILE_FEATURES cxx_std_11
                             PUBLIC_HEADER_DIR ${CMAKE_SOURCE_DIR}/include
-                            RETURN_TARGETS libs)
-message(STATUS "Got libs:${libs}")
-foreach(lib IN LISTS libs)
-    if(UNIX)
-        target_link_options(${lib} INTERFACE -rdynamic) #For backtraces to be useful must export all symbols
-    endif()
-endforeach()
-if(WIN32)
-    fixup_dependencies(TARGETS ${libs})
+                            RETURN_TARGETS libs
+                            RETURN_SHARED_TARGET shared_lib)
+
+if(UNIX)
+    target_link_options(${shared_lib} INTERFACE -rdynamic) #For backtraces to be useful must export all symbols
+endif()
+
+#If crosscompling install dependencies along with library
+if(CMAKE_CROSSCOMPILING AND OPT_INSTALL_DEPENDENCIES)
+    include(FixupDependencies)
+    fixup_dependencies(TARGETS ${shared_lib} COPY_DESTINATION ".") #copy dependencies into destination
 endif()

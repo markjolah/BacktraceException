@@ -14,8 +14,8 @@ set(MXE_BIN_DIR ${MXE_ROOT}/usr/bin)
 
 message(STATUS "[MexIFace] MXE_ROOT: ${MXE_ROOT}")
 
-#Search paths for dependent libraries to copy into install dir
-set(FIXUP_LIB_SEARCH_PATHS "${MXE_ROOT}/usr/${MXE_TARGET_ARCH}/bin")
+# #Search paths for dependent libraries to copy into install dir
+# set(FIXUP_LIB_SEARCH_PATHS "${MXE_ROOT}/usr/${MXE_TARGET_ARCH}/bin")
 
 set(CMAKE_SYSTEM_NAME Windows)
 
@@ -32,3 +32,5 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY True)
 set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY True)
+
+option(OPT_INSTALL_DEPENDENCIES "Copy dependencies to install tree." ON)

@@ -6,6 +6,9 @@
 # https://www.apache.org/licenses/LICENSE-2.0
 # See: LICENCE file
 #
+# Options:
+#   COPY_SYSTEM_LIBS - [default: off] Only has effect on Linux targets.  Copy all system (gcc) libraries into COPY_DESTINATION.
+#
 # Single argument keywords:
 #   COPY_DESTINATION - [optional] [default: '.'] Relative path from the target install location to the lib dir  i.e., copy location.
 #   TARGET_DESTINATION - [suggested but optional] [default try to find_file in install prefix].  The relative path
@@ -18,10 +21,12 @@
 #                       Libraries found in these directories will not be copied as they are assumed provided.
 #   PROVIDED_LIBS - Names (with of without extensions) of provided libraries that should not be copied.
 #   SEARCH_LIB_DIRS - Additional directories to search for libraries.  These libraries will be copied into COPY_DESTINATION
+#   SEARCH_LIB_DIR_SUFFIXES - Additional suffixes to check for
 set(_fixup_dependencies_install_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(fixup_dependencies)
-    cmake_parse_arguments(FIXUP "" "COPY_DESTINATION;TARGET_DESTINATION;SCRIPT_TEMPLATE"
-                                   "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS" ${ARGN})
+    cmake_parse_arguments(FIXUP "COPY_SYSTEM_LIBS"
+                                "COPY_DESTINATION;TARGET_DESTINATION;SCRIPT_TEMPLATE"
+                                "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
     if(NOT FIXUP_COPY_DESTINATION)
         set(FIXUP_COPY_DESTINATION ".")  #Must be relative to TARGET_DESTINATION
     endif()
@@ -38,7 +43,9 @@ function(fixup_dependencies)
         endif()
         set(FIXUP_SCRIPT_TEMPLATE ${FIXUP_SCRIPT_TEMPLATE_PATH})
     endif()
-
+    if(NOT FIXUP_COPY_SYSTEM_LIBS AND OPT_INSTALL_SYSTEM_DEPENDENCIES)
+        set(FIXUP_COPY_SYSTEM_LIBS True)
+    endif()
     #Normal variables WIN32 UNIX, etc. are not respected in install scrtipts
     #(apparently due to toolchain file not being used at install time?)
     if(WIN32)
@@ -62,7 +69,7 @@ function(fixup_dependencies)
             list(TRANSFORM PROVIDED_LIBS TOLOWER) #Case insensitive-match on windows
         endif()
     endif()
-
+    message(STATUS "CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES:${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES}")
     foreach(FIXUP_TARGET IN LISTS FIXUP_TARGETS)
         if(NOT TARGET ${FIXUP_TARGET})
             message(FATAL_ERROR "[fixup_dependencies]  Got invalid target: ${FIXUP_TARGET}")
