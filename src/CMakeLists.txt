@@ -19,9 +19,3 @@ add_shared_static_libraries(SOURCES ${SRCS}
 if(UNIX)
     target_link_options(${shared_lib} INTERFACE -rdynamic) #For backtraces to be useful must export all symbols
 endif()
-
-#If crosscompling install dependencies along with library
-if(CMAKE_CROSSCOMPILING AND OPT_INSTALL_DEPENDENCIES)
-    include(FixupDependencies)
-    fixup_dependencies(TARGETS ${shared_lib} COPY_DESTINATION ".") #copy dependencies into destination
-endif()
