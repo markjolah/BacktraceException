@@ -7,12 +7,17 @@
 # See: LICENCE file
 #
 # Options:
-#   COPY_SYSTEM_LIBS - [default: off] Only has effect on Linux targets.  Copy all system (gcc) libraries into COPY_DESTINATION.
-#
+#   COPY_SYSTEM_LIBS - [default: off] Only has effect on Linux targets.  Copy all system libraries into COPY_DESTINATION (except
+#   BUILD_TREE_EXPORT - [default: off] Fixup the libraries for the build-tree export
+#   LINK_INSTALLED_LIBS - [default: off] [WIN32 only] instead of copying into current directory make a symlink if dep us under in the install_prefix
+
 # Single argument keywords:
 #   COPY_DESTINATION - [optional] [default: '.'] Relative path from the target install location to the lib dir  i.e., copy location.
 #   TARGET_DESTINATION - [suggested but optional] [default try to find_file in install prefix].  The relative path
 #       of the target under the install prefix.  This is the same value as given to DESTINATION keyword of install(TARGETS).
+#   PARENT_LIB - [optional] [default: False] The library that will load this library possibly via dlopen.  We can use the RPATH or RUNPATH from this
+#                                            ELF file to correctly find libraries that will be provided on the system path.
+#                                            For fixing up matlab MEx files, this should be ${MATLAB_ROOT}/bin/${MATLAB_ARCH}/MATLAB or equivalent.
 #   FIXUP_SCRIPT_TEMPLATE - [optional] [default: look for script in ../Templates or ./Templates]
 # Multi-argument keywords:
 #   TARGETS - List of targets to copy dependencies for.  These targets should share all of the other keyword propoerties.
@@ -24,8 +29,8 @@
 #   SEARCH_LIB_DIR_SUFFIXES - Additional suffixes to check for
 set(_fixup_dependencies_install_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(fixup_dependencies)
-    cmake_parse_arguments(FIXUP "COPY_SYSTEM_LIBS"
-                                "COPY_DESTINATION;TARGET_DESTINATION;SCRIPT_TEMPLATE"
+    cmake_parse_arguments(FIXUP "COPY_SYSTEM_LIBS;BUILD_TREE_EXPORT;LINK_INSTALLED_LIBS"
+                                "COPY_DESTINATION;TARGET_DESTINATION;PARENT_LIB;SCRIPT_TEMPLATE"
                                 "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
     if(NOT FIXUP_COPY_DESTINATION)
         set(FIXUP_COPY_DESTINATION ".")  #Must be relative to TARGET_DESTINATION
@@ -69,7 +74,6 @@ function(fixup_dependencies)
             list(TRANSFORM PROVIDED_LIBS TOLOWER) #Case insensitive-match on windows
         endif()
     endif()
-    message(STATUS "CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES:${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES}")
     foreach(FIXUP_TARGET IN LISTS FIXUP_TARGETS)
         if(NOT TARGET ${FIXUP_TARGET})
             message(FATAL_ERROR "[fixup_dependencies]  Got invalid target: ${FIXUP_TARGET}")
@@ -78,11 +82,15 @@ function(fixup_dependencies)
         if(NOT (${FIXUP_TARGET_TYPE} MATCHES SHARED_LIBRARY OR ${FIXUP_TARGET_TYPE} MATCHES EXECUTABLE) )
             message(STATUS "[fixup_dependencies]  Skipping non-shared target: ${FIXUP_TARGET}")
         else()
-            set(FIXUP_SCRIPT ${CMAKE_BINARY_DIR}/Fixup-${FIXUP_TARGET}.cmake)
-            configure_file(${FIXUP_SCRIPT_TEMPLATE} ${FIXUP_SCRIPT}.gen @ONLY)
-            file(GENERATE OUTPUT ${FIXUP_SCRIPT} INPUT ${FIXUP_SCRIPT}.gen )
-            install(SCRIPT ${FIXUP_SCRIPT})
-            message(STATUS "[fixup_dependencies]  Generated dependency fixup script for target: ${FIXUP_TARGET}")
+            get_target_property(script ${FIXUP_TARGET} FIXUP_SCRIPT)
+            if(NOT script)
+                set(FIXUP_SCRIPT ${CMAKE_BINARY_DIR}/Fixup-${FIXUP_TARGET}.cmake)
+                configure_file(${FIXUP_SCRIPT_TEMPLATE} ${FIXUP_SCRIPT}.gen @ONLY)
+                file(GENERATE OUTPUT ${FIXUP_SCRIPT} INPUT ${FIXUP_SCRIPT}.gen )
+                install(SCRIPT ${FIXUP_SCRIPT})
+                message(STATUS "[fixup_dependencies]  Generated dependency fixup script for target: ${FIXUP_TARGET}")
+                set_target_properties(${FIXUP_TARGET} PROPERTIES FIXUP_SCRIPT ${FIXUP_SCRIPT}) #Mark as fixup-ready.
+            endif()
         endif()
     endforeach()
 endfunction()
