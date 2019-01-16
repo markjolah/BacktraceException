@@ -7,10 +7,16 @@
 # See: LICENCE file
 #
 # Options:
-#   COPY_SYSTEM_LIBS - [default: off] Only has effect on Linux targets.  Copy all system libraries into COPY_DESTINATION (except
+#   COPY_GCC_LIBS - [UNIX only]  [default: off] Copy libraries provided by GCC [i.e. libgcc_s libstdc++, etc.].  This implies
+#                    Setting RPATH for targets to the COPU_DESTINATION.  This is only possibly usefull if deploying to
+#                    systems with and older GCC than was used to build them.
+#   COPY_GLIBC_LIBS - [UNIX only] [DANGEROUS} [default: off] Copy libraries provided glibc [i.e. libc, ld-linux-x86_64 etc.].
+#                      Also copy in Glibc libraries.  WARNING. This is almost certainly going to cause problems as
+#                     the version of libc and ld-linux-x86_64 must match exactly.  For now this is disabled.
+#
 #   BUILD_TREE_EXPORT - [default: off] Fixup the libraries for the build-tree export
 #   LINK_INSTALLED_LIBS - [default: off] [WIN32 only] instead of copying into current directory make a symlink if dep us under in the install_prefix
-
+#
 # Single argument keywords:
 #   COPY_DESTINATION - [optional] [default: '.'] Relative path from the target install location to the lib dir  i.e., copy location.
 #   TARGET_DESTINATION - [suggested but optional] [default try to find_file in install prefix].  The relative path
@@ -27,9 +33,12 @@
 #   PROVIDED_LIBS - Names (with of without extensions) of provided libraries that should not be copied.
 #   SEARCH_LIB_DIRS - Additional directories to search for libraries.  These libraries will be copied into COPY_DESTINATION
 #   SEARCH_LIB_DIR_SUFFIXES - Additional suffixes to check for
+#
+# TODO: Allow a configure-time build-tree fixup phase.
+#
 set(_fixup_dependencies_install_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(fixup_dependencies)
-    cmake_parse_arguments(FIXUP "COPY_SYSTEM_LIBS;BUILD_TREE_EXPORT;LINK_INSTALLED_LIBS"
+    cmake_parse_arguments(FIXUP "COPY_GCC_LIBS;COPY_GLIBC_LIBS;BUILD_TREE_EXPORT;LINK_INSTALLED_LIBS"
                                 "COPY_DESTINATION;TARGET_DESTINATION;PARENT_LIB;SCRIPT_TEMPLATE"
                                 "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
     if(NOT FIXUP_COPY_DESTINATION)
