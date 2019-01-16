@@ -34,7 +34,7 @@ option(OPT_AUTO_FIXUP_DEPENDENCIES "Enable the auto hook on install() function f
 
 option(OPT_INSTALL_GCC_DEPENDENCIES "Copy gcc provided dependencies to install tree and set RPATH for all libraries and executables." OFF)
 option(OPT_SET_RPATH "Set RPATH on installed libraries and binaries. This supersedes LD_LIBRARY_PATH and rpaths are searched recursively in dependency hierarchy" OFF)
-option(OPT_SET_RUNPATH "Set RUNPATH on installed libraries and binaries." OFF)
+option(OPT_SET_RUNPATH "Set RUNPATH on installed libraries and binaries." ON)
 set(INSTALL_RUNTIME_PATH "\$ORIGIN/../lib" CACHE STRING "Runtime path used for installed libraries and executables.")
 set(BUILD_RUNTIME_PATH "\$ORIGIN" CACHE STRING "Build tree path used for installed libraries and executables.")
 
@@ -51,6 +51,10 @@ if(OPT_FIXUP_DEPENDENCIES)
             set(OPT_SET_RPATH ON)
             set(OPT_SET_RPATH ON CACHE BOOL "Set RPATH on installed libraries and binaries. This supersedes LD_LIBRARY_PATH and rpaths are searched recursively in dependency hierarchy" FORCE)
         endif()
+    elseif(NOT OPT_SET_RPATH AND NOT OPT_SET_RUNPATH)
+        message(STATUS "Neither OPT_RUNPATH or OPT_RPATH is set.  Must have at least one when cross-compiling.  Setting OPT_RUNPATH.")
+        set(OPT_SET_RUNPATH ON)
+        set(OPT_SET_RUNPATH ON CACHE BOOL "Set RUNPATH on installed libraries and binaries." FORCE)
     endif()
 
     get_property(_install_hook_activated GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED)
