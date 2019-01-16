@@ -11,9 +11,7 @@ include(ExternalProject)
 
 set(CMAKE_ARGS -DCMAKE_CXX_COMPILER=@CMAKE_CXX_COMPILER@
                -DCMAKE_INSTALL_PREFIX=@CMAKE_INSTALL_PREFIX@
-               -DCMAKE_TOOLCHAIN_FILE=@CMAKE_TOOLCHAIN_FILE@
-               -DBUILD_SHARED_LIBS=@_ExtProject_SHARED@
-               -DBUILD_STATIC_LIBS=@_ExtProject_STATIC@)
+               -DCMAKE_TOOLCHAIN_FILE=@CMAKE_TOOLCHAIN_FILE@)
 
 include(ProcessorCount)
 ProcessorCount(NUM_PROCS)

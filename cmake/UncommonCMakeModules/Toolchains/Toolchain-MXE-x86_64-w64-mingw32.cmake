@@ -55,7 +55,7 @@ if(OPT_FIXUP_DEPENDENCIES)
                                                 OPT_LINK_INSTALLED_LIBS)
         SET(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
 
-        message(STATUS "mingw-w64 Toolchain option: OPT_INSTALL_DEPENDENCIES:${OPT_INSTALL_DEPENDENCIES}")
+        message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_DEPENDENCIES:${OPT_FIXUP_DEPENDENCIES}")
         message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_BUILD_TREE_DEPENDENCIES:${OPT_FIXUP_BUILD_TREE_DEPENDENCIES}")
         message(STATUS "mingw-w64 Toolchain option: OPT_AUTO_FIXUP_DEPENDENCIES:${OPT_AUTO_FIXUP_DEPENDENCIES}")
 
@@ -75,7 +75,7 @@ if(OPT_FIXUP_DEPENDENCIES)
             #intercept install(TARGETS) commands and run fixup_dependencies on the targets
             function(install type)
                 _install(${type} ${name} ${ARGN})
-                if(NOT OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES AND type STREQUAL TARGETS)
+                if(OPT_AUTO_FIXUP_DEPENDENCIES AND type STREQUAL TARGETS) #Need to check for OPT_AUTO_FIXUP_DEPENDENCIES again incase it is disabled in main CMakeLists.txt after this Toolchain is processed
                     #Get all targets
                     math(EXPR _N "${ARGC} - 1")
                     set(_targets)

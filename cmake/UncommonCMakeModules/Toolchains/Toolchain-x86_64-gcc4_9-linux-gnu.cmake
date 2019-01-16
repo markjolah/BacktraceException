@@ -91,7 +91,7 @@ if(OPT_FIXUP_DEPENDENCIES)
             #intercept install(TARGETS) commands and run fixup_dependencies on the targets
             function(install type)
                 _install(${type} ${name} ${ARGN})
-                if(type STREQUAL TARGETS)
+                if(OPT_AUTO_FIXUP_DEPENDENCIES AND type STREQUAL TARGETS) #Need to check for OPT_AUTO_FIXUP_DEPENDENCIES again incase it is disabled in main CMakeLists.txt after this Toolchain is processed
                     #Get all targets
                     math(EXPR _N "${ARGC} - 1")
                     set(_targets)
