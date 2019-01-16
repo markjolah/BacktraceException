@@ -238,7 +238,7 @@ function(fixup_unix_target target)
     read_rpath(_target_runpath ${target} RUNPATH)
     if(_target_runpath)
         set(_rpath)
-        set(_runpath ${target_runpath})
+        set(_runpath ${_target_runpath})
     elseif(_target_rpath)
         set(_rpath ${_target_rpath} ${_parent_rpath}) #recursive rpaths if parent also used rpath. Even if we have not _target_rpath this is correct
         set(_runpath)
