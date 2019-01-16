@@ -15,13 +15,25 @@ set(project_name @PROJECT_NAME@)
 set(fixup_target @FIXUP_TARGET@)
 
 set(install_prefix ${CMAKE_INSTALL_PREFIX}) #this should be set at install time
-get_filename_component(install_prefix ${install_prefix} REALPATH) #Ensure we have a cannonical path to install at
+if(install_prefix)
+    get_filename_component(install_prefix ${install_prefix} REALPATH) #Ensure we have a cannonical path to install at
+    if(NOT EXISTS ${install_prefix})
+        set(install_prefix)
+    endif()
+endif()
 
 set(target_file_name $<TARGET_FILE_NAME:@FIXUP_TARGET@>)
 set(target_build_dir $<TARGET_FILE_DIR:@FIXUP_TARGET@>)
-set(msg_hdr "[fixup_dependencies:install_phase] [${fixup_target}]")
+set(target_build_file ${target_build_dir}/${target_file_name})
+set(install_prefix @CMAKE_INSTALL_PREFIX@)
+get_filename_component(lib_copy_dest ${target_build_dir} ABSOLUTE) #Destination for libraries to copy in
+
+set(msg_hdr "[fixup_dependencies:build_tree] [${fixup_target}]")
 message(STATUS "${msg_hdr}: file name:${target_file_name}")
 message(STATUS "${msg_hdr}: build dir:${target_build_dir}")
+message(STATUS "${msg_hdr}: build file:${target_build_file}")
+message(STATUS "${msg_hdr}: install_prefix:${install_prefix}")
+
 
 function(transform_filename_component_list list_name component)
     list(LENGTH ${list_name} ndirs)
@@ -36,7 +48,6 @@ function(transform_filename_component_list list_name component)
     endif()
     set(${list_name} ${_new_list} PARENT_SCOPE)
 endfunction()
-
 
 function(read_rpath out_var target tag)
     get_filename_component(_target_dir ${target} DIRECTORY)
@@ -55,18 +66,20 @@ function(read_rpath out_var target tag)
         return()
     endif()
     if(_out MATCHES "\\(?${tag}\\)?[ \t]+[A-Za-z ]+:[ \t]*\\[([^\]]+)\\][ \t\r]*\n")
-        set(_val ${CMAKE_MATCH_1})
-        string(REGEX REPLACE "\\$\\(?ORIGIN\\)?" ${_target_dir} _val "${_val}")
-        get_filename_component(_val ${_val} ABSOLUTE)
-        set(${out_var} ${_val} PARENT_SCOPE)
+        set(_dirs ${CMAKE_MATCH_1})
+        string(REGEX REPLACE "\\$\\(?ORIGIN\\)?" ${_target_dir} _dirs "${_dirs}")
+        string(REGEX REPLACE ":" ";" _dirs "${_dirs}")
+        message(STATUS "_dirs:${_dirs}")
+        set(_abs_dirs)
+        foreach(_dir IN LISTS _dirs)
+            if(_dir)
+                get_filename_component(_dir "${_dir}" ABSOLUTE)
+                list(APPEND _abs_dirs ${_dir})
+            endif()
+        endforeach()
+        set(${out_var} ${_abs_dirs} PARENT_SCOPE)
     endif()
 endfunction()
-
-function(read_ld_libraray_path path_var)
-    set(path $ENV{LD_LIBRARY_PATH})
-    set(${path_var} ${path} PARENT_SCOPE)
-endfunction()
-
 
 function(read_direct_dependencies out_var target)
     get_filename_component(_target_dir ${target} DIRECTORY)
@@ -106,26 +119,9 @@ function(read_direct_dependencies out_var target)
     endif()
 endfunction()
 
-
-#Find target_destination: the relative directory path from ${CMAKE_INSTALL_PREFIX} that target will be installed to
-set(target_destination @FIXUP_TARGET_DESTINATION@)
-if(NOT target_destination)
-    #try to find installed file
-    find_file(_file ${target_file_name} PATHS ${install_prefix} PATH_SUFFIXES lib lib/${project_name} bin bin/${project_name} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
-    if(NOT _file)
-        message(FATAL_ERROR "Could not find installed location for target fixup file: ${target_file_name} under install dir: ${install_prefix}")
-    endif()
-    message(STATUS "${msg_hdr}: Found Fixing up target_install_file:${_file}")
-    get_filename_component(target_install_dir ${_file} DIRECTORY)
-    unset(_file)
-    unset(_file CACHE)
-    file(RELATIVE_PATH target_destination ${install_prefix} "${target_install_dir}")
-endif()
+set(target_link_libraries @FIXUP_BUILD_TARGET_LINK_DIRECTORIES@)
 
 set(parent_lib "@FIXUP_PARENT_LIB@")
-set(target_install_dir ${install_prefix}/${target_destination})
-set(target_install_file ${target_install_dir}/${target_file_name})
-get_filename_component(lib_copy_dest ${target_install_dir}/@FIXUP_COPY_DESTINATION@ ABSOLUTE) #Destination for libraries to copy in
 
 set(provided_lib_dirs @FIXUP_PROVIDED_LIB_DIRS@)
 transform_filename_component_list(provided_lib_dirs REALPATH)
@@ -209,10 +205,8 @@ elseif(target_os STREQUAL "WIN32")
     list(APPEND provided_libs kernel32 user32 msvcrt advapi32 ws2_32 msvcp120 msvcr120 msvcp120 dbghelp oleaut32 ole32 psapi powrprof)
 endif()
 
-message(STATUS "${msg_hdr} install_prefix: ${install_prefix} target_destination: ${target_destination}")
+message(STATUS "${msg_hdr}: target_link_libraries:${target_link_libraries}")
 message(STATUS "${msg_hdr} parent_lib: ${parent_lib}")
-message(STATUS "${msg_hdr} target_install_dir: ${target_install_dir}")
-message(STATUS "${msg_hdr} target_install_file: ${target_install_file}")
 message(STATUS "${msg_hdr} lib_copy_dest: ${lib_copy_dest}")
 message(STATUS "${msg_hdr} provided_lib_dirs: ${provided_lib_dirs}")
 message(STATUS "${msg_hdr} provided_libs: ${provided_libs}")
@@ -221,16 +215,6 @@ message(STATUS "${msg_hdr} find_root_path: ${find_root_path}")
 message(STATUS "${msg_hdr} default_library_search_suffixs: ${default_library_search_suffixs}")
 message(STATUS "${msg_hdr} crosscompiling: ${crosscompiling}")
 message(STATUS "${msg_hdr} target_os: ${target_os}")
-
-
-macro(_do_copy_build_dir)
-    if(@FIXUP_BUILD_TREE_EXPORT@ AND NOT EXISTS ${target_build_dir}/${_dep})
-        message(STATUS "  &&& ${dep_name}: {BUILD_TREE_EXPORT} Copying to build tree: ${target_build_dir}")
-        execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${fitem} ${target_build_dir})
-        message(STATUS "  &&& >>> Copying:  ${fitem} --> ${target_build_dir}")
-    endif()
-endmacro()
-
 
 #Called by a parent with an RPATH and no RUNPATH
 function(fixup_unix_target target)
@@ -280,15 +264,13 @@ function(fixup_unix_target target)
     #Recursion happens on the copied library location so that it's dependencies are found as they would be when it
     # is loaded from the new directory (vs. the old one).
     macro(_do_copy_recurse)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${fitem} ${lib_copy_dest})
-        message(STATUS "  +++ >>> Copying:  ${fitem} --> ${lib_copy_dest}")
-        _do_copy_build_dir()
+        execute_process(COMMAND cp ${fitem} ${lib_copy_dest})
+        message(STATUS "  &&& >>> Copying [Build Tree]:  ${fitem} --> ${lib_copy_dest}")
         unset(fitem CACHE)
         fixup_unix_target(${lib_copy_dest}/${_dep} "${_rpath}")
     endmacro()
 
     macro(_do_recurse)
-        _do_copy_build_dir()
         set(_recurse_item ${fitem})
         unset(fitem CACHE)
         fixup_unix_target(${_recurse_item} "${_rpath}") #Rpath will expand as empty if it is not used
@@ -301,7 +283,9 @@ function(fixup_unix_target target)
 
         #Check RPATH if target did not have RUNPATH set.  _rpath will include recursive rpaths
         if(_rpath)
+            message(STATUS "Rpath ${_rpath} fitem:${fitem} dep:${_dep}")
             find_file(fitem ${_dep} PATHS ${_rpath} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+            message(STATUS "fitem ${fitem}")
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
                 message(STATUS "  --- ${msg_hdr}: Exists under rpath at: ${resolved_dir}")
@@ -334,25 +318,16 @@ function(fixup_unix_target target)
         find_file(fitem ${_dep} PATHS ${lib_copy_dest} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(fitem)
             message(STATUS "  --- ${msg_hdr}: Exists at lib copy dest: ${lib_copy_dest}")
-            if(@FIXUP_BUILD_TREE_EXPORT@)
-                _do_recurse() #Recurse if the build tree might need these libraries to be fixed up
-            elseif()
-                unset(fitem CACHE)
-            endif()
+            unset(fitem CACHE)
             continue()
         endif()
 
-        #install_prefix
-        #don't recurse.  These are assumed already fixed-up.
+        #install_prefix - and also not in rpath - recurse.
         find_file(fitem ${_dep} PATHS ${install_prefix} PATH_SUFFIXES ${default_library_search_suffixs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(fitem)
             get_filename_component(resolved_dir ${fitem} DIRECTORY)
-            message(STATUS "  --- ${msg_hdr}: Exists under install prefix at: ${resolved_dir}")
-            if(@FIXUP_BUILD_TREE_EXPORT@)
-                _do_recurse() #Recurse if the build tree might need these libraries to be fixed up
-            elseif()
-                unset(fitem CACHE)
-            endif()
+            message(STATUS "  &&& ${msg_hdr}: Exists under install prefix at: ${resolved_dir}")
+            _do_copy_recurse()
             continue()
         endif()
 
@@ -361,7 +336,7 @@ function(fixup_unix_target target)
             find_file(fitem ${_dep} PATHS ${staging_prefix} PATH_SUFFIXES ${default_library_search_suffixs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  --- ${msg_hdr}: Exists under staging prefix at: ${resolved_dir}")
+                message(STATUS "  &&& ${msg_hdr}: Exists under staging prefix at: ${resolved_dir}")
                 _do_copy_recurse()
                 continue()
             endif()
@@ -373,7 +348,7 @@ function(fixup_unix_target target)
             find_file(fitem ${_dep} PATHS ${search_lib_dirs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  +++ ${msg_hdr}: Exists under search_lib_dirs at: ${resolved_dir}")
+                message(STATUS "  &&& ${msg_hdr}: Exists under search_lib_dirs at: ${resolved_dir}")
                 _do_copy_recurse()
                 continue()
             endif()
@@ -385,32 +360,30 @@ function(fixup_unix_target target)
             find_file(fitem ${_dep} PATHS @CMAKE_FIND_ROOT_PATH@ PATH_SUFFIXES ${default_library_search_suffixs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  +++ ${msg_hdr}: Exists under CMAKE_FIND_ROOT_PATH at: ${resolved_dir}")
+                message(STATUS "  &&& ${msg_hdr}: Exists under CMAKE_FIND_ROOT_PATH at: ${resolved_dir}")
                 _do_copy_recurse()
                 continue()
             endif()
         endif()
 
-        #Check RUNPATH if has RUNPATH set.  _rpath will be ignored
+        #Check RUNPATH if has RUNPATH set.  _rpath will be ignored. Don't copy. Do recurse.
         if(_runpath)
             find_file(fitem ${_dep} PATHS ${_runpath} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  +++ ${msg_hdr}: Exists under runpath at: ${resolved_dir}")
+                message(STATUS "  --- ${msg_hdr}: Exists under runpath at: ${resolved_dir}")
                 _do_recurse()
                 continue()
             endif()
         endif()
 
-        #sysroot - don't copy.  These are assumed provided sysytem directories on target system  This search happens last.
-        #don't recurse.  These are assumed already fixed-up.
+        #sysroot - Copy if not already on rpath.
         if(sysroot)
             find_file(fitem ${_dep} PATHS ${sysroot} PATH_SUFFIXES ${default_library_search_suffixs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  --- ${msg_hdr}: Exists under sysroot prefix at: ${resolved_dir}")
-                _do_copy_build_dir()
-                unset(fitem CACHE)
+                message(STATUS "  &&& ${msg_hdr}: Exists under sysroot prefix at: ${resolved_dir}")
+                _do_copy_recurse()
                 continue()
             endif()
         endif()
@@ -450,29 +423,23 @@ function(fixup_win32_target target)
 
     set(msg_hdr "[fixup_win32_target:${_name}]")
     read_direct_dependencies(_deps ${target})
-#     message(STATUS "${msg_hdr}: direct_target: ${direct_target}")
     message(STATUS "${msg_hdr}: dir: ${_dir}")
-#     message(STATUS "${msg_hdr}: deps: ${_deps}")
 
-    #Little helper function to do the copy and recursion. We recuse whenever we copy.
+    #Helper function to do the copy and recursion. We recuse whenever we copy.
     #Recursion happens on the copied library location so that it's dependencies are found as they would be when it
     # is loaded from the new directory (vs. the old one).
     macro(_do_copy_recurse)
-        execute_process(COMMAND ${CMAKE_COMMAND} -E copy ${fitem} ${lib_copy_dest})
-        message(STATUS "  +++ >>> Copying:  ${fitem} --> ${lib_copy_dest}")
-        _do_copy_build_dir()
+        execute_process(COMMAND cp ${fitem} ${lib_copy_dest})
+        message(STATUS "  &&& >>> Copying [Build Tree]:  ${fitem} --> ${lib_copy_dest}")
         unset(fitem CACHE)
         fixup_win32_target(${lib_copy_dest}/${_dep})
     endmacro()
 
     #May have to recurse on already copied libraries for build tree-fixups.
-    macro(_do_build_tree_recurse)
-        _do_copy_build_dir()
+    macro(_do_recurse)
         set(_recurse_item ${fitem})
         unset(fitem CACHE)
-        if(@FIXUP_BUILD_TREE_EXPORT@) #Only recurse if build_tree_export is happening
-            fixup_win32_target(${_recurse_item})
-        endif()
+        fixup_win32_target(${_recurse_item})
         unset(_recurse_item)
     endmacro()
 
@@ -489,7 +456,7 @@ function(fixup_win32_target target)
         endif()
 
         #Find in vendor provided_libs only for direct dependencies
-        if(provided_lib_dirs AND direct_target)
+        if(direct_target AND provided_lib_dirs)
             find_file(fitem ${_dep} PATHS ${provided_lib_dirs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
@@ -503,8 +470,18 @@ function(fixup_win32_target target)
         find_file(fitem ${_dep} PATHS ${lib_copy_dest} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(fitem)
             message(STATUS "  --- ${msg_hdr}: Exists at lib copy dest: ${lib_copy_dest}")
-            _do_build_tree_recurse() #Recurse to check that build tree has all dependencies it needs.
             continue()
+        endif()
+
+        #target_link_libraries
+        if(direct_target AND target_link_libraries)
+            find_file(fitem ${_dep} PATHS ${target_link_libraries} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+            if(fitem)
+                get_filename_component(resolved_dir ${fitem} DIRECTORY)
+                message(STATUS "  +++ ${msg_hdr}: Exists under target link libraries at: ${resolved_dir}")
+                _do_copy_recurse()
+                continue()
+            endif()
         endif()
 
         #install_prefix
@@ -568,6 +545,10 @@ function(fixup_win32_target target)
             endif()
         endif()
 
+        if(direct_dependency AND TARGET ${fixup_target})
+
+        endif()
+
         message(FATAL_ERROR "  XXX ${msg_hdr}: Could not find dependency ${_dep} of target ${_name} from dir:${_dir}")
     endforeach()
     message(STATUS "  ===> [fixup_win32_target:${_name}] Complete.")
@@ -579,13 +560,13 @@ if(target_os STREQUAL "UNIX")
         read_rpath(_parent_runpath ${parent_lib} RUNPATH)
         read_rpath(_parent_rpath ${parent_lib} RPATH)
         if(_parent_runpath)
-            fixup_unix_target(${target_install_file})
+            fixup_unix_target(${target_build_file})
         else()
-            fixup_unix_target(${target_install_file} ${_parent_rpath})
+            fixup_unix_target(${target_build_file} ${_parent_rpath})
         endif()
     else()
-        fixup_unix_target(${target_install_file})
+        fixup_unix_target(${target_build_file})
     endif()
 else()
-    fixup_win32_target(${target_install_file})
+    fixup_win32_target(${target_build_file})
 endif()

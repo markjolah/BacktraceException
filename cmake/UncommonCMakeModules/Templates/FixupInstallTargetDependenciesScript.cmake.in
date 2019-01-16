@@ -18,7 +18,7 @@ set(install_prefix ${CMAKE_INSTALL_PREFIX}) #this should be set at install time
 get_filename_component(install_prefix ${install_prefix} REALPATH) #Ensure we have a cannonical path to install at
 
 set(target_file_name $<TARGET_FILE_NAME:@FIXUP_TARGET@>)
-set(msg_hdr "[fixup_dependencies:install_phase] [${fixup_target}]")
+set(msg_hdr "[fixup_dependencies:install_tree] [${fixup_target}]")
 message(STATUS "${msg_hdr}: file name:${target_file_name}")
 
 function(transform_filename_component_list list_name component)
@@ -52,16 +52,19 @@ function(read_rpath out_var target tag)
         return()
     endif()
     if(_out MATCHES "\\(?${tag}\\)?[ \t]+[A-Za-z ]+:[ \t]*\\[([^\]]+)\\][ \t\r]*\n")
-        set(_val ${CMAKE_MATCH_1})
-        string(REGEX REPLACE "\\$\\(?ORIGIN\\)?" ${_target_dir} _val "${_val}")
-        get_filename_component(_val ${_val} ABSOLUTE)
-        set(${out_var} ${_val} PARENT_SCOPE)
+        set(_dirs ${CMAKE_MATCH_1})
+        string(REGEX REPLACE "\\$\\(?ORIGIN\\)?" ${_target_dir} _dirs "${_dirs}")
+        string(REGEX REPLACE ":" ";" _dirs "${_dirs}")
+        message(STATUS "_dirs:${_dirs}")
+        set(_abs_dirs)
+        foreach(_dir IN LISTS _dirs)
+            if(_dir)
+                get_filename_component(_dir "${_dir}" ABSOLUTE)
+                list(APPEND _abs_dirs ${_dir})
+            endif()
+        endforeach()
+        set(${out_var} ${_abs_dirs} PARENT_SCOPE)
     endif()
-endfunction()
-
-function(read_ld_libraray_path path_var)
-    set(path $ENV{LD_LIBRARY_PATH})
-    set(${path_var} ${path} PARENT_SCOPE)
 endfunction()
 
 function(read_direct_dependencies out_var target)
@@ -337,7 +340,7 @@ function(fixup_unix_target target)
             find_file(fitem ${_dep} PATHS ${staging_prefix} PATH_SUFFIXES ${default_library_search_suffixs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  --- ${msg_hdr}: Exists under staging prefix at: ${resolved_dir}")
+                message(STATUS "  +++ ${msg_hdr}: Exists under staging prefix at: ${resolved_dir}")
                 _do_copy_recurse()
                 continue()
             endif()
@@ -428,7 +431,7 @@ function(fixup_win32_target target)
     read_direct_dependencies(_deps ${target})
     message(STATUS "${msg_hdr}: dir: ${_dir}")
 
-    #Little helper function to do the copy and recursion. We recuse whenever we copy.
+    #Helper function to do the copy and recursion. We recuse whenever we copy.
     #Recursion happens on the copied library location so that it's dependencies are found as they would be when it
     # is loaded from the new directory (vs. the old one).
     macro(_do_copy_recurse)

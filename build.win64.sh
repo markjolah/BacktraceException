@@ -9,7 +9,7 @@ TOOLCHAIN_FILE=./cmake/UncommonCMakeModules/Toolchains/Toolchain-MXE-${FULL_ARCH
 INSTALL_PATH=_${ARCH}.install
 BUILD_PATH=_${ARCH}.build/Debug
 NUM_PROCS=`grep -c ^processor /proc/cpuinfo`
-ARGS="-DBUILD_TESTING=1 -DOPT_INSTALL_GCC_DEPENDENCIES=1"
+ARGS="-DBUILD_TESTING=1"
 
 rm -rf $INSTALL_PATH $BUILD_PATH
 
