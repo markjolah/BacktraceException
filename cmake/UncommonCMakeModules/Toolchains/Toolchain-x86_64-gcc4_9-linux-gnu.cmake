@@ -27,8 +27,8 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 #Options to control FixupDependencies
-option(OPT_INSTALL_DEPENDENCIES "Copy dependencies to install tree." ON)
-option(OPT_BUILD_TREE_EXPORT "Enable export of the build tree." ON)
+option(OPT_INSTALL_DEPENDENCIES "Copy dependencies to install tree." OFF)
+option(OPT_FIXUP_BUILD_TREE_DEPENDENCIES "Enable export of the build tree." OFF)
 option(OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES "Disable the auto hood on install() function for fixup_dependencies().  Must manually call fixup_dependencies()." OFF)
 
 option(OPT_INSTALL_GCC_DEPENDENCIES "Copy gcc provided dependencies to install tree and set RPATH for all libraries and executables." OFF)
@@ -39,6 +39,7 @@ set(BUILD_RUNTIME_PATH "\$ORIGIN" CACHE STRING "Build tree path used for install
 
 
 if(OPT_INSTALL_DEPENDENCIES)
+    #Check options logical restrictions
     if(OPT_INSTALL_GCC_DEPENDENCIES)
         if(OPT_SET_RUNPATH)
             message(STATUS "OPT_INSTALL_GCC_DEPENDENCIES is set.  OPT_SET_RUNPATH is not compatible.  Forcing OPT_SET_RUNPATH OFF.")
@@ -56,7 +57,7 @@ if(OPT_INSTALL_DEPENDENCIES)
         if(OPT_SET_RPATH OR OPT_SET_RUNPATH)
             SET(CMAKE_INSTALL_RPATH "${INSTALL_RUNTIME_PATH}")
         endif()
-        if(OPT_BUILD_TREE_EXPORT)
+        if(OPT_FIXUP_BUILD_TREE_DEPENDENCIES)
             SET(CMAKE_BUILD_RPATH "${BUILD_RUNTIME_PATH}")
         endif()
         if(OPT_SET_RPATH)
@@ -64,13 +65,15 @@ if(OPT_INSTALL_DEPENDENCIES)
         elseif(OPT_SET_RUNPATH)
             set_property(DIRECTORY APPEND PROPERTY LINK_OPTIONS "-Wl,--enable-new-dtags")
         endif()
-        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT
-                                                 OPT_INSTALL_GCC_DEPENDENCIES=0 OPT_SET_RPATH OPT_SET_RUNPATH)
-        message(STATUS "Toolchain option: OPT_INSTALL_DEPENDENCIES:${OPT_INSTALL_DEPENDENCIES}")
-        message(STATUS "Toolchain option: OPT_BUILD_TREE_EXPORT:${OPT_BUILD_TREE_EXPORT}")
-        message(STATUS "Toolchain option: OPT_INSTALL_GCC_DEPENDENCIES:${OPT_INSTALL_GCC_DEPENDENCIES}")
-        message(STATUS "Toolchain option: OPT_SET_RPATH:${OPT_SET_RPATH}")
-        message(STATUS "Toolchain option: OPT_SET_RUNPATH:${OPT_SET_RUNPATH}")
+
+        message(STATUS "gcc4_9 Toolchain option: OPT_INSTALL_DEPENDENCIES:${OPT_INSTALL_DEPENDENCIES}")
+        message(STATUS "gcc4_9 Toolchain option: OPT_FIXUP_BUILD_TREE_DEPENDENCIES:${OPT_FIXUP_BUILD_TREE_DEPENDENCIES}")
+        message(STATUS "gcc4_9 Toolchain option: OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES:${OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES}")
+
+        message(STATUS "gcc4_9 Toolchain option: OPT_INSTALL_GCC_DEPENDENCIES:${OPT_INSTALL_GCC_DEPENDENCIES}")
+        message(STATUS "gcc4_9 Toolchain option: OPT_SET_RPATH:${OPT_SET_RPATH}")
+        message(STATUS "gcc4_9 Toolchain option: OPT_SET_RUNPATH:${OPT_SET_RUNPATH}")
+
         #Find FixupDependencies.cmake, add to path, then cleanup any variables we changed
         find_path(_FixupDependencies_Path FixupDependencies.cmake PATHS "${CMAKE_CURRENT_LIST_DIR}/.." NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(NOT _FixupDependencies_Path)
@@ -100,7 +103,7 @@ if(OPT_INSTALL_DEPENDENCIES)
                 if(OPT_INSTALL_GCC_DEPENDENCIES)
                     list(APPEND _args COPY_GCC_LIBS)
                 endif()
-                if(OPT_BUILD_TREE_EXPORT)
+                if(OPT_FIXUP_BUILD_TREE_DEPENDENCIES)
                     list(APPEND _args BUILD_TREE_EXPORT)
                 endif()
                 fixup_dependencies(TARGETS ${_targets} ${_args} COPY_DESTINATION "../lib")

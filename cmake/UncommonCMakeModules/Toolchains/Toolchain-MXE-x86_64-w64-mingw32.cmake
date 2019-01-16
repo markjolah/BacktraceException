@@ -35,23 +35,25 @@ set(CMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY True)
 set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY True)
 
 #Options to control FixupDependencies
-option(OPT_INSTALL_DEPENDENCIES "Copy dependencies to install tree." ON)
-option(OPT_LINK_INSTALLED_LIBS "Create symbolic links to dependent DLLs that are within install_prefix already, as opposed to copying." OFF)
-option(OPT_BUILD_TREE_EXPORT "Enable export of the build tree." ON)
+option(OPT_FIXUP_DEPENDENCIES "Copy dependencies to install tree." ON)
+option(OPT_FIXUP_BUILD_TREE_DEPENDENCIES "Enable export of the build tree." OFF)
 option(OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES "Disable the auto hood on install() function for fixup_dependencies().  Must manually call fixup_dependencies()." OFF)
 
-if(OPT_INSTALL_DEPENDENCIES)
+option(OPT_LINK_INSTALLED_LIBS "Create symbolic links to dependent DLLs that are within install_prefix already, as opposed to copying." OFF)
+
+if(OPT_FIXUP_DEPENDENCIES)
     get_property(_install_hook_activated GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED)
     if(NOT _install_hook_activated)
-        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT=0
+        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_FIXUP_BUILD_TREE_DEPENDENCIES=0
                                                 OPT_LINK_INSTALLED_LIBS)
         SET(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
-        if(OPT_INSTALL_SYSTEM_DEPENDENCIES)
-            #Force setting RPATH instead of RUNPATH
-            #This is an agressive move to prevent any use of system libraries and is only enabled if
-            #system libraries will be installed.
-            set_property(DIRECTORY APPEND PROPERTY LINK_OPTIONS "-Wl,--disable-new-dtags")
-        endif()
+
+        message(STATUS "mingw-w64 Toolchain option: OPT_INSTALL_DEPENDENCIES:${OPT_INSTALL_DEPENDENCIES}")
+        message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_BUILD_TREE_DEPENDENCIES:${OPT_FIXUP_BUILD_TREE_DEPENDENCIES}")
+        message(STATUS "mingw-w64 Toolchain option: OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES:${OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES}")
+
+        message(STATUS "mingw-w64 Toolchain option: OPT_LINK_INSTALLED_LIBS:${OPT_LINK_INSTALLED_LIBS}")
+
         #Find FixupDependencies.cmake, add to path, then cleanup any variables we changed
         find_path(_FixupDependencies_Path FixupDependencies.cmake PATHS "${CMAKE_CURRENT_LIST_DIR}/.." NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(NOT _FixupDependencies_Path)
@@ -81,7 +83,7 @@ if(OPT_INSTALL_DEPENDENCIES)
                 if(OPT_LINK_INSTALLED_LIBS)
                     list(APPEND _args LINK_INSTALLED_LIBS)
                 endif()
-                if(OPT_BUILD_TREE_EXPORT)
+                if(OPT_FIXUP_BUILD_TREE_DEPENDENCIES)
                     list(APPEND _args BUILD_TREE_EXPORT)
                 endif()
                 message(" Targets:${_targets} Args:${_args}")
