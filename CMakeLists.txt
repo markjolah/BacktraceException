@@ -12,6 +12,7 @@ project(BacktraceException VERSION 0.2 LANGUAGES CXX)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(BUILD_TESTING "Build tests" OFF)
+option(OPT_EXPORT_BUILD_TREE "Configure the package so it is useable from the build tree.  Useful for development." OFF)
 
 if (NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
   set (BUILD_STATIC_LIBS ON)
@@ -31,7 +32,7 @@ include(ConfigureDebugBuilds) #Configure standard CFlags and definitions for deb
 
 ### PackageConfig Exports
 include(ExportPackageWizzard)
-export_package_wizzard() #setup build-tree and install-tree exports and packageconfig files
+export_package_wizzard(EXPORT_BUILD_TREE "${OPT_EXPORT_BUILD_TREE}") #setup build-tree and install-tree exports and packageconfig files
 
 ### Source directories
 add_subdirectory(src)

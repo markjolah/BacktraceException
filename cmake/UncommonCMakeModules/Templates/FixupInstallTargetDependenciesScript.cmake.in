@@ -55,7 +55,6 @@ function(read_rpath out_var target tag)
         set(_dirs ${CMAKE_MATCH_1})
         string(REGEX REPLACE "\\$\\(?ORIGIN\\)?" ${_target_dir} _dirs "${_dirs}")
         string(REGEX REPLACE ":" ";" _dirs "${_dirs}")
-        message(STATUS "_dirs:${_dirs}")
         set(_abs_dirs)
         foreach(_dir IN LISTS _dirs)
             if(_dir)
@@ -253,17 +252,7 @@ function(fixup_unix_target target)
     endif()
     read_direct_dependencies(_deps ${target})
 
-    set(msg_hdr "[fixup_unix_target:${_name}]")
-    message(STATUS "${msg_hdr}: dir: ${_dir}")
-#     message(STATUS "${msg_hdr}: deps: ${_deps}")
-#     message(STATUS "${msg_hdr}: target_rpath: ${_target_rpath}")
-#     message(STATUS "${msg_hdr}: target_runpath: ${_target_runpath}")
-#     message(STATUS "${msg_hdr}: parent_rpath: ${_parent_rpath}")
-    if(_rpath)
-        message(STATUS "${msg_hdr}: _rpath: ${_rpath}")
-    elseif(_runpath)
-        message(STATUS "${msg_hdr}: _runpath: ${_runpath}")
-    endif()
+    message(STATUS ">>> [fixup_unix_target:${_name}]: dir: ${_dir}")
 
     #Helper function to do the copy and recursion. We recuse whenever we copy.
     #Recursion happens on the copied library location so that it's dependencies are found as they would be when it
@@ -427,9 +416,8 @@ function(fixup_win32_target target)
         set(direct_target False)
     endif()
 
-    set(msg_hdr "[fixup_win32_target:${_name}]")
+    message(STATUS ">>> [fixup_win32_target:${_name}]  dir: ${_dir}")
     read_direct_dependencies(_deps ${target})
-    message(STATUS "${msg_hdr}: dir: ${_dir}")
 
     #Helper function to do the copy and recursion. We recuse whenever we copy.
     #Recursion happens on the copied library location so that it's dependencies are found as they would be when it

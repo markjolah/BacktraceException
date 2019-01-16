@@ -16,11 +16,6 @@
 #  support useage on single build-type generators like Make.
 #
 #
-# Options:
-#  DISABLE_BUILD_EXPORT - Disable the export of the build tree.  Those configuration files generated for install tree export will
-#                         still be generated in the build tree.  Note cmake variable CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 will disable
-#                         the effect of the export(PACKAGE) call, but other build export tasks are still enabled unless this option 
-#                         is used.
 # Single Argument Keywords
 #  NAME - [Default: ${PACKAGE_NAME}] The name of the export. The name a client will use use to import with: find_package(NAME).  
 #  NAMESPACE - [Default: $NAME}] The namespace in which to place  the export.
@@ -36,7 +31,9 @@
 #  CONFIG_INSTALL_DIR - [Default: lib/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_SOURCE_DIR - [Default: ${CMAKE_SOURCE_DIR}/cmake] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
-#
+#  EXPORT_BUILD_TREE - Bool. [optional] [Default: False] - Enable the export of the build tree.
+#                         Note cmake variable CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 will disable the effect of the
+#                         export(PACKAGE) call, but other build export tasks are still enabled unless this option is used.
 # Multi-Argument Keywords
 #   FIND_MODULES - List of relative paths to provided custom find module files to propagate with export and install.
 #   EXPORTED_BUILD_TYPES - [default:${BUILD_TYPE}] The list of BUILD_TYPES this export will provide.  Normally this should just
@@ -46,9 +43,10 @@ include(CMakePackageConfigHelpers)
 function(export_package_wizzard)
 
 ### Parse arguments and set defaults
-set(options DISABLE_BUILD_EXPORT)
+set(options)
 set(oneValueArgs NAME NAMESPACE EXPORT_TARGETS_NAME PACKAGE_CONFIG_TEMPLATE_PATH VERSION_COMPATIBILITY
-                 BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR SHARED_CMAKE_SOURCE_DIR)
+                 BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR SHARED_CMAKE_SOURCE_DIR
+                 EXPORT_BUILD_TREE)
 set(multiValueArgs FIND_MODULES EXPORTED_BUILD_TYPES)
 cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"  "${multiValueArgs}"  ${ARGN})
 if(ARG_UNPARSED_ARGUMENTS)
@@ -115,7 +113,7 @@ set(ARG_CONFIG_DIR ${CMAKE_BINARY_DIR}) #Directory for generated .cmake config f
 set(ARG_PACKAGE_CONFIG_FILE ${ARG_NAME}Config.cmake) #<Package>Config.cmake name
 set(ARG_VERSION_CONFIG_FILE ${ARG_NAME}ConfigVersion.cmake)
 
-if(NOT ARG_DISABLE_BUILD_EXPORT)
+if(ARG_EXPORT_BUILD_TREE)
     set(ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE ${ARG_NAME}Config.cmake.install_tree) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
 else()
     set(ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE ${ARG_PACKAGE_CONFIG_FILE}) #Generated <Package>Config.cmake Version meant for the install tree but name mangled to prevent use in build tree
@@ -157,7 +155,7 @@ foreach(module_path ${ARG_FIND_MODULES})
 endforeach()
         
 ### Build tree export
-if(NOT ARG_DISABLE_BUILD_EXPORT AND NOT CMAKE_EXPORT_NO_PACKAGE_REGISTRY AND NOT CMAKE_CROSSCOMPILING)
+if(ARG_EXPORT_BUILD_TREE AND NOT CMAKE_CROSSCOMPILING)
     #Generate: ${PROJECT_NAME}Config.cmake for use in exporting from the build-tree
     set(FIND_MODULES_PATH ${ARG_CONFIG_DIR})  #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
     #Note setting INSTALL_DESTINATION to ${ARG_CONFIG_DIR} for build tree PackageConfig.cmake as it is never installed to install tree

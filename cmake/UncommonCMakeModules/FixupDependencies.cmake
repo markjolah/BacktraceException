@@ -14,7 +14,7 @@
 #                      Also copy in Glibc libraries.  WARNING. This is almost certainly going to cause problems as
 #                     the version of libc and ld-linux-x86_64 must match exactly.  For now this is disabled.
 #
-#   BUILD_TREE_EXPORT - [default: off] Fixup the libraries for the build-tree export
+#   EXPORT_BUILD_TREE - [default: off] Fixup the libraries for the build-tree export
 #   LINK_INSTALLED_LIBS - [default: off] [WIN32 only] instead of copying into current directory make a symlink if dep us under in the install_prefix
 #
 # Single argument keywords:
@@ -39,9 +39,10 @@
 #
 set(_fixup_dependencies_install_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(fixup_dependencies)
-    cmake_parse_arguments(FIXUP "COPY_GCC_LIBS;COPY_GLIBC_LIBS;BUILD_TREE_EXPORT;LINK_INSTALLED_LIBS"
+    cmake_parse_arguments(FIXUP "COPY_GCC_LIBS;COPY_GLIBC_LIBS;EXPORT_BUILD_TREE;LINK_INSTALLED_LIBS"
                                 "COPY_DESTINATION;TARGET_DESTINATION;PARENT_LIB;INSTALL_SCRIPT_TEMPLATE;BUILD_SCRIPT_TEMPLATE"
                                 "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
+    set(msg_hdr "[fixup_dependencies:configure-phase]:")
     if(NOT FIXUP_COPY_DESTINATION)
         set(FIXUP_COPY_DESTINATION ".")  #Must be relative to TARGET_DESTINATION
     endif()
@@ -54,17 +55,17 @@ function(fixup_dependencies)
                 NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         mark_as_advanced(FIXUP_INSTALL_SCRIPT_TEMPLATE_PATH)
         if(NOT FIXUP_INSTALL_SCRIPT_TEMPLATE_PATH)
-            message(FATAL_ERROR "[fixup_dependencies]: Cannot find FixupInstallTargetDependenciesScript.cmake.in")
+            message(FATAL_ERROR "${msg_hdr} Cannot find FixupInstallTargetDependenciesScript.cmake.in")
         endif()
         set(FIXUP_INSTALL_SCRIPT_TEMPLATE ${FIXUP_INSTALL_SCRIPT_TEMPLATE_PATH})
     endif()
-    if(FIXUP_BUILD_TREE_EXPORT AND NOT FIXUP_BUILD_SCRIPT_TEMPLATE)
+    if(FIXUP_EXPORT_BUILD_TREE AND NOT FIXUP_BUILD_SCRIPT_TEMPLATE)
         find_file(FIXUP_BUILD_SCRIPT_TEMPLATE_PATH FixupBuildTargetDependenciesScript.cmake.in
                 PATHS ${_fixup_dependencies_install_PATH}/Templates ${_fixup_dependencies_install_PATH}/../Templates
                 NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         mark_as_advanced(FIXUP_BUILD_SCRIPT_TEMPLATE_PATH)
         if(NOT FIXUP_BUILD_SCRIPT_TEMPLATE_PATH)
-            message(FATAL_ERROR "[fixup_dependencies]: Cannot find FixupBuildTargetDependenciesScript.cmake.in")
+            message(FATAL_ERROR "${msg_hdr} Cannot find FixupBuildTargetDependenciesScript.cmake.in")
         endif()
         set(FIXUP_BUILD_SCRIPT_TEMPLATE ${FIXUP_BUILD_SCRIPT_TEMPLATE_PATH})
     endif()
@@ -93,11 +94,11 @@ function(fixup_dependencies)
     endif()
     foreach(FIXUP_TARGET IN LISTS FIXUP_TARGETS)
         if(NOT TARGET ${FIXUP_TARGET})
-            message(FATAL_ERROR "[fixup_dependencies]  Got invalid target: ${FIXUP_TARGET}")
+            message(FATAL_ERROR "${msg_hdr}  Got invalid target: ${FIXUP_TARGET}")
         endif()
         get_target_property(FIXUP_TARGET_TYPE ${FIXUP_TARGET} TYPE)
         if(NOT (${FIXUP_TARGET_TYPE} MATCHES SHARED_LIBRARY OR ${FIXUP_TARGET_TYPE} MATCHES EXECUTABLE) )
-            message(STATUS "[fixup_dependencies]  Skipping non-shared target: ${FIXUP_TARGET}")
+            message(STATUS "${msg_hdr}  Skipping non-shared target: ${FIXUP_TARGET}")
         else()
             set(FIXUP_INSTALL_SCRIPT ${CMAKE_BINARY_DIR}/Fixup-Install-${FIXUP_TARGET}.cmake)
             configure_file(${FIXUP_INSTALL_SCRIPT_TEMPLATE} ${FIXUP_INSTALL_SCRIPT}.gen @ONLY)
@@ -105,12 +106,12 @@ function(fixup_dependencies)
             install(SCRIPT ${FIXUP_INSTALL_SCRIPT})
             get_target_property(script ${FIXUP_TARGET} FIXUP_INSTALL_SCRIPT)
             if(script)
-                message(STATUS "[fixup_dependencies]  Re-generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                message(STATUS "${msg_hdr} Re-generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
             else()
-                message(STATUS "[fixup_dependencies]  Generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                message(STATUS "${msg_hdr} Generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
             endif()
             set_target_properties(${FIXUP_TARGET} PROPERTIES FIXUP_INSTALL_SCRIPT ${FIXUP_INSTALL_SCRIPT}) #Mark as fixup-ready.
-            if(FIXUP_BUILD_TREE_EXPORT)
+            if(FIXUP_EXPORT_BUILD_TREE)
                 get_target_property(_libs ${FIXUP_TARGET} LINK_LIBRARIES)
                 if(NOT _libs)
                     set(_libs)
@@ -136,7 +137,7 @@ function(fixup_dependencies)
                 add_custom_target(${_build_target} ALL DEPENDS ${FIXUP_TARGET} ${_all_targets} COMMAND cmake -P ${FIXUP_BUILD_SCRIPT})
                 set_property(GLOBAL APPEND PROPERTY FIXUP_ALL_CUSTOM_TARGETS ${_build_target})
                 #add_custom_command(TARGET ${FIXUP_TARGET} POST_BUILD COMMAND cmake -P ${FIXUP_BUILD_SCRIPT})
-                message(STATUS "[fixup_dependencies]  Generated build-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                message(STATUS "${msg_hdr} Generated build-tree dependency fixup script for target: ${FIXUP_TARGET}")
             endif()
         endif()
     endforeach()
