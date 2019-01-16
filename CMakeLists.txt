@@ -19,6 +19,7 @@ endif ()
 
 message(STATUS "OPTION: BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 message(STATUS "OPTION: BUILD_STATIC_LIBS: ${BUILD_STATIC_LIBS}")
+message(STATUS "OPTION: BUILD_TESTING: ${BUILD_TESTING}")
 
 #Add UcommonCmakeModules git subpreo to path.
 list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_LIST_DIR}/cmake/UncommonCMakeModules)
