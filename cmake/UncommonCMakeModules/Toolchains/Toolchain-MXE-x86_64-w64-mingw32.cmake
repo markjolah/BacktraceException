@@ -43,7 +43,7 @@ option(OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES "Disable the auto hood on install() f
 if(OPT_INSTALL_DEPENDENCIES)
     get_property(_install_hook_activated GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED)
     if(NOT _install_hook_activated)
-        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT
+        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT=0
                                                 OPT_LINK_INSTALLED_LIBS)
         SET(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
         if(OPT_INSTALL_SYSTEM_DEPENDENCIES)

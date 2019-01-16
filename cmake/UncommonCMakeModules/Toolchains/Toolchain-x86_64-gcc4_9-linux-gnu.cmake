@@ -65,7 +65,7 @@ if(OPT_INSTALL_DEPENDENCIES)
             set_property(DIRECTORY APPEND PROPERTY LINK_OPTIONS "-Wl,--enable-new-dtags")
         endif()
         list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT
-                                                 OPT_INSTALL_GCC_DEPENDENCIES OPT_SET_RPATH OPT_SET_RUNPATH)
+                                                 OPT_INSTALL_GCC_DEPENDENCIES=0 OPT_SET_RPATH OPT_SET_RUNPATH)
         message(STATUS "Toolchain option: OPT_INSTALL_DEPENDENCIES:${OPT_INSTALL_DEPENDENCIES}")
         message(STATUS "Toolchain option: OPT_BUILD_TREE_EXPORT:${OPT_BUILD_TREE_EXPORT}")
         message(STATUS "Toolchain option: OPT_INSTALL_GCC_DEPENDENCIES:${OPT_INSTALL_GCC_DEPENDENCIES}")

@@ -286,25 +286,14 @@ function(fixup_unix_target target)
         set(msg_hdr "{Dep:${_dep}}")
         get_filename_component(_dep_base_name ${_dep} NAME_WE)
 
-        #Check RPATH if target did not have RUNPATH set.  _rpath will include recursive rpaths
-        if(_rpath)
-            find_file(fitem ${_dep} PATHS ${_rpath} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
-            if(fitem)
-                get_filename_component(resolved_dir ${fitem} DIRECTORY)
-                message(STATUS "  --- ${msg_hdr}: Exists under rpath at: ${resolved_dir}")
-                _do_recurse()
-                continue()
-            endif()
-        endif()
-
-        #check if dep_base_name is in provided_libs. These are assumed to be in the LD_LIBRARY_PATH.
+         #check if dep_base_name is in provided_libs. These are assumed to be in the RPATH or LD_LIBRARY_PATH.
         #Don't recurse.  These are assumed linked correctly.
         if(provided_libs AND ${_dep_base_name} IN_LIST provided_libs)
             message(STATUS "  *** ${msg_hdr}: Vendor provided library name: ${_dep_base_name}")
             continue()
         endif()
 
-        #Find in vendor provided_libs These are assumed to be in the LD_LIBRARY_PATH.
+        #Find in vendor provided_libs These are assumed to be in the RPATH or LD_LIBRARY_PATH.
         #Don't recurse.  These are assumed linked correctly.
         if(provided_lib_dirs)
             find_file(fitem ${_dep} PATHS ${provided_lib_dirs} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
@@ -312,6 +301,17 @@ function(fixup_unix_target target)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
                 message(STATUS "  *** ${msg_hdr}: In vendor provided lib dir: ${resolved_dir}")
                 unset(fitem CACHE)
+                continue()
+            endif()
+        endif()
+
+        #Check RPATH if target did not have RUNPATH set.  _rpath will include recursive rpaths
+        if(_rpath)
+            find_file(fitem ${_dep} PATHS ${_rpath} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+            if(fitem)
+                get_filename_component(resolved_dir ${fitem} DIRECTORY)
+                message(STATUS "  --- ${msg_hdr}: Exists under rpath at: ${resolved_dir}")
+                _do_recurse()
                 continue()
             endif()
         endif()
@@ -468,6 +468,7 @@ function(fixup_win32_target target)
         find_file(fitem ${_dep} PATHS ${lib_copy_dest} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(fitem)
             message(STATUS "  --- ${msg_hdr}: Exists at lib copy dest: ${lib_copy_dest}")
+            unset(fitem CACHE)
             continue()
         endif()
 
@@ -527,7 +528,7 @@ function(fixup_win32_target target)
             if(fitem)
                 get_filename_component(resolved_dir ${fitem} DIRECTORY)
                 message(STATUS "  --- ${msg_hdr}: Indirect dependency of ${target_file_name} only found In vendor provided lib dir: ${resolved_dir}")
-                _do_copy_recurse()
+                unset(fitem CACHE)
                 continue()
             endif()
         endif()
