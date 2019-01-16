@@ -29,6 +29,7 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 #Options to control FixupDependencies
 option(OPT_INSTALL_DEPENDENCIES "Copy dependencies to install tree." ON)
 option(OPT_BUILD_TREE_EXPORT "Enable export of the build tree." ON)
+option(OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES "Disable the auto hood on install() function for fixup_dependencies().  Must manually call fixup_dependencies()." OFF)
 
 option(OPT_INSTALL_GCC_DEPENDENCIES "Copy gcc provided dependencies to install tree and set RPATH for all libraries and executables." OFF)
 option(OPT_SET_RPATH "Set RPATH on installed libraries and binaries. This supersedes LD_LIBRARY_PATH and rpaths are searched recursively in dependency hierarchy" OFF)
@@ -50,7 +51,6 @@ if(OPT_INSTALL_DEPENDENCIES)
             set(OPT_SET_RPATH ON CACHE BOOL "Set RPATH on installed libraries and binaries. This supersedes LD_LIBRARY_PATH and rpaths are searched recursively in dependency hierarchy" FORCE)
         endif()
     endif()
-
     get_property(_install_hook_activated GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED)
     if(NOT _install_hook_activated)
         if(OPT_SET_RPATH OR OPT_SET_RUNPATH)
@@ -64,7 +64,13 @@ if(OPT_INSTALL_DEPENDENCIES)
         elseif(OPT_SET_RUNPATH)
             set_property(DIRECTORY APPEND PROPERTY LINK_OPTIONS "-Wl,--enable-new-dtags")
         endif()
-
+        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT
+                                                 OPT_INSTALL_GCC_DEPENDENCIES OPT_SET_RPATH OPT_SET_RUNPATH)
+        message(STATUS "Toolchain option: OPT_INSTALL_DEPENDENCIES:${OPT_INSTALL_DEPENDENCIES}")
+        message(STATUS "Toolchain option: OPT_BUILD_TREE_EXPORT:${OPT_BUILD_TREE_EXPORT}")
+        message(STATUS "Toolchain option: OPT_INSTALL_GCC_DEPENDENCIES:${OPT_INSTALL_GCC_DEPENDENCIES}")
+        message(STATUS "Toolchain option: OPT_SET_RPATH:${OPT_SET_RPATH}")
+        message(STATUS "Toolchain option: OPT_SET_RUNPATH:${OPT_SET_RUNPATH}")
         #Find FixupDependencies.cmake, add to path, then cleanup any variables we changed
         find_path(_FixupDependencies_Path FixupDependencies.cmake PATHS "${CMAKE_CURRENT_LIST_DIR}/.." NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(NOT _FixupDependencies_Path)
@@ -79,7 +85,7 @@ if(OPT_INSTALL_DEPENDENCIES)
         #intercept install(TARGETS) commands and run fixup_dependencies on the targets
         function(install type)
             _install(${type} ${name} ${ARGN})
-            if(type STREQUAL TARGETS)
+            if(NOT OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES AND type STREQUAL TARGETS)
                 #Get all targets
                 math(EXPR _N "${ARGC} - 1")
                 set(_targets)

@@ -36,12 +36,15 @@ set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY True)
 
 #Options to control FixupDependencies
 option(OPT_INSTALL_DEPENDENCIES "Copy dependencies to install tree." ON)
-option(OPT_LINK_INSTALLED_LIBS "Create symbolic links to dependent DLLs that are within install_prefix already, as opposed to copying." ON)
+option(OPT_LINK_INSTALLED_LIBS "Create symbolic links to dependent DLLs that are within install_prefix already, as opposed to copying." OFF)
 option(OPT_BUILD_TREE_EXPORT "Enable export of the build tree." ON)
+option(OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES "Disable the auto hood on install() function for fixup_dependencies().  Must manually call fixup_dependencies()." OFF)
 
 if(OPT_INSTALL_DEPENDENCIES)
     get_property(_install_hook_activated GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED)
     if(NOT _install_hook_activated)
+        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_BUILD_TREE_EXPORT
+                                                OPT_LINK_INSTALLED_LIBS)
         SET(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
         if(OPT_INSTALL_SYSTEM_DEPENDENCIES)
             #Force setting RPATH instead of RUNPATH
@@ -49,7 +52,6 @@ if(OPT_INSTALL_DEPENDENCIES)
             #system libraries will be installed.
             set_property(DIRECTORY APPEND PROPERTY LINK_OPTIONS "-Wl,--disable-new-dtags")
         endif()
-
         #Find FixupDependencies.cmake, add to path, then cleanup any variables we changed
         find_path(_FixupDependencies_Path FixupDependencies.cmake PATHS "${CMAKE_CURRENT_LIST_DIR}/.." NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
         if(NOT _FixupDependencies_Path)
@@ -64,7 +66,7 @@ if(OPT_INSTALL_DEPENDENCIES)
         #intercept install(TARGETS) commands and run fixup_dependencies on the targets
         function(install type)
             _install(${type} ${name} ${ARGN})
-            if(type STREQUAL TARGETS)
+            if(NOT OPT_DISABLE_AUTO_FIXUP_DEPENDENCIES AND type STREQUAL TARGETS)
                 #Get all targets
                 math(EXPR _N "${ARGC} - 1")
                 set(_targets)
@@ -76,14 +78,19 @@ if(OPT_INSTALL_DEPENDENCIES)
                     endif()
                 endforeach()
                 set(_args)
-                if(OPT_INSTALL_SYSTEM_DEPENDENCIES)
-                    list(APPEND _args COPY_SYSTEM_LIBS)
+                if(OPT_LINK_INSTALLED_LIBS)
+                    list(APPEND _args LINK_INSTALLED_LIBS)
                 endif()
                 if(OPT_BUILD_TREE_EXPORT)
                     list(APPEND _args BUILD_TREE_EXPORT)
                 endif()
                 message(" Targets:${_targets} Args:${_args}")
-                fixup_dependencies(TARGETS ${_targets} ${_args})
+                foreach(_target IN LISTS _targets)
+                    get_target_property(script ${FIXUP_TARGET} FIXUP_SCRIPT)
+                    if(NOT FIXUP_SCRIPT) #Only run the fixup_dependencies hook if we have not already run it.
+                        fixup_dependencies(TARGETS ${_target} ${_args})
+                    endif()
+                endforeach()
             endif()
         endfunction()
         set_property(GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED True)

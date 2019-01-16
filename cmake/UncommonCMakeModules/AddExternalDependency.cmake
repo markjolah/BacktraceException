@@ -25,12 +25,14 @@
 # CMAKELISTS_TEMPLATE - [optional] Template file for the CMakeLists.txt to the building and installing via ExternalProject_Add [default: Templates/External.CMakeLists.txt.in]
 # BUILD_TYPE_COMPATABILITY - [optional] Default: Exact  Options: Exact, Any
 # TOOLCHAIN_FILE - [optional] [Only used if CMAKE_CROSSCOMPILING is true.  Uses CMAKE_TOOLCHAIN_FILE as the default.]
+#Mulit-arguments
+#  PASS_CACHE_VARIABLES - [optional] List of cache variables to pass-through
 set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "Path of AddExternalDependency.cmake")
 
 macro(add_external_dependency)
     set(oneArgOpts NAME URL VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE
                BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
-    cmake_parse_arguments(_ExtProject "SHARED;STATIC" "${oneArgOpts}" "" ${ARGN})
+    cmake_parse_arguments(_ExtProject "SHARED;STATIC" "${oneArgOpts}" "PASS_CACHE_VARIABLES" ${ARGN})
     if(NOT _ExtProject_NAME)
         message(FATAL_ERROR "No package name given")
     endif()
@@ -54,6 +56,16 @@ macro(add_external_dependency)
 
     if(CMAKE_CROSSCOMPILING AND NOT _ExtProject_TOOLCHAIN_FILE)
         set(_ExtProject_TOOLCHAIN_FILE ${CMAKE_TOOLCHAIN_FILE})
+    endif()
+    if(_ExtProject_PASS_CACHE_VARIABLES)
+        set(_pass_vars)
+        foreach(_var IN LISTS _ExtProject_PASS_CACHE_VARIABLES)
+            if(DEFINED ${_var})
+                list(APPEND _pass_vars "-D${_var}=${${_var}}")
+            endif()
+        endforeach()
+        set(_ExtProject_PASS_CACHE_VARIABLES ${_pass_vars})
+        unset(_pass_vars)
     endif()
 
     #Build shared libraries by default if neither SHARED or STATIC are set
