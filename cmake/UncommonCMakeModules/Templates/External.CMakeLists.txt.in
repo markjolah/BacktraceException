@@ -23,7 +23,8 @@ if(@_ExtProject_URL@ MATCHES "^/")
 else()
     set(_git_shallow "GIT_SHALLOW 1")
 endif()
-set(_vars "@_ExtProject_PASS_CACHE_VARIABLES@")
+
+set(_vars "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=1" "@_ExtProject_PASS_CACHE_VARIABLES@")
 # CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 --- Causes the external project not to add itself to the build repository
 ExternalProject_Add(@_ExtProject_NAME@
     GIT_REPOSITORY @_ExtProject_URL@
@@ -33,7 +34,7 @@ ExternalProject_Add(@_ExtProject_NAME@
     SOURCE_DIR @_ExtProject_Dir@/@CMAKE_BUILD_TYPE@/source
     BINARY_DIR @_ExtProject_Dir@/@CMAKE_BUILD_TYPE@/build
     INSTALL_DIR @_ExtProject_INSTALL_PREFIX@
-    CMAKE_ARGS ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=@CMAKE_BUILD_TYPE@ -DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 ${_vars} @_ExtProject_TOOLCHAIN_ARGS@
+    CMAKE_ARGS ${CMAKE_ARGS} -DCMAKE_BUILD_TYPE=@CMAKE_BUILD_TYPE@ ${_vars} @_ExtProject_TOOLCHAIN_ARGS@
     BUILD_COMMAND ${BUILD_COMMAND}
     INSTALL_COMMAND ${INSTALL_COMMAND}
     )

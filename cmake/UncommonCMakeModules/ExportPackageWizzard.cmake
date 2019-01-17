@@ -155,7 +155,7 @@ foreach(module_path ${ARG_FIND_MODULES})
 endforeach()
         
 ### Build tree export
-if(ARG_EXPORT_BUILD_TREE AND NOT CMAKE_CROSSCOMPILING)
+if(NOT CMAKE_EXPORT_NO_PACKAGE_REGISTRY AND ARG_EXPORT_BUILD_TREE AND NOT CMAKE_CROSSCOMPILING)
     #Generate: ${PROJECT_NAME}Config.cmake for use in exporting from the build-tree
     set(FIND_MODULES_PATH ${ARG_CONFIG_DIR})  #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
     #Note setting INSTALL_DESTINATION to ${ARG_CONFIG_DIR} for build tree PackageConfig.cmake as it is never installed to install tree
