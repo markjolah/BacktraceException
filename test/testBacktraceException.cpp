@@ -41,15 +41,15 @@ int main()
     std::cout<<"\n===== BacktraceMethod::glibc  =====\n";
     enable_backtraces();
     set_backtrace_method(BacktraceMethod::glibc);
-    if(tryit()) return -1;
+    if(tryit()) return -2;
     std::cout<<"\n===== BacktraceMethod::gdb  =====\n";
     enable_backtraces();
     set_backtrace_method(BacktraceMethod::gdb);
-    if(tryit()) return -1;
+    if(tryit()) return -3;
 #elif defined(_WIN32)
     std::cout<<"\n===== BacktraceMethod::stackwalk  =====\n";
     enable_backtraces();
     set_backtrace_method(BacktraceMethod::stackwalk);
-    if(tryit()) return -1;
+    if(tryit()) return -4;
 #endif
 }

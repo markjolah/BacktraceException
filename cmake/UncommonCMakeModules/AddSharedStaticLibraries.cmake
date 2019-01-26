@@ -66,7 +66,6 @@ function(add_shared_static_libraries)
     if(NOT ARG_STATIC_LIBTARGET)
         set(ARG_STATIC_LIBTARGET ${PROJECT_NAME}_static)
     endif()
-    message(STATUS "SOURCES:${ARG_SOURCES}")
 
     set(LIB_TARGETS ${ARG_LIBTARGET}) # List of targets to configure.  At most: the shared and static library targets.
     set(SHARED_TARGET False)

@@ -1,7 +1,7 @@
 # BacktraceException - A C++ library for using GDB to capture exception backtraces
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
-# Copyright 2017-2018
+# Copyright 2017-2019
 # Licensed under the Apache License, Version 2.0
 # https://www.apache.org/licenses/LICENSE-2.0
 # See: LICENCE file
@@ -13,16 +13,16 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(BUILD_TESTING "Build tests" OFF)
 option(OPT_INSTALL_TESTING "Install testing executables" OFF)
-
 option(OPT_EXPORT_BUILD_TREE "Configure the package so it is usable from the build tree.  Useful for development." OFF)
 
 if (NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
-  set (BUILD_STATIC_LIBS ON)
+  set (BUILD_STATIC_LIBS ON) #Must build at least one of SHARED_ and STATIC_LIBS.  Default SHARED_
 endif ()
 
 message(STATUS "OPTION: BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 message(STATUS "OPTION: BUILD_STATIC_LIBS: ${BUILD_STATIC_LIBS}")
 message(STATUS "OPTION: BUILD_TESTING: ${BUILD_TESTING}")
+message(STATUS "OPTION: OPT_INSTALL_TESTING: ${OPT_INSTALL_TESTING}")
 message(STATUS "OPTION: OPT_EXPORT_BUILD_TREE: ${OPT_EXPORT_BUILD_TREE}")
 
 #Add UcommonCmakeModules git subpreo to path.
@@ -41,5 +41,6 @@ export_package_wizzard(EXPORT_BUILD_TREE "${OPT_EXPORT_BUILD_TREE}") #setup buil
 add_subdirectory(src)
 
 if(BUILD_TESTING)
+    enable_testing()
     add_subdirectory(test)
 endif()
