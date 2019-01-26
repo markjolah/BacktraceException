@@ -27,11 +27,10 @@
 #  BUILD_TYPE_COMPATIBILITY - [Default:Exact]
 #                               Exact - Require the BuildType of packages using this as a dependency to match build type exactly
 #                               Any - Totally ignore BuildType
-#  CONFIG_DIR - [Default: ${CMAKE_BINARY_DIR}] Path within build directory to make configured files before installation.  Also serves as the exported build directory.
 #  CONFIG_INSTALL_DIR - [Default: lib/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_SOURCE_DIR - [Default: ${CMAKE_SOURCE_DIR}/cmake] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
-#  EXPORT_BUILD_TREE - Bool. [optional] [Default: False] - Enable the export of the build tree.
+#  EXPORT_BUILD_TREE - Bool. [optional] [Default: negation of value of CMAKE_EXPORT_NO_PACKAGE_REGISTRY] - Enable the export of the build tree.
 #                         Note cmake variable CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 will disable the effect of the
 #                         export(PACKAGE) call, but other build export tasks are still enabled unless this option is used.
 # Multi-Argument Keywords
@@ -105,6 +104,14 @@ if(NOT ARG_FIND_MODULES)
     set(ARG_FIND_MODULES)
 endif()
 
+if(NOT ARG_EXPORT_BUILD_TREE)
+    if(CMAKE_CROSSCOMPILING OR CMAKE_EXPORT_NO_PACKAGE_REGISTRY)
+        set(ARG_EXPORT_BUILD_TREE False)
+    else()
+        set(ARG_EXPORT_BUILD_TREE True)
+    endif()
+endif()
+
 if(ARG_UNPARSED_ARGUMENTS)
     message(WARNING "export_package_wizzard: Unrecognized arguments: ${ARG_UNPARSED_ARGUMENTS}")
 endif()
@@ -133,10 +140,10 @@ install_smarter_package_version_file(CONFIG_DIR ${ARG_CONFIG_DIR}
 #Copy modules PATH_VARS to easier to use names for use in PackageConfig.cmake.in
 set(EXPORT_TARGETS_NAME ${ARG_EXPORT_TARGETS_NAME})
 set(SHARED_CMAKE_DIR ${ARG_SHARED_CMAKE_INSTALL_DIR})
-set(ARG_FIND_MODULES_PATH ${ARG_SHARED_CMAKE_INSTALL_DIR}) #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
+set(FIND_MODULES_PATH ${ARG_SHARED_CMAKE_INSTALL_DIR}) #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
 configure_package_config_file(${ARG_PACKAGE_CONFIG_TEMPLATE} ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE}
                               INSTALL_DESTINATION ${ARG_CONFIG_INSTALL_DIR}
-                              PATH_VARS SHARED_CMAKE_DIR)
+                              PATH_VARS FIND_MODULES_PATH SHARED_CMAKE_DIR)
 
 ### Install tree export
 #<Package>Config.cmake
@@ -155,7 +162,7 @@ foreach(module_path ${ARG_FIND_MODULES})
 endforeach()
         
 ### Build tree export
-if(NOT CMAKE_EXPORT_NO_PACKAGE_REGISTRY AND ARG_EXPORT_BUILD_TREE AND NOT CMAKE_CROSSCOMPILING)
+if(ARG_EXPORT_BUILD_TREE)
     #Generate: ${PROJECT_NAME}Config.cmake for use in exporting from the build-tree
     set(FIND_MODULES_PATH ${ARG_CONFIG_DIR})  #Location to look for exported Find<XXX>.cmake modules provided by this package from install tree
     #Note setting INSTALL_DESTINATION to ${ARG_CONFIG_DIR} for build tree PackageConfig.cmake as it is never installed to install tree
