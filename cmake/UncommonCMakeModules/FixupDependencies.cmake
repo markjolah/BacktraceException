@@ -92,6 +92,63 @@ function(fixup_dependencies)
             list(TRANSFORM PROVIDED_LIBS TOLOWER) #Case insensitive-match on windows
         endif()
     endif()
+
+    #Append system libraries to FIXUP_PROVIDED_LIBS
+    if(UNIX AND NOT APPLE)
+        #libc and ld-linux-x86-64 loader must match versions exactly with system loader since
+        #the loader location is hard-coded as an absolute path, it cannot be made relocatable without using system
+        #loader which implied also using system libc.
+        if(NOT FIXUP_COPY_GCC_LIBS)
+            list(APPEND FIXUP_PROVIDED_LIBS libstdc++ libgfortran libgcc_s libatomic libgomp libquadmath libmpx libmpxwrappers) #gcc libs
+        endif()
+        if(NOT FIXUP_COPY_GLIBC_LIBS)
+            list(APPEND FIXUP_PROVIDED_LIBS libdl libpthread libcrypt librt libm) #glibc libs
+        endif()
+        list(APPEND FIXUP_PROVIDED_LIBS libc ld-linux-x86-64) #loader
+    elseif(WIN32)
+        list(APPEND FIXUP_PROVIDED_LIBS kernel32 user32 msvcrt advapi32 ws2_32 msvcp120 msvcr120 msvcp120 dbghelp oleaut32 ole32 psapi powrprof)
+    endif()
+
+    #FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS - generally matches the CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES
+    set(FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS)
+    if(UNIX AND NOT APPLE)
+        set(_suffixs ${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES}) #dirs of libraries provided by host system
+        foreach(sdir IN LISTS _suffixs)
+            if(sdir MATCHES "^/(.*)")
+                list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS ${CMAKE_MATCH_1})
+            else()
+                list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS ${sdir})
+            endif()
+        endforeach()
+        unset(_suffixs)
+        list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS lib lib64)
+    elseif(WIN32)
+        set(_suffixs ${CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES}) #dirs of libraries provided by host system
+        foreach(_suffix IN LISTS _suffixs)
+            if(IS_ABSOLUTE ${_suffix})
+                get_filename_component(_suffix ${_suffix} REALPATH)
+                set(_found)
+                foreach(pre IN ITEMS ${CMAKE_FIND_ROOT_PATH})
+                    get_filename_component(pre ${pre} REALPATH)
+                    if(_suffix MATCHES "^${pre}/(.*)")
+                        list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS ${CMAKE_MATCH_1})
+                        set(_found True)
+                        break()
+                    endif()
+                endforeach()
+                if(NOT _found AND ${_suffix} MATCHES "^/(.*)")
+                    list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS ${CMAKE_MATCH_1})
+                endif()
+                unset(_found)
+            else()
+                list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS ${_suffix})
+            endif()
+        endforeach()
+        unset(_suffixs)
+        list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS bin usr/bin lib usr/lib)
+    endif()
+
+
     set(FIXUP_SCRIPT_OUTPUT_DIR ${CMAKE_BINARY_DIR}/FixupDependencies) #Directory where fixup-scripts will be written.
     foreach(FIXUP_TARGET IN LISTS FIXUP_TARGETS)
         if(NOT TARGET ${FIXUP_TARGET})

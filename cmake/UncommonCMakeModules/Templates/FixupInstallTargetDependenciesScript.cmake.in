@@ -160,59 +160,7 @@ if(search_lib_dirs)
     transform_filename_component_list(search_lib_dirs REALPATH)
 endif()
 
-#default_library_search_suffixs - generally matches the CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES
-set(default_library_search_suffixs)
-if(target_os STREQUAL "UNIX")
-    set(_suffixs @CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES@) #dirs of libraries provided by host system
-    foreach(sdir IN LISTS _suffixs)
-        if(sdir MATCHES "^/(.*)")
-            list(APPEND default_library_search_suffixs ${CMAKE_MATCH_1})
-        else()
-            list(APPEND default_library_search_suffixs ${sdir})
-        endif()
-    endforeach()
-    unset(_suffixs)
-    list(APPEND default_library_search_suffixs lib lib64)
-elseif(target_os STREQUAL "WIN32")
-    set(_suffixs @CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES@) #dirs of libraries provided by host system
-    foreach(_suffix IN LISTS _suffixs)
-        if(IS_ABSOLUTE ${_suffix})
-            get_filename_component(_suffix ${_suffix} REALPATH)
-            set(_found)
-            foreach(pre IN ITEMS @CMAKE_FIND_ROOT_PATH@)
-                get_filename_component(pre ${pre} REALPATH)
-                if(_suffix MATCHES "^${pre}/(.*)")
-                    list(APPEND default_library_search_suffixs ${CMAKE_MATCH_1})
-                    set(_found True)
-                    break()
-                endif()
-            endforeach()
-            if(NOT _found AND ${_suffix} MATCHES "^/(.*)")
-                list(APPEND default_library_search_suffixs ${CMAKE_MATCH_1})
-            endif()
-        else()
-            list(APPEND default_library_search_suffixs ${_suffix})
-        endif()
-    endforeach()
-    unset(_suffixs)
-    list(APPEND default_library_search_suffixs bin usr/bin lib usr/lib)
-endif()
-
-#Provided system libraries that should not be copied or recursed on.
-if(target_os STREQUAL "UNIX")
-    #libc and ld-linux-x86-64 loader must match versions exactly with system loader since
-    #the loader location is hard-coded as an absolute path, it cannot be made relocatable without using system
-    #loader which implied also using system libc.
-    if(NOT @FIXUP_COPY_GCC_LIBS@)
-        list(APPEND provided_libs libstdc++ libgfortran libgcc_s libatomic libgomp libquadmath libmpx libmpxwrappers) #gcc libs
-    endif()
-    if(NOT @FIXUP_COPY_GLIBC_LIBS@)
-        list(APPEND provided_libs libc libdl libpthread libcrypt librt libm) #glibc libs
-    endif()
-    list(APPEND provided_libs ld-linux-x86-64) #loader
-elseif(target_os STREQUAL "WIN32")
-    list(APPEND provided_libs kernel32 user32 msvcrt advapi32 ws2_32 msvcp120 msvcr120 msvcp120 dbghelp oleaut32 ole32 psapi powrprof)
-endif()
+set(default_library_search_suffixs @FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS@)
 
 message(STATUS "${msg_hdr} install_prefix: ${install_prefix} target_destination: ${target_destination}")
 message(STATUS "${msg_hdr} parent_lib: ${parent_lib}")
