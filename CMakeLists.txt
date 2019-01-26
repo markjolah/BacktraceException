@@ -12,6 +12,8 @@ project(BacktraceException VERSION 0.2 LANGUAGES CXX)
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(BUILD_TESTING "Build tests" OFF)
+option(OPT_INSTALL_TESTING "Install testing executables" OFF)
+
 option(OPT_EXPORT_BUILD_TREE "Configure the package so it is usable from the build tree.  Useful for development." OFF)
 
 if (NOT BUILD_SHARED_LIBS AND NOT BUILD_STATIC_LIBS)
