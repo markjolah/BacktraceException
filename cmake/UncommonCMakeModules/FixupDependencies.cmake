@@ -18,9 +18,7 @@
 #   LINK_INSTALLED_LIBS - [default: off] [WIN32 only] instead of copying into current directory make a symlink if dep us under in the install_prefix
 #
 # Single argument keywords:
-#   COPY_DESTINATION - [optional] [default: '.'] Relative path from the target install location to the lib dir  i.e., copy location.
-#   TARGET_DESTINATION - [suggested but optional] [default try to find_file in install prefix].  The relative path
-#       of the target under the install prefix.  This is the same value as given to DESTINATION keyword of install(TARGETS).
+#   COPY_DESTINATION - [optional] [default: 'lib'] Linux-only. Relative path from the install_prefix in which to copy dependencies.
 #   PARENT_LIB - [optional] [default: False] The library that will load this library possibly via dlopen.  We can use the RPATH or RUNPATH from this
 #                                            ELF file to correctly find libraries that will be provided on the system path.
 #                                            For fixing up matlab MEx files, this should be ${MATLAB_ROOT}/bin/${MATLAB_ARCH}/MATLAB or equivalent.
@@ -29,6 +27,8 @@
 # Multi-argument keywords:
 #   TARGETS - List of targets to copy dependencies for.  These targets should share all of the other keyword propoerties.
 #             If multiple targets require different options to fixup_dependencies, then multiple independent calls should be made.
+#   TARGET_DESTINATIONS - [suggested but optional] [default try to find_file in install prefix].  List of relative paths
+#        to look for the installed target under the install prefix.  This is the same value as given to DESTINATION keyword of install(TARGETS).
 #   PROVIDED_LIB_DIRS - Absolute paths to directories containaing libraries that will be provided by the system or parent program for dynamic imports.
 #                       Libraries found in these directories will not be copied as they are assumed provided.
 #   PROVIDED_LIBS - Names (with of without extensions) of provided libraries that should not be copied.
@@ -40,14 +40,14 @@
 set(_fixup_dependencies_install_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(fixup_dependencies)
     cmake_parse_arguments(FIXUP "COPY_GCC_LIBS;COPY_GLIBC_LIBS;EXPORT_BUILD_TREE;LINK_INSTALLED_LIBS"
-                                "COPY_DESTINATION;TARGET_DESTINATION;PARENT_LIB;INSTALL_SCRIPT_TEMPLATE;BUILD_SCRIPT_TEMPLATE"
-                                "TARGETS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
+                                "COPY_DESTINATION;PARENT_LIB;INSTALL_SCRIPT_TEMPLATE;BUILD_SCRIPT_TEMPLATE"
+                                "TARGETS;TARGET_DESTINATIONS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
     set(msg_hdr "[fixup_dependencies:configure-phase]:")
     if(NOT FIXUP_COPY_DESTINATION)
-        set(FIXUP_COPY_DESTINATION ".")  #Must be relative to TARGET_DESTINATION
+        set(FIXUP_COPY_DESTINATION "lib")  #Must be relative to INSTALL_PREFIX
     endif()
-    if(NOT FIXUP_TARGET_DESTINATION)
-        set(FIXUP_TARGET_DESTINATION) #Signal to use find_file in FixupTarget script
+    if(NOT FIXUP_TARGET_DESTINATIONS)
+        set(FIXUP_TARGET_DESTINATIONS) #Signal to use find_file in FixupTarget script
     endif()
     if(NOT FIXUP_INSTALL_SCRIPT_TEMPLATE)
         find_file(FIXUP_INSTALL_SCRIPT_TEMPLATE_PATH FixupInstallTargetDependenciesScript.cmake.in

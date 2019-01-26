@@ -106,10 +106,12 @@ endfunction()
 
 
 #Find target_destination: the relative directory path from ${CMAKE_INSTALL_PREFIX} that target will be installed to
-set(target_destination @FIXUP_TARGET_DESTINATION@)
-if(NOT target_destination)
+set(target_destination "@FIXUP_TARGET_DESTINATIONS@")
+message(STATUS "GOT target_destination:${target_destination}")
+list(LENGTH target_destination _N_dests)
+if(NOT target_destination OR _N_dests GREATER 1)
     #try to find installed file
-    find_file(_file ${target_file_name} PATHS ${install_prefix} PATH_SUFFIXES lib lib/${project_name} bin bin/${project_name} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
+    find_file(_file ${target_file_name} PATHS ${install_prefix} PATH_SUFFIXES ${target_destination} lib lib/${project_name} bin bin/${project_name} NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
     if(NOT _file)
         message(FATAL_ERROR "Could not find installed location for target fixup file: ${target_file_name} under install dir: ${install_prefix}")
     endif()
@@ -123,15 +125,20 @@ endif()
 set(parent_lib "@FIXUP_PARENT_LIB@")
 set(target_install_dir ${install_prefix}/${target_destination})
 set(target_install_file ${target_install_dir}/${target_file_name})
-get_filename_component(lib_copy_dest ${target_install_dir}/@FIXUP_COPY_DESTINATION@ ABSOLUTE) #Destination for libraries to copy in
+set(crosscompiling @CMAKE_CROSSCOMPILING@)
+set(toolchain_file @CMAKE_TOOLCHAIN_FILE@)
+set(target_os @FIXUP_TARGET_OS@)
+#Destination for libraries to copy in
+if(target_os STREQUAL "UNIX")
+    get_filename_component(lib_copy_dest ${install_prefix}/@FIXUP_COPY_DESTINATION@ ABSOLUTE)
+elseif(target_os STREQUAL "WIN32")
+    set(lib_copy_dest ${target_install_dir}) #Windows always fixes-up in-place
+endif()
 
 set(provided_lib_dirs @FIXUP_PROVIDED_LIB_DIRS@)
 transform_filename_component_list(provided_lib_dirs REALPATH)
 set(provided_libs @FIXUP_PROVIDED_LIBS@)
 
-set(crosscompiling @CMAKE_CROSSCOMPILING@)
-set(toolchain_file @CMAKE_TOOLCHAIN_FILE@)
-set(target_os @FIXUP_TARGET_OS@)
 
 set(staging_prefix @CMAKE_STAGING_PREFIX@)
 if(staging_prefix)
