@@ -36,31 +36,29 @@ set(CMAKE_EXPORT_NO_PACKAGE_REGISTRY True)
 
 #Options to control FixupDependencies
 option(OPT_FIXUP_DEPENDENCIES "Copy dependencies to install tree." ON)
-option(OPT_FIXUP_BUILD_TREE_DEPENDENCIES "Fixup dependencies for targets in the build tree." OFF)
-option(OPT_AUTO_FIXUP_DEPENDENCIES "Enable the auto hook on install() function for fixup_dependencies(). Disable to manually call fixup_dependencies()." ON)
-
-option(OPT_LINK_INSTALLED_LIBS "Create symbolic links to dependent DLLs that are within install_prefix already, as opposed to copying." OFF)
+option(OPT_FIXUP_DEPENDENCIES_AUTO "Enable the auto hook on install() function for fixup_dependencies(). Disable to manually call fixup_dependencies()." ON)
+option(OPT_FIXUP_DEPENDENCIES_BUILD_TREE "Fixup dependencies for targets in the build tree." OFF)
+option(OPT_FIXUP_DEPENDENCIES_LINK_INSTALLED_LIBS "Create symbolic links to dependent DLLs that are within install_prefix already, as opposed to copying." OFF)
 
 if(OPT_FIXUP_DEPENDENCIES)
     #Check options logical restrictions
-    if(OPT_EXPORT_BUILD_TREE AND OPT_FIXUP_DEPENDENCIES)
-        message(STATUS "OPT_EXPORT_BUILD_TREE and OPT_FIXUP_DEPENDENCIES imply: OPT_FIXUP_BUILD_TREE_DEPENDENCIES")
-        set(OPT_FIXUP_BUILD_TREE_DEPENDENCIES ON)
-        set(OPT_FIXUP_BUILD_TREE_DEPENDENCIES ON CACHE BOOL "Fixup dependencies for targets in the build tree." FORCE)
+    if(OPT_EXPORT_BUILD_TREE AND OPT_FIXUP_DEPENDENCIES AND NOT OPT_FIXUP_DEPENDENCIES_BUILD_TREE)
+        message(STATUS "OPT_EXPORT_BUILD_TREE and OPT_FIXUP_DEPENDENCIES imply: OPT_FIXUP_DEPENDENCIES_BUILD_TREE")
+        set(OPT_FIXUP_DEPENDENCIES_BUILD_TREE ON)
+        set(OPT_FIXUP_DEPENDENCIES_BUILD_TREE ON CACHE BOOL "Fixup dependencies for targets in the build tree." FORCE)
     endif()
 
     get_property(_install_hook_activated GLOBAL PROPERTY _FIXUP_DEPENDENCY_INSTALL_HOOK_ACTIVATED)
     if(NOT _install_hook_activated)
-        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_FIXUP_BUILD_TREE_DEPENDENCIES=0
+        list(APPEND External_Dependency_PASS_CACHE_VARIABLES OPT_INSTALL_DEPENDENCIES OPT_FIXUP_DEPENDENCIES_BUILD_TREE=0
                                                 OPT_LINK_INSTALLED_LIBS)
         SET(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
 
         message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_DEPENDENCIES:${OPT_FIXUP_DEPENDENCIES}")
-        message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_BUILD_TREE_DEPENDENCIES:${OPT_FIXUP_BUILD_TREE_DEPENDENCIES}")
-        message(STATUS "mingw-w64 Toolchain option: OPT_AUTO_FIXUP_DEPENDENCIES:${OPT_AUTO_FIXUP_DEPENDENCIES}")
-
-        message(STATUS "mingw-w64 Toolchain option: OPT_LINK_INSTALLED_LIBS:${OPT_LINK_INSTALLED_LIBS}")
-        if(OPT_AUTO_FIXUP_DEPENDENCIES)
+        message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_DEPENDENCIES_AUTO:${OPT_FIXUP_DEPENDENCIES_AUTO}")
+        message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_DEPENDENCIES_BUILD_TREE:${OPT_FIXUP_DEPENDENCIES_BUILD_TREE}")
+        message(STATUS "mingw-w64 Toolchain option: OPT_FIXUP_DEPENDENCIES_LINK_INSTALLED_LIBS:${OPT_FIXUP_DEPENDENCIES_LINK_INSTALLED_LIBS}")
+        if(OPT_FIXUP_DEPENDENCIES_AUTO)
             #Find FixupDependencies.cmake, add to path, then cleanup any variables we changed
             find_path(_FixupDependencies_Path FixupDependencies.cmake PATHS "${CMAKE_CURRENT_LIST_DIR}/.." NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             if(NOT _FixupDependencies_Path)
@@ -75,7 +73,7 @@ if(OPT_FIXUP_DEPENDENCIES)
             #intercept install(TARGETS) commands and run fixup_dependencies on the targets
             function(install type)
                 _install(${type} ${name} ${ARGN})
-                if(OPT_AUTO_FIXUP_DEPENDENCIES AND type STREQUAL TARGETS) #Need to check for OPT_AUTO_FIXUP_DEPENDENCIES again incase it is disabled in main CMakeLists.txt after this Toolchain is processed
+                if(OPT_FIXUP_DEPENDENCIES_AUTO AND type STREQUAL TARGETS) #Need to check for OPT_FIXUP_DEPENDENCIES_AUTO again incase it is disabled in main CMakeLists.txt after this Toolchain is processed
                     #Get all targets
                     math(EXPR _N "${ARGC} - 1")
                     set(_targets)
@@ -87,14 +85,14 @@ if(OPT_FIXUP_DEPENDENCIES)
                         endif()
                     endforeach()
                     set(_args)
-                    if(OPT_LINK_INSTALLED_LIBS)
+                    if(OPT_FIXUP_DEPENDENCIES_LINK_INSTALLED_LIBS)
                         list(APPEND _args LINK_INSTALLED_LIBS)
                     endif()
-                    if(OPT_FIXUP_BUILD_TREE_DEPENDENCIES)
+                    if(OPT_FIXUP_DEPENDENCIES_BUILD_TREE)
                         list(APPEND _args EXPORT_BUILD_TREE)
                     endif()
                     message(" Targets:${_targets} Args:${_args}")
-                    fixup_dependencies(TARGETS ${_targets} ${_args} COPY_DESTINATION "../bin")
+                    fixup_dependencies(TARGETS ${_targets} ${_args})
                 endif()
             endfunction()
         endif()

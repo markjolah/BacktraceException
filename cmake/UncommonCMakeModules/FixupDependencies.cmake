@@ -15,10 +15,10 @@
 #                     the version of libc and ld-linux-x86_64 must match exactly.  For now this is disabled.
 #
 #   EXPORT_BUILD_TREE - [default: off] Fixup the libraries for the build-tree export
-#   LINK_INSTALLED_LIBS - [default: off] [WIN32 only] instead of copying into current directory make a symlink if dep us under in the install_prefix
+#   LINK_INSTALLED_LIBS - [default: off] [WIN32 only] [deprecated: does not seem to be viable option] instead of copying into current directory make a symlink if dep us under in the install_prefix
 #
 # Single argument keywords:
-#   COPY_DESTINATION - [optional] [default: 'lib'] Linux-only. Relative path from the install_prefix in which to copy dependencies.
+#   COPY_DESTINATION - [optional] [default: 'lib'] Relative path from the install_prefix in which to copy dependencies.
 #   PARENT_LIB - [optional] [default: False] The library that will load this library possibly via dlopen.  We can use the RPATH or RUNPATH from this
 #                                            ELF file to correctly find libraries that will be provided on the system path.
 #                                            For fixing up matlab MEx files, this should be ${MATLAB_ROOT}/bin/${MATLAB_ARCH}/MATLAB or equivalent.
@@ -43,7 +43,7 @@ function(fixup_dependencies)
                                 "COPY_DESTINATION;PARENT_LIB;INSTALL_SCRIPT_TEMPLATE;BUILD_SCRIPT_TEMPLATE"
                                 "TARGETS;TARGET_DESTINATIONS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
     set(msg_hdr "[fixup_dependencies:configure-phase]:")
-    if(NOT FIXUP_COPY_DESTINATION)
+    if(UNIX AND NOT FIXUP_COPY_DESTINATION)
         set(FIXUP_COPY_DESTINATION "lib")  #Must be relative to INSTALL_PREFIX
     endif()
     if(NOT FIXUP_TARGET_DESTINATIONS)
