@@ -35,10 +35,18 @@ macro(print_interface_target target)
     message(STATUS "  >${target} INTERFACE_INCLUDE_DIRECTORIES: ${_VAR}")
     get_property(_VAR TARGET ${target} PROPERTY INTERFACE_LINK_LIBRARIES)
     message(STATUS "  >${target} INTERFACE_LINK_LIBRARIES: ${_VAR}")
+    get_property(_VAR TARGET ${target} PROPERTY INTERFACE_LINK_DIRECTORIES)
+    message(STATUS "  >${target} INTERFACE_LINK_DIRECTORIES: ${_VAR}")
+    get_property(_VAR TARGET ${target} PROPERTY INTERFACE_LINK_OPTIONS)
+    message(STATUS "  >${target} INTERFACE_LINK_OPTIONS: ${_VAR}")
+
+
     get_property(_VAR TARGET ${target} PROPERTY INTERFACE_COMPILE_FEATURES)
     message(STATUS "  >${target} INTERFACE_COMPILE_FEATURES: ${_VAR}")
     get_property(_VAR TARGET ${target} PROPERTY INTERFACE_COMPILE_OPTIONS)
     message(STATUS "  >${target} INTERFACE_COMPILE_OPTIONS: ${_VAR}")
+    get_property(_VAR TARGET ${target} PROPERTY INTERFACE_COMPILE_DEFINITIONS)
+    message(STATUS "  >${target} INTERFACE_COMPILE_DEFINITIONS: ${_VAR}")
     message(STATUS "")
 endmacro()
 

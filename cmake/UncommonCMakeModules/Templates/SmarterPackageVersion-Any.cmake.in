@@ -1,5 +1,0 @@
-# Generated PackageConfigVersion.cmake by SmarterPackageVersionFile.cmake
-# For BUILD_TYPE_COMPATABILITY=Any
-
-#Just call regular Version Number check
-include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionNumber.cmake")

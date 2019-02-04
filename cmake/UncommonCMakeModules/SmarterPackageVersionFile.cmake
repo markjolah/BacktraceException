@@ -19,13 +19,15 @@
 #   VERSION_COMPATIBILITY - [optional] Default: AnyNewerVersion Options: <AnyNewerVersion|SameMajorVersion|SameMinorVersion|ExactVersion>
 #   BUILD_TYPE_COMPATIBILITY - [optional] Default: Exact Options:<Exact|Any>
 # Multi-Argument Keywords
+#   PROVIDED_COMPONENTS - List of provided components which enables the version file to check for required components and reject builds with missing required components.
+#                         If this variable is not set, the component check with PackageConfigVersion.cmake is disabled.
 #   EXPORTED_BUILD_TYPES - [optional] Default: ${BUILD_TYPE}
 include(CMakePackageConfigHelpers)
 set(_WriteSmarterPackageVersionFile_PATH ${CMAKE_CURRENT_LIST_DIR})
 function(install_smarter_package_version_file)
     set(options)
     set(oneValueArgs VERSION TEMPLATE_FILE CONFIG_DIR INSTALL_DIR VERSION_COMPATIBILITY BUILD_TYPE_COMPATIBILITY)
-    set(multiValueArgs EXPORTED_BUILD_TYPES)
+    set(multiValueArgs PROVIDED_COMPONENTS EXPORTED_BUILD_TYPES)
     cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}"  ${ARGN})
     if(ARG_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "Unknown keywords given to install_smarter_package_version_file(): \"${ARG_UNPARSED_ARGUMENTS}\"")
@@ -61,7 +63,14 @@ function(install_smarter_package_version_file)
     endif()
     install(FILES ${ARG_NUMERIC_VERSION_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
 
-    #Generate and install PackageVersionBuildType-<BUILD_TYPE>.cmake
+    #Generate and install <Package>ConfigProvidedComponents.cmake
+    # This files appends EXPORTED_BUILD_TYPES to PACKAGE_BUILD_TYPES when called by find_package for use in main PackageConfigVersion.cmake
+    set(ARG_EXPORTED_PROVIDED_COMPONENTS_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersionProvidedComponents.cmake.in)
+    set(ARG_EXPORTED_PROVIDED_COMPONENTS_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigProvidedComponents.cmake)
+    configure_file(${ARG_EXPORTED_PROVIDED_COMPONENTS_TEMPLATE} ${ARG_EXPORTED_PROVIDED_COMPONENTS_FILE} @ONLY)
+    install(FILES ${ARG_EXPORTED_PROVIDED_COMPONENTS_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
+
+    #Generate and install <Package>ConfigVersionBuildType-<BUILD_TYPE>.cmake
     # This files appends EXPORTED_BUILD_TYPES to PACKAGE_BUILD_TYPES when called by find_package for use in main PackageConfigVersion.cmake
     set(ARG_EXPORTED_BUILD_TYPE_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersionBuildType.cmake.in)
     string(CONCAT ARG_BUILD_TYPE_NAME ${ARG_EXPORTED_BUILD_TYPES})
@@ -71,7 +80,7 @@ function(install_smarter_package_version_file)
 
     #Generate and install the primary PackageConfigVersion.cmake file
     # The file template used depends on the choice of BUILD_TYPE_COMPATIBILITY
-    set(ARG_CONFIG_VERSION_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersion-${ARG_BUILD_TYPE_COMPATIBILITY}.cmake.in)
+    set(ARG_CONFIG_VERSION_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersion.cmake.in)
     set(ARG_CONFIG_VERSION_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigVersion.cmake)
     configure_file(${ARG_CONFIG_VERSION_TEMPLATE} ${ARG_CONFIG_VERSION_FILE} @ONLY)
     install(FILES ${ARG_CONFIG_VERSION_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)

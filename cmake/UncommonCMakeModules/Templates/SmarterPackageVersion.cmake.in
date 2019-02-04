@@ -1,0 +1,47 @@
+# Source: SmarterPackageVersion.cmake.in Template
+# Generates @PROJECT_NAME@ConfigVersion.cmake through SmarterPackageVersionFile.cmake
+
+# Each configuration will provide a file named @PROJECT_NAME@ConfigVersionBuildType-<BUILD_TYPE>.cmake
+# which will append to variable @PROJECT_NAME@_BUILD_TYPES.
+set(PACKAGE_BUILD_TYPES)
+file(GLOB CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
+foreach(f ${CONFIG_FILES})
+    include(${f})
+endforeach()
+include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigProvidedComponents.cmake")  #import @PROJECT_NAME@_PROVIDED_COMPONENTS
+
+message(STATUS "[@PROJECT_NAME@ConfigVersion.cmake]: @PROJECT_NAME@_FIND_COMPONENTS:${@PROJECT_NAME@_FIND_COMPONENTS}")
+message(STATUS "[@PROJECT_NAME@ConfigVersion.cmake]: @PROJECT_NAME@_FIND_REQUIRED_INT64:${@PROJECT_NAME@_FIND_REQUIRED_INT64}")
+message(STATUS "[@PROJECT_NAME@ConfigVersion.cmake]: @PROJECT_NAME@_PROVIDED_COMPONENTS:${@PROJECT_NAME@_PROVIDED_COMPONETS}")
+message(STATUS "[@PROJECT_NAME@ConfigVersion.cmake]: @PROJECT_NAME@_INT64_FOUND:${@PROJECT_NAME@_INT64_FOUND}")
+
+string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
+string(TOLOWER "@ARG_BUILD_TYPE_COMPATABILITY@" BUILD_TYPE_COMPATABILITY)
+
+if(${BUILD_TYPE_COMPATABILITY} STREQUAL EXACT AND NOT ${BUILD_TYPE} IN_LIST @PACKAGE_NAME@_BUILD_TYPES)
+    set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Build:${BUILD_TYPE} Provided Builds:[${@PACKAGE_NAME@_BUILD_TYPES}]")
+    set(PACKAGE_VERSION_UNSUITABLE TRUE)
+elseif(@PROJECT_NAME@_FIND_COMPONENTS)
+    #Check for required components
+    foreach(_comp IN LISTS @PROJECT_NAME@_FIND_COMPONENTS)
+        if(@PROJECT_NAME@_FIND_REQUIRED_${_comp})
+            if(NOT ${_comp} IN_LIST @PROJECT_NAME@_PROVIDED_COMPONENTS)
+                set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PACKAGE_NAME@_BUILD_TYPES}] Required Component:${_comp} Provided Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+                set(PACKAGE_VERSION_UNSUITABLE TRUE)
+                break()
+            endif()
+        endif()
+    endforeach()
+endif()
+
+if(NOT PACKAGE_VERSION_UNSUITABLE)
+    if(NOT PACKAGE_FIND_VERSION)
+        #No version specified.  This package has correct build-type so accept.
+        set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PACKAGE_NAME@_BUILD_TYPES}] Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+        set(PACKAGE_VERSION_COMPATIBLE TRUE)
+    else()
+        #Regular version number check
+        include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionNumber.cmake")
+    endif()
+endif()
+

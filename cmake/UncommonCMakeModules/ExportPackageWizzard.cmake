@@ -34,6 +34,8 @@
 #                         Note cmake variable CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 will disable the effect of the
 #                         export(PACKAGE) call, but other build export tasks are still enabled unless this option is used.
 # Multi-Argument Keywords
+#   PROVIDED_COMPONENTS - List of provided components which enables the version file to check for required components and reject builds with missing required components.
+#                         If this variable is not set, the component check with PackageConfigVersion.cmake is disabled.
 #   FIND_MODULES - List of relative paths to provided custom find module files to propagate with export and install.
 #   EXPORTED_BUILD_TYPES - [default:${BUILD_TYPE}] The list of BUILD_TYPES this export will provide.  Normally this should just
 #                           be the current BUILD_TYPE for single build-type generators like Make.
@@ -46,7 +48,7 @@ set(options)
 set(oneValueArgs NAME NAMESPACE EXPORT_TARGETS_NAME PACKAGE_CONFIG_TEMPLATE_PATH VERSION_COMPATIBILITY
                  BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR SHARED_CMAKE_SOURCE_DIR
                  EXPORT_BUILD_TREE)
-set(multiValueArgs FIND_MODULES EXPORTED_BUILD_TYPES)
+set(multiValueArgs FIND_MODULES EXPORTED_BUILD_TYPES PROVIDED_COMPONENTS)
 cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"  "${multiValueArgs}"  ${ARGN})
 if(ARG_UNPARSED_ARGUMENTS)
     message(FATAL_ERROR "Unknown keywords given to export_package_wizzard(): \"${ARG_UNPARSED_ARGUMENTS}\"")
@@ -134,7 +136,8 @@ install_smarter_package_version_file(CONFIG_DIR ${ARG_CONFIG_DIR}
                                      INSTALL_DIR ${ARG_CONFIG_INSTALL_DIR}
                                      VERSION_COMPATIBILITY ${ARG_VERSION_COMPATIBILITY}
                                      BUILD_TYPE_COMPATIBILITY ${ARG_BUILD_TYPE_COMPATIBILITY}
-                                     EXPORTED_BUILD_TYPES ${ARG_EXPORTED_BUILD_TYPES})
+                                     EXPORTED_BUILD_TYPES ${ARG_EXPORTED_BUILD_TYPES}
+                                     PROVIDED_COMPONENTS ${ARG_PROVIDED_COMPONENTS})
 
 #Generate: ${PROJECT_NAME}Config.cmake
 #Copy modules PATH_VARS to easier to use names for use in PackageConfig.cmake.in
@@ -157,9 +160,7 @@ if(ARG_EXPORT_TARGETS_NAME) #set to OFF to disable exporting Targets.cmake file
 endif()
 
 #install provided Find<XXX>.cmake modules into the install tree
-foreach(module_path ${ARG_FIND_MODULES})
-    install(FILES ${module_path} DESTINATION ${ARG_SHARED_CMAKE_INSTALL_DIR} COMPONENT Development)
-endforeach()
+install(FILES ${ARG_FIND_MODULES} DESTINATION ${ARG_SHARED_CMAKE_INSTALL_DIR} COMPONENT Development)
         
 ### Build tree export
 if(ARG_EXPORT_BUILD_TREE)

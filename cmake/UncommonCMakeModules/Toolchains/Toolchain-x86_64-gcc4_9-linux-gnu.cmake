@@ -14,7 +14,11 @@ set(CMAKE_CXX_COMPILER g++-4.9.4)
 set(CMAKE_FIND_ROOT_PATH $ENV{X86_64_GCC4_9_LINUX_GNU_ROOT})
 set(CMAKE_SYSROOT $ENV{X86_64_GCC4_9_LINUX_GNU_ROOT}) #This sets --sysroot= on linking
 
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_PREFIX_PATH $ENV{X86_64_GCC4_9_LINUX_GNU_ROOT}) #This root for pkg-config in FindPkgConfig
+set(PKG_CONFIG_USE_CMAKE_PREFIX_PATH On)
+# set(ENV{PKG_CONFIG_LIBDIR} ${CMAKE_SYSROOT}/lib/pkgconfig:${CMAKE_SYSROOT}/share/pkgconfig) #tell pkg-config to replace root with sysroot
+# set(ENV{PKG_CONFIG_SYSROOT_DIR} ${CMAKE_SYSROOT}) #tell pkg-config to replace root with sysroot
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
@@ -35,8 +39,8 @@ option(OPT_FIXUP_DEPENDENCIES_AUTO "Enable the auto hook on install() function f
 option(OPT_FIXUP_DEPENDENCIES_BUILD_TREE "Fixup dependencies for targets in the build tree." OFF)
 option(OPT_FIXUP_DEPENDENCIES_COPY_GCC_LIBS "Copy gcc provided dependencies to install tree and set RPATH for all libraries and executables." OFF)
 option(OPT_FIXUP_DEPENDENCIES_COPY_GLIBC_LIBS "[Warning: not recommended] Copy glibc provided dependencies to install tree and set RPATH for all libraries and executables." OFF)
-option(OPT_FIXUP_SET_RPATH "Set RPATH on installed libraries and binaries. This supersedes LD_LIBRARY_PATH and rpaths are searched recursively in dependency hierarchy" OFF)
-option(OPT_FIXUP_SET_RUNPATH "Set RUNPATH on installed libraries and binaries." ON)
+option(OPT_FIXUP_SET_RPATH "Set RPATH on installed libraries and binaries. This supersedes LD_LIBRARY_PATH and rpaths are searched recursively in dependency hierarchy" ON)
+option(OPT_FIXUP_SET_RUNPATH "Set RUNPATH on installed libraries and binaries." OFF)
 set(INSTALL_RUNTIME_PATH "\$ORIGIN/../lib" CACHE STRING "Runtime path used for installed libraries and executables.")
 set(BUILD_RUNTIME_PATH "\$ORIGIN" CACHE STRING "Build tree path used for installed libraries and executables.")
 

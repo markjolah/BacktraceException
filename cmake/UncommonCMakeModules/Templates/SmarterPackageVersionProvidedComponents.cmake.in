@@ -1,0 +1,6 @@
+# Generated @PROJECT_NAME@ConfigProvidedComponents.cmake by SmarterPackageVersionFile.cmake
+#
+set(@PROJECT_NAME@_PROVIDED_COMPONENTS @ARG_PROVIDED_COMPONENTS@)
+foreach(_comp IN LISTS @PROJECT_NAME@_PROVIDED_COMPONENTS)
+    set(@PROJECT_NAME@_${_comp}_FOUND True)
+endforeach()
