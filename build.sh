@@ -2,6 +2,8 @@
 # build.sh
 #
 # Release and Debug build to local install prefix with build-tree export
+#
+# For safety only delete the _install if and only if INSTALL_PATH hasn't been modified.
 
 INSTALL_PATH=_install
 BUILD_PATH=_build
@@ -15,7 +17,12 @@ ARGS="${ARGS} -DOPT_INSTALL_TESTING=On"
 ARGS="${ARGS} -DOPT_EXPORT_BUILD_TREE=On"
 
 set -ex
-rm -rf $INSTALL_PATH $BUILD_PATH/Debug $BUILD_PATH/Release
+
+if [ "$INSTALL_PATH" == "_install" ]; then
+    rm -rf _install
+fi
+rm -rf $BUILD_PATH/Debug
+rm -rf $BUILD_PATH/Release
 cmake -H. -B$BUILD_PATH/Debug -DCMAKE_BUILD_TYPE=Debug -Wdev ${ARGS}
 cmake --build $BUILD_PATH/Debug --target install -- -j${NUM_PROCS}
 cmake -H. -B$BUILD_PATH/Release -DCMAKE_BUILD_TYPE=Release ${ARGS}

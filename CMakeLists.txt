@@ -35,7 +35,8 @@ include(ConfigureDebugBuilds) #Configure standard CFlags and definitions for deb
 
 ### PackageConfig Exports
 include(ExportPackageWizzard)
-export_package_wizzard(EXPORT_BUILD_TREE "${OPT_EXPORT_BUILD_TREE}") #setup build-tree and install-tree exports and packageconfig files
+#Responds to: OPT_EXPORT_BUILD_TREE
+export_package_wizzard() #setup build-tree and install-tree exports and packageconfig files
 
 ### Source directories
 add_subdirectory(src)
