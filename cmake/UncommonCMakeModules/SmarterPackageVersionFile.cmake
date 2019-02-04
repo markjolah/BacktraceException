@@ -79,7 +79,6 @@ function(install_smarter_package_version_file)
     install(FILES ${ARG_EXPORTED_BUILD_TYPE_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
 
     #Generate and install the primary PackageConfigVersion.cmake file
-    # The file template used depends on the choice of BUILD_TYPE_COMPATIBILITY
     set(ARG_CONFIG_VERSION_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersion.cmake.in)
     set(ARG_CONFIG_VERSION_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigVersion.cmake)
     configure_file(${ARG_CONFIG_VERSION_TEMPLATE} ${ARG_CONFIG_VERSION_FILE} @ONLY)
