@@ -1,7 +1,7 @@
 #!/bin/bash
 # build.sh
 #
-# Simple release build
+# Release and Debug build to local install prefix with build-tree export
 
 INSTALL_PATH=_install
 BUILD_PATH=_build
@@ -11,8 +11,8 @@ ARGS="-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH"
 ARGS="${ARGS} -DBUILD_STATIC_LIBS=ON"
 ARGS="${ARGS} -DBUILD_SHARED_LIBS=ON"
 ARGS="${ARGS} -DBUILD_TESTING=On"
-ARGS="${ARGS} -DOPT_INSTALL_TESTING=Off"
-ARGS="${ARGS} -DOPT_EXPORT_BUILD_TREE=Off"
+ARGS="${ARGS} -DOPT_INSTALL_TESTING=On"
+ARGS="${ARGS} -DOPT_EXPORT_BUILD_TREE=On"
 
 set -ex
 rm -rf $INSTALL_PATH $BUILD_PATH/Debug $BUILD_PATH/Release
