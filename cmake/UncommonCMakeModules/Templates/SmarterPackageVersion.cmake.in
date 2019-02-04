@@ -37,7 +37,11 @@ endif()
 if(NOT PACKAGE_VERSION_UNSUITABLE)
     if(NOT PACKAGE_FIND_VERSION)
         #No version specified.  This package has correct build-type so accept.
-        set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PACKAGE_NAME@_BUILD_TYPES}] Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+        if(NOT ${@PROJECT_NAME@_PROVIDED_COMPONENTS})
+            set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PACKAGE_NAME@_BUILD_TYPES}]")
+        else()
+            set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PACKAGE_NAME@_BUILD_TYPES}] Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+        endif()
         set(PACKAGE_VERSION_COMPATIBLE TRUE)
     else()
         #Regular version number check

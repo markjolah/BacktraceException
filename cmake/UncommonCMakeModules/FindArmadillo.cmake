@@ -17,6 +17,8 @@
 # Find TARGETS
 #   Armadillo::Armadillo
 #
+#  Respected options:
+#    OPT_EXTRA_DEBUG - Enable extra debugging support [very noisy]
 #
 # The armadillo library has several macro definitions that are critical to enabling or disabling
 # various libraries and features, as well as C++11 compliance and integer sizing.  These include
@@ -76,6 +78,9 @@ if(NOT TARGET Armadillo::Armadillo)
     target_include_directories(Armadillo::Armadillo INTERFACE ${ARMADILLO_INCLUDE_DIR})
     target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<CONFIG:Debug>:ARMA_PRINT_ERRORS>)
     target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<NOT:$<CONFIG:Debug>>:ARMA_NO_DEBUG>)
+    if(OPT_EXTRA_DEBUG)
+        target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<CONFIG:Debug>:ARMA_EXTRA_DEBUG>)
+    endif()
 
     set(ARMADILLO_ENABLED_COMPONENTS ${Armadillo_FIND_COMPONENTS})
     set(ARMADILLO_PRIVATE_COMPILE_DEFINITIONS)

@@ -15,7 +15,13 @@
 #   RELEASE, DEBUG, RELWITHDEBINFO, MINSIZEREL.  For Make generators this is the value of BUILD_TYPE.  For now we only
 #  support useage on single build-type generators like Make.
 #
+# Respects options:
+#  OPT_EXPORT_BUILD_TREE - If defined and false, don't export build tree
 #
+#
+# Options:
+#  DISABLE_EXPORT_BUILD_TREE - Disable the export of the build tree, if it would have otherwise been enabled.
+
 # Single Argument Keywords
 #  NAME - [Default: ${PACKAGE_NAME}] The name of the export. The name a client will use use to import with: find_package(NAME).  
 #  NAMESPACE - [Default: $NAME}] The namespace in which to place  the export.
@@ -30,9 +36,6 @@
 #  CONFIG_INSTALL_DIR - [Default: lib/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_SOURCE_DIR - [Default: ${CMAKE_SOURCE_DIR}/cmake] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
-#  EXPORT_BUILD_TREE - Bool. [optional] [Default: negation of value of CMAKE_EXPORT_NO_PACKAGE_REGISTRY] - Enable the export of the build tree.
-#                         Note cmake variable CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 will disable the effect of the
-#                         export(PACKAGE) call, but other build export tasks are still enabled unless this option is used.
 # Multi-Argument Keywords
 #   PROVIDED_COMPONENTS - List of provided components which enables the version file to check for required components and reject builds with missing required components.
 #                         If this variable is not set, the component check with PackageConfigVersion.cmake is disabled.
@@ -44,10 +47,9 @@ include(CMakePackageConfigHelpers)
 function(export_package_wizzard)
 
 ### Parse arguments and set defaults
-set(options)
+set(options DISABLE_EXPORT_BUILD_TREE)
 set(oneValueArgs NAME NAMESPACE EXPORT_TARGETS_NAME PACKAGE_CONFIG_TEMPLATE_PATH VERSION_COMPATIBILITY
-                 BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR SHARED_CMAKE_SOURCE_DIR
-                 EXPORT_BUILD_TREE)
+                 BUILD_TYPE_COMPATIBILITY CONFIG_INSTALL_DIR SHARED_CMAKE_INSTALL_DIR SHARED_CMAKE_SOURCE_DIR)
 set(multiValueArgs FIND_MODULES EXPORTED_BUILD_TYPES PROVIDED_COMPONENTS)
 cmake_parse_arguments(ARG "${options}" "${oneValueArgs}"  "${multiValueArgs}"  ${ARGN})
 if(ARG_UNPARSED_ARGUMENTS)
@@ -106,12 +108,10 @@ if(NOT ARG_FIND_MODULES)
     set(ARG_FIND_MODULES)
 endif()
 
-if(NOT ARG_EXPORT_BUILD_TREE)
-    if(CMAKE_CROSSCOMPILING OR CMAKE_EXPORT_NO_PACKAGE_REGISTRY)
-        set(ARG_EXPORT_BUILD_TREE False)
-    else()
-        set(ARG_EXPORT_BUILD_TREE True)
-    endif()
+if(DISABLE_EXPORT_BUILD_TREE OR CMAKE_CROSSCOMPILING OR CMAKE_EXPORT_NO_PACKAGE_REGISTRY OR (DEFINED OPT_EXPORT_BUILD_TREE AND NOT OPT_EXPORT_BUILD_TREE))
+    set(ARG_EXPORT_BUILD_TREE False)
+else()
+    set(ARG_EXPORT_BUILD_TREE True)
 endif()
 
 if(ARG_UNPARSED_ARGUMENTS)
