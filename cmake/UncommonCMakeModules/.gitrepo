@@ -6,7 +6,7 @@
 [subrepo]
 	remote = /nfs/olah/home/mjo/github/UncommonCMakeModules/
 	branch = Debugging
-	commit = bc183e5d4a7442594161fa24f8ffc6a6c4420f4d
-	parent = 63b4f82b3c49cf1c243bfeeff9c9e47873df21a5
+	commit = 12fc5b887eae5d5a95013d13fc778aaa8a1cd8c9
+	parent = e1df4e65b99b423d8728d381c6fefbd526b8c29a
 	cmdver = 0.4.0
 	method = merge
