@@ -32,11 +32,10 @@
 set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "Path of AddExternalDependency.cmake")
 
 macro(add_external_dependency)
-    set(options SHARED;STATIC;TESTING
-    set(oneArgOpts NAME URL VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE
-               BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
+    set(options SHARED STATIC TESTING)
+    set(oneArgOpts NAME URL VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
     set(multiArgOpts PASS_CACHE_VARIABLES COMPONENTS)
-    cmake_parse_arguments(_ExtProject "${options}" "${oneArgOpts}"  "${multiArgOpts}" ${ARGN})
+    cmake_parse_arguments(_ExtProject "${options}" "${oneArgOpts}" "${multiArgOpts}" ${ARGN})
     if(NOT _ExtProject_NAME)
         message(FATAL_ERROR "No package name given")
     endif()
