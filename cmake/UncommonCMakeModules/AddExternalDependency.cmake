@@ -15,25 +15,28 @@
 #
 # useage: AddExternalDependency(<package-name> <package-git-clone-url> [SHARED] [STATIC])
 # Options:
-# STATIC - Require static libraries.  [default=OFF]
-# SHARED - Require shared libraries.  If neither SHARED nor STATIC is set, then SHARED is default.
-# TESTING - Attempt to build testing functionality. [default=OFF]
+#   STATIC - Require static libraries.  [default=OFF]
+#   SHARED - Require shared libraries.  If neither SHARED nor STATIC is set, then SHARED is default.
+#   TESTING - Attempt to build testing functionality. [default=OFF]
 # Single-Value arguments:
-# NAME - [required] Name of PROJECT_NAME of the external cmake project
-# URL - URL of git repository or local path to git repository (can be overwritten with ${PROJECT_NAME}URL environment variable giving alternate URL
-# VERSION - [optional] Version number of dependency required. Leave empty for any version with appropriate BUILD_TYPE_COMPATABILITY
-# INSTALL_PREFIX - [optional] install location for package [defaults to CMAKE_INSTALL_PREFIX]
-# CMAKELISTS_TEMPLATE - [optional] Template file for the CMakeLists.txt to the building and installing via ExternalProject_Add [default: Templates/External.CMakeLists.txt.in]
-# BUILD_TYPE_COMPATABILITY - [optional] Default: Exact  Options: Exact, Any
-# TOOLCHAIN_FILE - [optional] [Only used if CMAKE_CROSSCOMPILING is true.  Uses CMAKE_TOOLCHAIN_FILE as the default.]
-#Mulit-arguments
+#   NAME - [required] Name of PROJECT_NAME of the external cmake project
+#   URL - URL of git repository or local path to git repository (can be overwritten with ${PROJECT_NAME}URL environment variable giving alternate URL
+#   VERSION - [optional] Version number of dependency required. Leave empty for any version with appropriate BUILD_TYPE_COMPATABILITY
+#   INSTALL_PREFIX - [optional] install location for package [defaults to CMAKE_INSTALL_PREFIX]
+#   CMAKELISTS_TEMPLATE - [optional] Template file for the CMakeLists.txt to the building and installing via ExternalProject_Add [default: Templates/External.CMakeLists.txt.in]
+#   BUILD_TYPE_COMPATABILITY - [optional] Default: Exact  Options: Exact, Any
+#   TOOLCHAIN_FILE - [optional] [Only used if CMAKE_CROSSCOMPILING is true.  Uses CMAKE_TOOLCHAIN_FILE as the default.]
+#Multi-arguments
 #  PASS_CACHE_VARIABLES - [optional] List of cache variables to pass-through
+#  COMPONENTS - [optional] List of required components for find_package
 set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "Path of AddExternalDependency.cmake")
 
 macro(add_external_dependency)
+    set(options SHARED;STATIC;TESTING
     set(oneArgOpts NAME URL VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE
                BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
-    cmake_parse_arguments(_ExtProject "SHARED;STATIC;TESTING" "${oneArgOpts}" "PASS_CACHE_VARIABLES" ${ARGN})
+    set(multiArgOpts PASS_CACHE_VARIABLES COMPONENTS)
+    cmake_parse_arguments(_ExtProject "${options}" "${oneArgOpts}"  "${multiArgOpts}" ${ARGN})
     if(NOT _ExtProject_NAME)
         message(FATAL_ERROR "No package name given")
     endif()
@@ -92,11 +95,16 @@ macro(add_external_dependency)
     if(NOT _ExtProject_SHARED AND NOT _ExtProject_STATIC)
         set(_ExtProject_SHARED ON)
     endif()
+    set(_ExtProject_FIND_PACKAGE_ARGS)
     if(NOT _ExtProject_VERSION)
-        find_package(${_ExtProject_NAME} CONFIG)
+        list(APPEND _ExtProject_FIND_PACKAGE_ARGS CONFIG)
     else()
-        find_package(${_ExtProject_NAME} ${_ExtProject_VERSION} CONFIG )
+        list(APPEND _ExtProject_FIND_PACKAGE_ARGS ${_ExtProject_VERSION} CONFIG)
     endif()
+    if(_ExtProject_COMPONENTS)
+        list(APPEND _ExtProject_FIND_PACKAGE_ARGS COMPONENTS ${_ExtProject_COMPONENTS})
+    endif()
+    find_package(${_ExtProject_NAME} ${_ExtProject_FIND_PACKAGE_ARGS})
     string(TOUPPER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
     if(NOT ${_ExtProject_NAME}_FOUND OR (${_ExtProject_NAME}_BUILD_TYPES AND (NOT ${BUILD_TYPE} IN_LIST ${_ExtProject_NAME}_BUILD_TYPES )))
         set(_ExtProject_Dir ${CMAKE_BINARY_DIR}/External/${_ExtProject_NAME})
@@ -136,11 +144,8 @@ macro(add_external_dependency)
         message(STATUS "[add_external_dependency] Downloading Building and Installing: ${_ExtProject_NAME}")
         execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${_ExtProject_Dir})
 
-        if(NOT _ExtProject_VERSION)
-            find_package(${_ExtProject_NAME} CONFIG PATHS ${_ExtProject_INSTALL_PREFIX}/lib/cmake/${_ExtProject_NAME} NO_CMAKE_FIND_ROOT_PATH)
-        else()
-            find_package(${_ExtProject_NAME} ${_ExtProject_VERSION} CONFIG PATHS ${_ExtProject_INSTALL_PREFIX}/lib/cmake/${_ExtProject_NAME} NO_CMAKE_FIND_ROOT_PATH)
-        endif()
+        find_package(${_ExtProject_NAME} ${_ExtProject_FIND_PACKAGE_ARGS} PATHS ${_ExtProject_INSTALL_PREFIX}/lib/cmake/${_ExtProject_NAME} NO_CMAKE_FIND_ROOT_PATH)
+
         if(NOT ${_ExtProject_NAME}_FOUND)
             message(FATAL_ERROR "[add_external_dependency] Install of ${_ExtProject_NAME} failed.")
         endif()

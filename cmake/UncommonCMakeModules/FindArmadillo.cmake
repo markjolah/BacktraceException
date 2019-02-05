@@ -75,6 +75,9 @@ mark_as_advanced(ARMADILLO_WRAPPER ARMADILLO_INCLUDE_DIR ARMADILLO_VERSION_STRIN
 if(NOT TARGET Armadillo::Armadillo)
     #No other calls to find_package(Armadillo) set up the target and component lists
     add_library(Armadillo::Armadillo INTERFACE IMPORTED)
+    if(${ARMADILLO_VERSION_STRING} VERSION_LESS 9999) #Re-enable once fixed in futrue armadillo
+        target_compile_options(Armadillo::Armadillo INTERFACE -Wno-unused-local-typedefs) # Necessary for armadillo 9.200.6 warnings
+    endif()
     target_include_directories(Armadillo::Armadillo INTERFACE ${ARMADILLO_INCLUDE_DIR})
     target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<CONFIG:Debug>:ARMA_PRINT_ERRORS>)
     target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<NOT:$<CONFIG:Debug>>:ARMA_NO_DEBUG>)
