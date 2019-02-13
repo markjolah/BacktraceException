@@ -4,18 +4,27 @@
 # Copyright 2018
 # see file: LICENCE
 #
-# Configure common debugging flags and deginitions for debug builds only.
+# Configure common debugging flags and definitions for debug builds only.
 #
+# Controlling options:
+#  OPT_DEBUG - If defined and disabled some more noisy options will be disabled.
+#              These options default to ON if not OPT_DEBUG is defined.
 #
 
-# CFLAGS ##
-#Debugging configuration
-add_compile_options($<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:GNU>>:-O0>) #No optimization for debugging
-#Add warnings in debug configurations
+#No optimization for debugging
+add_compile_options($<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:GNU>>:-O0>)
+
+#Add warnings for debug configurations
 add_compile_options($<$<CONFIG:Debug>:-W>)
 add_compile_options($<$<CONFIG:Debug>:-Wall>)
 add_compile_options($<$<CONFIG:Debug>:-Wextra>)
-set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG>) 
+
+if(NOT DEFINED OPT_DEBUG OR OPT_DEBUG)
+    add_compile_definitions($<$<CONFIG:Debug>:DEBUG>)
+endif()
+
+#Set the global debug postfix for libraries and executables
 set(CMAKE_DEBUG_POSTFIX ".debug" CACHE STRING "Debug file extension")
+
 #Limit # of errors reported by gcc
-set_property(DIRECTORY APPEND PROPERTY COMPILE_OPTIONS $<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:GNU>>:-fmax-errors=5>)
+add_compile_options($<$<AND:$<CONFIG:Debug>,$<CXX_COMPILER_ID:GNU>>:-fmax-errors=5>)

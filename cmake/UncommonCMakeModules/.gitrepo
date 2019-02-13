@@ -4,9 +4,9 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = /nfs/olah/home/mjo/github/UncommonCMakeModules/
+	remote = /nfs/olah/home/mjo/github/UncommonCMakeModules
 	branch = Debugging
-	commit = cf94e406a273db5c67a7b2b483ae25eb0a034603
-	parent = 0188a06dbdb34ff3ae2be2bd10aa8a41ac14a7c2
+	commit = 4ae35f3cae88d79e42acd97e1f1c1a1273f42456
+	parent = 723e3dae0ce90635118d59332f6edaf138ebfbff
 	cmdver = 0.4.0
 	method = merge
