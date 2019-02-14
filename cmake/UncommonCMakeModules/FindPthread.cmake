@@ -2,7 +2,7 @@
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
 # Copyright 2018-2019
-# see file: LICENCE
+# see file: LICENSE
 #
 # Find the Pthreads library
 # Works on Linux and Win64 in cross-build environments.

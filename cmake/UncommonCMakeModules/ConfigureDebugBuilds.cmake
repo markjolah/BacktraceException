@@ -2,7 +2,7 @@
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
 # Copyright 2018
-# see file: LICENCE
+# see file: LICENSE
 #
 # Configure common debugging flags and definitions for debug builds only.
 #

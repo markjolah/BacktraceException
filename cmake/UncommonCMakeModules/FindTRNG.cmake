@@ -2,7 +2,7 @@
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
 # Copyright 2018
-# see file: LICENCE
+# see file: LICENSE
 #
 # Find the TRNG (Tina's Random Number Generator Library)
 # GIT: https://github.com/rabauke/trng4.git

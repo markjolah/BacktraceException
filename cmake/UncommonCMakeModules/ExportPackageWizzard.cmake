@@ -4,7 +4,7 @@
 # Copyright 2017-2018
 # Licensed under the Apache License, Version 2.0
 # https://www.apache.org/licenses/LICENSE-2.0
-# See: LICENCE file
+# See: LICENSE file
 #
 # Prepare cmake package configuration and target export files so that
 # this package can be found both from the install tree and the build tree
@@ -25,7 +25,7 @@
 # Single Argument Keywords
 #  NAME - [Default: ${PACKAGE_NAME}] The name of the export. The name a client will use use to import with: find_package(NAME).  
 #  NAMESPACE - [Default: $NAME}] The namespace in which to place  the export.
-#  EXPORT_TARGETS_NAME - [Default: ${NAME}Targets] The name of the target export (the one used with the instal(TARGET EXPORT) keyword)
+#  EXPORT_TARGETS_NAME - [Default: ${NAME}Targets] The name of the target export (the one used with the install(TARGET EXPORT) keyword)
 #                         set to OFF to disable exporting Targets.cmake file.
 #  PACKAGE_CONFIG_TEMPLATE -  The template file for package config.
 #         [Default: Look for PackageConfig.cmake.in under ${CMAKE_SOURCE_DIR}/cmake/<Templates|templatesModules|modules|>]
@@ -76,7 +76,6 @@ if(NOT ARG_PACKAGE_CONFIG_TEMPLATE)
         message(FATAL_ERROR "Unable to find PackageConfig.cmake.in. Cannot configure exports.")
     endif()
 endif()
-
 if(NOT ARG_VERSION_COMPATIBILITY)
     set(ARG_VERSION_COMPATIBILITY AnyNewerVersion)
 endif()

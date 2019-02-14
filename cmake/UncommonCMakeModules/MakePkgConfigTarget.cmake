@@ -2,44 +2,11 @@
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
 # Copyright 2019
-# see file: LICENCE
+# see file: LICENSE
 #
-# Functions to enable use of pkg-config for modern CMake namespaced-targets, with cross-compiling awareness.
+# Enables use of pkg-config for modern CMake namespaced-targets, with cross-compiling awareness.
 #
 #
-
-#get_pkg_config(ret_var pcname pcflags...)
-# Check if pcname is known to pkg-config
-# Returns:
-#  Boolean: true if ${pcname}.pc file is found by pkg-config).
-# Args:
-#  ret_var: return variable name.
-#  pcname: pkg-config name to look for (.pc file)
-function(check_pkg_config ret_var pcname)
-    execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} --exists ${pcname} RESULT_VARIABLE _found)
-    if(_found EQUAL 0)
-        set(${ret_var} True PARENT_SCOPE)
-    else()
-        set(${ret_var} False PARENT_SCOPE)
-    endif()
-endfunction()
-
-#get_pkg_config(ret_var pcname pcflags...)
-# Get the output of pkg-config
-# Args:
-#  ret_var: return variable name
-#  pcname: pkg-config name to look for (.pc file)
-#  pcflags: pkg-config flags to pass
-function(get_pkg_config ret_var pcname)
-    execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} ${ARGN} ${pcname} OUTPUT_VARIABLE _out RESULT_VARIABLE _ret OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if(_ret EQUAL 0)
-        separate_arguments(_out)
-        set(${ret_var} ${_out} PARENT_SCOPE)
-    else()
-        set(${ret_var} "" PARENT_SCOPE)
-    endif()
-endfunction()
-
 # make_pkg_config_target(target_var_name target_name [STATIC] pkg_config_names... )
 # Options:
 #   STATIC - Find static libs.  Will pass --static args to pkg_config
@@ -57,6 +24,42 @@ endfunction()
 #  ${VAR_NAME}_PKGCONFIG_NAME - pkg-config name found under if any.
 #
 #
+
+#Helper:
+#check_pkg_config(ret_var pcname pcflags...)
+# Check if pcname is known to pkg-config
+# Returns:
+#  Boolean: true if ${pcname}.pc file is found by pkg-config).
+# Args:
+#  ret_var: return variable name.
+#  pcname: pkg-config name to look for (.pc file)
+function(check_pkg_config ret_var pcname)
+    execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} --exists ${pcname} RESULT_VARIABLE _found)
+    if(_found EQUAL 0)
+        set(${ret_var} True PARENT_SCOPE)
+    else()
+        set(${ret_var} False PARENT_SCOPE)
+    endif()
+endfunction()
+
+#Helper:
+#get_pkg_config(ret_var pcname pcflags...)
+# Get the output of pkg-config
+# Args:
+#  ret_var: return variable name
+#  pcname: pkg-config name to look for (.pc file)
+#  pcflags: pkg-config flags to pass
+function(get_pkg_config ret_var pcname)
+    execute_process(COMMAND ${PKG_CONFIG_EXECUTABLE} ${ARGN} ${pcname} OUTPUT_VARIABLE _out RESULT_VARIABLE _ret OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if(_ret EQUAL 0)
+        separate_arguments(_out)
+        set(${ret_var} ${_out} PARENT_SCOPE)
+    else()
+        set(${ret_var} "" PARENT_SCOPE)
+    endif()
+endfunction()
+
+
 function(make_pkg_config_target)
     set(options STATIC DISABLE_PKGCONFIG)
     set(oneValueArgs VAR_NAME NAMESPACE TARGET)
@@ -80,21 +83,21 @@ function(make_pkg_config_target)
         return()
     elseif(${target_var_name}_FOUND AND ${target_var_name}_LIBRARIES)
         add_library(${target_name} SHARED IMPORTED)
-        target_link_libraries(${target_name} INTERFACE ${${target_var_name}_LIBRARIES})
+        set_target_properties(${target_name} PROPERTIES INTERFACE_LINK_LIBRARIES ${${target_var_name}_LIBRARIES})
         if(${target_var_name}_LINKER_FLAGS)
-            target_link_options(${target_name} INTERFACE ${${target_var_name}_LINKER_FLAGS})
+            set_target_properties(${target_name} PROPERTIES INTERFACE_LINK_OPTIONS ${${target_var_name}_LINKER_FLAGS})
         endif()
         if(${target_var_name}_LINKER_DIRS)
-            target_link_directories(${target_name} INTERFACE ${${target_var_name}_LINKER_DIRS})
+            set_target_properties(${target_name} PROPERTIES INTERFACE_LINK_DIRECTORIES ${${target_var_name}_LINKER_DIRS})
         endif()
         if(${target_var_name}_INCLUDE_DIRS)
-            target_include_directories(${target_name} INTERFACE ${${target_var_name}_INCLUDE_DIRS})
+            set_target_properties(${target_name} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${${target_var_name}_INCLUDE_DIRS})
         endif()
         if(${target_var_name}_COMPILE_DEFINITIONS)
-            target_compile_definitions(${target_name} INTERFACE ${${target_var_name}_COMPILE_DEFINITIONS})
+            set_target_properties(${target_name} PROPERTIES INTERFACE_COMPILE_DEFINITIONS ${${target_var_name}_COMPILE_DEFINITIONS})
         endif()
         if(${target_var_name}_COMPILE_OPTIONS)
-            target_compile_options(${target_name} INTERFACE ${${target_var_name}_COMPILE_OPTIONS})
+            set_target_properties(${target_name} PROPERTIES INTERFACE_COMPILE_OPTIONS ${${target_var_name}_COMPILE_OPTIONS})
         endif()
         message(STATUS "Found ${target_name} manually specified")
         set(_FOUND True)
@@ -121,12 +124,12 @@ function(make_pkg_config_target)
                 string(REGEX REPLACE "-l" "" _LIBS "${_LIBS}")
 
                 add_library(${target_name} INTERFACE IMPORTED)
-                target_include_directories(${target_name} INTERFACE ${_INCLUDES})
-                target_compile_definitions(${target_name} INTERFACE ${_COMPILE_DEFINITIONS})
-                target_compile_options(${target_name} INTERFACE ${_COMPILE_OPTIONS})
-                target_link_directories(${target_name} INTERFACE ${_LIB_DIRS})
-                target_link_libraries(${target_name} INTERFACE ${_LIBS})
-                target_link_options(${target_name} INTERFACE ${_LINK_OPTS})
+                set_target_properties(${target_name} PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${_INCLUDES})
+                set_target_properties(${target_name} PROPERTIES INTERFACE_COMPILE_DEFINITIONS ${_COMPILE_DEFINITIONS})
+                set_target_properties(${target_name} PROPERTIES INTERFACE_COMPILE_OPTIONS ${_COMPILE_OPTIONS})
+                set_target_properties(${target_name} PROPERTIES INTERFACE_LINK_DIRECTORIES ${_LIB_DIRS})
+                set_target_properties(${target_name} PROPERTIES INTERFACE_LINK_LIBRARIES ${_LIBS})
+                set_target_properties(${target_name} PROPERTIES INTERFACE_LINK_OPTIONS ${_LINK_OPTS})
 
                 set(_FOUND_PKG_CONFIG True)
                 set(${target_var_name}_PKGCONFIG_FOUND_NAME ${pkg_config_name} PARENT_SCOPE)

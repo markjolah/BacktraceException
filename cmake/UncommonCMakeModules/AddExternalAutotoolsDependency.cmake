@@ -6,7 +6,7 @@
 #
 # Function: add_external_autotools_dependency
 #
-# Allows a cmake package dependency to be automatically added as a cmake ExternalProject, then built and installed
+# Allows a autotools-based package dependency to be automatically added as a cmake ExternalProject, then built and installed
 # to CMAKE_INSTALL_PREFIX.  All this happens before configure time for the client package, so that the dependency will be
 # automatically found through the cmake PackageConfig system and the normal find_package() mechanism.
 #

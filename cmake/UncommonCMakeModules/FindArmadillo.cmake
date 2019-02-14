@@ -2,7 +2,7 @@
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
 # Copyright 2018
-# see file: LICENCE
+# see file: LICENSE
 #
 # Recognized Components:
 #  CXX11 - Add C++11 support
@@ -76,13 +76,12 @@ if(NOT TARGET Armadillo::Armadillo)
     #No other calls to find_package(Armadillo) set up the target and component lists
     add_library(Armadillo::Armadillo INTERFACE IMPORTED)
     if(${ARMADILLO_VERSION_STRING} VERSION_LESS 9999) #Re-enable once fixed in futrue armadillo
-        target_compile_options(Armadillo::Armadillo INTERFACE -Wno-unused-local-typedefs) # Necessary for armadillo 9.200.6 warnings
+        set_target_properties(Armadillo::Armadillo PROPERTIES INTERFACE_COMPILE_OPTIONS -Wno-unused-local-typedefs) # Necessary for armadillo 9.200.6 warnings
     endif()
-    target_include_directories(Armadillo::Armadillo INTERFACE ${ARMADILLO_INCLUDE_DIR})
-    target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<CONFIG:Debug>:ARMA_PRINT_ERRORS>)
-    target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<NOT:$<CONFIG:Debug>>:ARMA_NO_DEBUG>)
+    set_target_properties(Armadillo::Armadillo PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${ARMADILLO_INCLUDE_DIR})
+    set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS $<$<CONFIG:Debug>:ARMA_PRINT_ERRORS> $<$<NOT:$<CONFIG:Debug>>:ARMA_NO_DEBUG>)
     if(OPT_EXTRA_DEBUG)
-        target_compile_definitions(Armadillo::Armadillo INTERFACE $<$<CONFIG:Debug>:ARMA_EXTRA_DEBUG>)
+        set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS $<$<CONFIG:Debug>:ARMA_EXTRA_DEBUG>)
     endif()
 
     set(ARMADILLO_ENABLED_COMPONENTS ${Armadillo_FIND_COMPONENTS})
@@ -102,8 +101,8 @@ if(ARMADILLO_PRIVATE_COMPILE_DEFINITIONS)
 endif()
 
 if(WRAPPER IN_LIST Armadillo_FIND_COMPONENTS)
-    target_compile_definitions(Armadillo::Armadillo INTERFACE ARMA_USE_WRAPPER)
-    target_link_libraries(Armadillo::Armadillo INTERFACE ${ARMADILLO_WRAPPER})
+    set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS ARMA_USE_WRAPPER)
+    set_target_properties(Armadillo::Armadillo PROPERTIES INTERFACE_LINK_LIBRARIES ${ARMADILLO_WRAPPER})
     list(REMOVE_ITEM ARMADILLO_PRIVATE_COMPILE_DEFINITIONS ARMA_DONT_USE_WRAPPER)
 else()
     if(NOT ARMA_DONT_USE_WRAPPER IN_LIST ARMADILLO_PRIVATE_COMPILE_DEFINITIONS)
@@ -118,7 +117,7 @@ message("Armadillo_FIND_COMPONENTS:${Armadillo_FIND_COMPONENTS}")
 
 foreach(_comp IN ITEMS BLAS LAPACK SUPERLU HDF5 OPENMP)
     if(${_comp} IN_LIST Armadillo_FIND_COMPONENTS)
-        target_compile_definitions(Armadillo::Armadillo INTERFACE ARMA_USE_${_comp})
+        set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS ARMA_USE_${_comp})
         list(REMOVE_ITEM ARMADILLO_PRIVATE_COMPILE_DEFINITIONS ARMA_DONT_USE_${_comp})
     else()
         list(APPEND ARMADILLO_PRIVATE_COMPILE_DEFINITIONS ARMA_DONT_USE_${_comp})
@@ -127,14 +126,14 @@ endforeach()
 unset(_comp)
 
 if(LAPACK IN_LIST Armadillo_FIND_COMPONENTS)
-    target_compile_definitions(Armadillo::Armadillo INTERFACE ARMA_USE_NEWARP) #Use Armadillo Built-in ARPACK
+    set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS  ARMA_USE_NEWARP) #Use Armadillo Built-in ARPACK
 endif()
 if(CXX11 IN_LIST Armadillo_FIND_COMPONENTS)
-    target_compile_features(Armadillo::Armadillo INTERFACE cxx_std_11)
-    target_compile_definitions(Armadillo::Armadillo INTERFACE ARMA_USE_CXX11)
+    set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_FEATURES cxx_std_11)
+    set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS  ARMA_USE_CXX11)
 endif()
 if(INT64 IN_LIST Armadillo_FIND_COMPONENTS)
-    target_compile_definitions(Armadillo::Armadillo INTERFACE ARMA_64BIT_WORD ARMA_BLAS_LONG_LONG)
+    set_property(TARGET Armadillo::Armadillo APPEND PROPERTY INTERFACE_COMPILE_DEFINITIONS ARMA_64BIT_WORD ARMA_BLAS_LONG_LONG)
 endif()
 
 set(ARMADILLO_ENABLED_COMPONENTS ${ARMADILLO_ENABLED_COMPONENTS} ${Armadillo_FIND_COMPONENTS})

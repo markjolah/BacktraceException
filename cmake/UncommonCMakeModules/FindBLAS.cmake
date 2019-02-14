@@ -2,7 +2,7 @@
 #
 # Mark J. Olah (mjo@cs.unm DOT edu)
 # Copyright 2019
-# see file: LICENCE
+# see file: LICENSE
 #
 # This is a modern Find Module replacement for the standard FindBLAS.cmake modules that produces IMPORTED targets for BLAS and CBLAS
 # using pkg-config, and also identifying Static, threaded, and int64 target versions of BLAS and CBLAS, for a variety of implementations.

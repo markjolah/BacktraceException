@@ -4,7 +4,7 @@
 # Copyright 2017
 # Licensed under the Apache License, Version 2.0
 # https://www.apache.org/licenses/LICENSE-2.0
-# See: LICENCE file
+# See: LICENSE file
 #
 # Useage: add_shared_static_libraries()
 # Options:
