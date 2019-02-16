@@ -1,0 +1,55 @@
+#BacktraceException
+language: cpp
+os: linux
+
+git:
+  depth: 3
+  quiet: true
+
+branches:
+    only:
+        - master
+
+matrix:
+  include:
+      - env:
+          - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+      - env:
+          - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+      ##Documentation build
+      - env: DOC=On PDFDOC=On
+        script: ./scripts/pdf-doc-build.sh
+      #- env: DOC=On
+      #  script: ./scripts/doc-build.sh
+
+
+#MATRIX_EVAL allows CC and CXX to be set before dependencies are installed
+before_install:
+    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    - sudo apt-get update
+    - eval "${MATRIX_EVAL}"
+
+install:
+    - if [ "${DOC}" == "On" ]; then sudo apt-get install -y doxygen graphviz; fi
+    - if [ "${PDFDOC}" == "On" ]; then sudo apt-get install -y doxygen-latex; fi
+    - if [ "${CXX}" == "g++-4.9" ];   then sudo apt-get install -y g++-4.9;   fi
+    - if [ "${CXX}" == "g++-5" ];     then sudo apt-get install -y g++-5;     fi
+    - if [ "${CXX}" == "g++-6" ];     then sudo apt-get install -y g++-6;     fi
+    - if [ "${CXX}" == "g++-7" ];     then sudo apt-get install -y g++-7;     fi
+    - if [ "${CXX}" == "clang++-5" ]; then sudo apt-get install -y clang-5.0; fi
+
+script:
+    - ./scripts/travis-build-test.sh
+
+deploy:
+    name: Docu-Bot
+    provider: pages
+    skip-cleanup: true
+    github-token: $GH_TRAVISCI_DOCUMENTATION_TOKEN
+    keep-history: true
+    verbosed: true
+    local_dir: _build/documentation/doc/html
+    on:
+        branch: master
+        condition: $DOC = On
