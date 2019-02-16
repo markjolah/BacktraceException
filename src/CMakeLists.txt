@@ -21,6 +21,6 @@ if(UNIX)
     if(${CMAKE_VERSION} VERSION_GREATER "3.13.0")
         target_link_options(${shared_lib} INTERFACE -rdynamic)
     else()
-        set_property(TARGET${shared_lib} INTERFACE_LINK_LIBRARIES -rdynamic) #Older CMAKE don't have INTERFACE_LINK_OPTIONS
+        set_property(TARGET ${shared_lib} APPEND PROPERTY INTERFACE_LINK_LIBRARIES -rdynamic) #Older CMAKE don't have INTERFACE_LINK_OPTIONS
     endif()
 endif()
