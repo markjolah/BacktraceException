@@ -28,8 +28,6 @@ set(_vars "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=1" "@_ExtProject_PASS_CACHE_VARIAB
 # CMAKE_EXPORT_NO_PACKAGE_REGISTRY=1 --- Causes the external project not to add itself to the build repository
 ExternalProject_Add(@_ExtProject_NAME@
     GIT_REPOSITORY @_ExtProject_URL@
-    GIT_TAG master
-    ${_git_shallow}
     GIT_PROGRESS 0
     SOURCE_DIR @_ExtProject_Dir@/@CMAKE_BUILD_TYPE@/source
     BINARY_DIR @_ExtProject_Dir@/@CMAKE_BUILD_TYPE@/build

@@ -32,6 +32,6 @@ ExternalProject_Add(@_ExtProject_NAME@
     SOURCE_DIR ${SOURCE_DIR}
     BUILD_IN_SOURCE TRUE
     INSTALL_DIR @_ExtProject_INSTALL_PREFIX@
-    CONFIGURE_COMMAND cd ${SOURCE_DIR} && autoreconf && ./configure ${CONFIGURE_ARGS}
+    CONFIGURE_COMMAND cd ${SOURCE_DIR} && autoreconf --force --install && ./configure ${CONFIGURE_ARGS}
     INSTALL_COMMAND make -j${NUM_PROCS} install
     )

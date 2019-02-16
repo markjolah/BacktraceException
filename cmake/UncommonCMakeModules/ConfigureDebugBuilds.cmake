@@ -20,7 +20,7 @@ add_compile_options($<$<CONFIG:Debug>:-Wall>)
 add_compile_options($<$<CONFIG:Debug>:-Wextra>)
 
 if(NOT DEFINED OPT_DEBUG OR OPT_DEBUG)
-    add_compile_definitions($<$<CONFIG:Debug>:DEBUG>)
+    set_property(DIRECTORY APPEND PROPERTY COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG>)
 endif()
 
 #Set the global debug postfix for libraries and executables
