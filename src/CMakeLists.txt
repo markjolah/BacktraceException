@@ -17,5 +17,10 @@ add_shared_static_libraries(SOURCES ${SRCS}
                             RETURN_SHARED_TARGET shared_lib)
 
 if(UNIX)
-    target_link_options(${shared_lib} INTERFACE -rdynamic) #For backtraces to be useful must export all symbols
+    #For backtraces to be useful must export all symbols
+    if(${CMAKE_VERSION} VERSION_GREATER "3.13.0")
+        target_link_options(${shared_lib} INTERFACE -rdynamic)
+    else()
+        set_property(TARGET${shared_lib} INTERFACE_LINK_LIBRARIES -rdynamic) #Older CMAKE don't have INTERFACE_LINK_OPTIONS
+    endif()
 endif()
