@@ -1,0 +1,50 @@
+\begin{theindex}
+
+  \item {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
+		\hyperpage{2}
+    \subitem {backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}, 
+		\hyperpage{2}
+    \subitem {disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}, 
+		\hyperpage{2}
+    \subitem {enable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}, 
+		\hyperpage{2}
+    \subitem {get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}, 
+		\hyperpage{2}
+    \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}, 
+		\hyperpage{2}
+  \item {Backtrace\discretionary {-}{}{}Exception.\discretionary {-}{}{}cpp}, 
+		\hyperpage{2}
+  \item {backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}
+    \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
+		\hyperpage{2}
+
+  \indexspace
+
+  \item {disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}
+    \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
+		\hyperpage{2}
+
+  \indexspace
+
+  \item {enable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}
+    \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
+		\hyperpage{2}
+
+  \indexspace
+
+  \item {get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}
+    \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
+		\hyperpage{2}
+
+  \indexspace
+
+  \item {R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}D\discretionary {-}{}{}M\discretionary {-}{}{}E.\discretionary {-}{}{}md}, 
+		\hyperpage{3}
+
+  \indexspace
+
+  \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}
+    \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
+		\hyperpage{2}
+
+\end{theindex}
