@@ -1,7 +1,7 @@
 <a href="https://travis-ci.org/markjolah/BacktraceException"><img src="https://travis-ci.org/markjolah/BacktraceException.svg?branch=master"/></a>
 # BacktraceException
 
-[BacktraceException](https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is a C++ exception type that produces a stack backtrace when thrown.  It
+[*BacktraceException*](https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is a C++ exception type that produces a stack backtrace when thrown.  It
 can capture this backtrace with several methods and the backtrace can be disabled.  The
 goal is for the library to work on both Linux and windows 64-bit.
 
@@ -30,7 +30,7 @@ This works well in interactive environments like Python and Matlab when running 
 
 ## Using Backtrace Exception
 
-A [BacktraceException](https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is used a a base class for application-defined
+A [*BacktraceException*](https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is used a a base class for application-defined
 classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful.
 
     struct UnrecoverableError : public BacktraceException {
@@ -40,16 +40,20 @@ classes of critical errors that would not be recoverable, and a backtrace of the
 
  * Use `backtrace_exception::enable_backtraces()` or `backtrace_exception::disable_backtraces()` to control the generation of backtraces.  When disabled backtrace_exception behaves like a normal `std::exception`.
  * Build examples from the examples sub-directory with `OPT_EXAMPLES=1`
+
     $ ./build.debug.sh -DOPT_EXAMPLES=1
     $ ./_build/Debug/examples/backtrace_exception_example1
 
 ### Limitations
- * In order to get a backtrace, the exception must derive from `BacktraceException`.  Exceptions from third-party libraries or based on [`std::exception`](https://en.cppreference.com/w/cpp/error/exception) will not generate a backtrace.
+ * In order to get a backtrace, the exception must derive from `BacktraceException`.  Exceptions from third-party libraries or based on [*std::exception*](https://en.cppreference.com/w/cpp/error/exception) will not generate a backtrace.
 
 ### CMake configuration options
 
- * `BUILD_SHARED_LIBS` - Build shared libraries [Default: ON]
- * `BUILD_STATIC_LIBS` - Build static libraries [Default: ON]
-
-
+ * `BUILD_SHARED_LIBS` - Build shared libraries [Default: On]
+ * `BUILD_STATIC_LIBS` - Build static libraries [Default: On]
+ * `BUILD_TESTING` - Build tests [Default: On if BUILD_TYPE==Debug]
+ * `OPT_INSTALL_TESTING` - Install tests.
+ * `OPT_DOC` - Build and install documentation (enables `make doc` and `make pdf`) [Default: Off]
+ * `OPT_EXAMPLES` - Build examples [Default: Off]
+ * `OPT_EXPORT_BUILD_TREE` - Enable CMake export and `find_package(BacktraceException)` support from the build-tree.
 
