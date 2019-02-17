@@ -20,9 +20,7 @@ matrix:
       ##Documentation build
       - env: DOC=On PDFDOC=On
         script: ./scripts/pdf-doc-build.sh
-      #- env: DOC=On
-      #  script: ./scripts/doc-build.sh
-
+        dist: xenial #supports newer doxygen
 
 #MATRIX_EVAL allows CC and CXX to be set before dependencies are installed
 before_install:
