@@ -20,18 +20,18 @@
     \subitem {glibc}, \hyperpage{4}
     \subitem {stackwalk}, \hyperpage{4}
   \item {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{3}
+		\hyperpage{4}
     \subitem {Backtrace\discretionary {-}{}{}Method}, \hyperpage{4}
     \subitem {backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}, 
-		\hyperpage{4}
+		\hyperpage{5}
     \subitem {disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}, 
-		\hyperpage{4}
+		\hyperpage{5}
     \subitem {enable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}, 
-		\hyperpage{4}
+		\hyperpage{5}
     \subitem {get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}, 
-		\hyperpage{4}
+		\hyperpage{5}
     \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}, 
-		\hyperpage{4}
+		\hyperpage{5}
   \item {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}, 
 		\hyperpage{5}
     \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace}, 
@@ -45,20 +45,20 @@
     \subitem {condition}, \hyperpage{7}
     \subitem {print\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace}, 
 		\hyperpage{7}
-    \subitem {what}, \hyperpage{7}
+    \subitem {what}, \hyperpage{8}
   \item {Backtrace\discretionary {-}{}{}Exception}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}, 
 		\hyperpage{7}
   \item {Backtrace\discretionary {-}{}{}Exception.\discretionary {-}{}{}cpp}, 
 		\hyperpage{8}
   \item {Backtrace\discretionary {-}{}{}Exception.\discretionary {-}{}{}h}, 
-		\hyperpage{9}
+		\hyperpage{10}
   \item {Backtrace\discretionary {-}{}{}Method}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
 		\hyperpage{4}
   \item {backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{4}
+		\hyperpage{5}
 
   \indexspace
 
@@ -70,13 +70,13 @@
 
   \item {disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{4}
+		\hyperpage{5}
 
   \indexspace
 
   \item {enable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{4}
+		\hyperpage{5}
 
   \indexspace
 
@@ -84,7 +84,7 @@
     \subitem {backtrace\-\_\-exception}, \hyperpage{4}
   \item {get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{4}
+		\hyperpage{5}
   \item {glibc}
     \subitem {backtrace\-\_\-exception}, \hyperpage{4}
 
@@ -103,7 +103,7 @@
 
   \item {set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{4}
+		\hyperpage{5}
   \item {stackwalk}
     \subitem {backtrace\-\_\-exception}, \hyperpage{4}
 
@@ -111,6 +111,6 @@
 
   \item {what}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}, 
-		\hyperpage{7}
+		\hyperpage{8}
 
 \end{theindex}

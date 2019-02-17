@@ -1,4 +1,6 @@
-Backtrace\-Exception is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-\/bit.
+\href{https://travis-ci.org/markjolah/BacktraceException}{\tt } \subsection*{Backtrace\-Exception}
+
+\href{https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html}{\tt Backtrace\-Exception} is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-\/bit.
 
 \subsubsection*{Documentation}
 
@@ -32,4 +34,29 @@ This works well in interactive environments like Python and Matlab when running 
 
 \subsubsection*{Using Backtrace Exception}
 
+A \href{https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html}{\tt Backtrace\-Exception} is used a a base class for application-\/defined classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful. \begin{DoxyVerb}struct UnrecoverableError : public BacktraceException {
+    UnrecoverableError(std::string what) : BacktraceException("UnrecoverableError",what) {}
+};
+\end{DoxyVerb}
+
+
+
+\begin{DoxyItemize}
+\item Use {\ttfamily \hyperlink{namespacebacktrace__exception_a4e1b86dea1b116c7bac88d89448a808e}{backtrace\-\_\-exception\-::enable\-\_\-backtraces()}} or {\ttfamily \hyperlink{namespacebacktrace__exception_a134895cbad5bc441a941f1f49b43a78a}{backtrace\-\_\-exception\-::disable\-\_\-backtraces()}} to control the generation of backtraces. When disabled \hyperlink{namespacebacktrace__exception}{backtrace\-\_\-exception} behaves like a normal {\ttfamily std\-::exception}.
+\item Build examples from the examples sub-\/directory with {\ttfamily O\-P\-T\-\_\-\-E\-X\-A\-M\-P\-L\-E\-S=1} \$ ./build.debug.\-sh -\/\-D\-O\-P\-T\-\_\-\-E\-X\-A\-M\-P\-L\-E\-S=1 \$ ./\-\_\-build/\-Debug/examples/backtrace\-\_\-exception\-\_\-example1
+\end{DoxyItemize}
+
+\paragraph*{Limitations}
+
+
+\begin{DoxyItemize}
+\item In order to get a backtrace, the exception must derive from {\ttfamily Backtrace\-Exception}. Exceptions from third-\/party libraries or based on \href{https://en.cppreference.com/w/cpp/error/exception}{\tt `std\-::exception`} will not generate a backtrace.
+\end{DoxyItemize}
+
 \paragraph*{C\-Make configuration options}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily B\-U\-I\-L\-D\-\_\-\-S\-H\-A\-R\-E\-D\-\_\-\-L\-I\-B\-S} -\/ Build shared libraries \mbox{[}Default\-: O\-N\mbox{]}
+\item {\ttfamily B\-U\-I\-L\-D\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-L\-I\-B\-S} -\/ Build static libraries \mbox{[}Default\-: O\-N\mbox{]} 
+\end{DoxyItemize}

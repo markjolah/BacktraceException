@@ -79,7 +79,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">BacktraceException Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>BacktraceException is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-bit.</p>
+<div class="textblock"><p><a href="https://travis-ci.org/markjolah/BacktraceException"></a> </p>
+<h1>BacktraceException</h1>
+<p><a href="https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html">BacktraceException</a> is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-bit.</p>
 <h2>Documentation</h2>
 <p>The BacktraceException Doxygen documentation can be build with the <code>OPT_DOC</code> CMake option and is also available on online:</p>
 <ul>
@@ -101,7 +103,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>Easily installed as a standalone package or built alongside CMake or autotools projects.</li>
 </ul>
 <h2>Using Backtrace Exception</h2>
+<p>A <a href="https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html">BacktraceException</a> is used a a base class for application-defined classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful. </p>
+<pre class="fragment">struct UnrecoverableError : public BacktraceException {
+    UnrecoverableError(std::string what) : BacktraceException("UnrecoverableError",what) {}
+};
+</pre><ul>
+<li>Use <code><a class="el" href="namespacebacktrace__exception.html#a4e1b86dea1b116c7bac88d89448a808e">backtrace_exception::enable_backtraces()</a></code> or <code><a class="el" href="namespacebacktrace__exception.html#a134895cbad5bc441a941f1f49b43a78a">backtrace_exception::disable_backtraces()</a></code> to control the generation of backtraces. When disabled <a class="el" href="namespacebacktrace__exception.html">backtrace_exception</a> behaves like a normal <code>std::exception</code>.</li>
+<li>Build examples from the examples sub-directory with <code>OPT_EXAMPLES=1</code> $ ./build.debug.sh -DOPT_EXAMPLES=1 $ ./_build/Debug/examples/backtrace_exception_example1</li>
+</ul>
+<h3>Limitations</h3>
+<ul>
+<li>In order to get a backtrace, the exception must derive from <code>BacktraceException</code>. Exceptions from third-party libraries or based on <a href="https://en.cppreference.com/w/cpp/error/exception">`std::exception`</a> will not generate a backtrace.</li>
+</ul>
 <h3>CMake configuration options</h3>
+<ul>
+<li><code>BUILD_SHARED_LIBS</code> - Build shared libraries [Default: ON]</li>
+<li><code>BUILD_STATIC_LIBS</code> - Build static libraries [Default: ON] </li>
+</ul>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
