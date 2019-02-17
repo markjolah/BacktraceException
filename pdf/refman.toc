@@ -1,18 +1,41 @@
 \contentsline {section}{\numberline {1}Main Page}{1}{section.1}
-\contentsline {section}{\numberline {2}Namespace Index}{1}{section.2}
-\contentsline {subsection}{\numberline {2.1}Namespace List}{1}{subsection.2.1}
-\contentsline {section}{\numberline {3}File Index}{1}{section.3}
-\contentsline {subsection}{\numberline {3.1}File List}{2}{subsection.3.1}
-\contentsline {section}{\numberline {4}Namespace Documentation}{2}{section.4}
-\contentsline {subsection}{\numberline {4.1}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception Namespace Reference}{2}{subsection.4.1}
-\contentsline {subsubsection}{\numberline {4.1.1}Function Documentation}{2}{subsubsection.4.1.1}
-\contentsline {paragraph}{\numberline {4.1.1.1}backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}{2}{paragraph.4.1.1.1}
-\contentsline {paragraph}{\numberline {4.1.1.2}disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}{2}{paragraph.4.1.1.2}
-\contentsline {paragraph}{\numberline {4.1.1.3}enable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}{2}{paragraph.4.1.1.3}
-\contentsline {paragraph}{\numberline {4.1.1.4}get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}{2}{paragraph.4.1.1.4}
-\contentsline {paragraph}{\numberline {4.1.1.5}set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}{2}{paragraph.4.1.1.5}
-\contentsline {section}{\numberline {5}File Documentation}{2}{section.5}
-\contentsline {subsection}{\numberline {5.1}Backtrace\discretionary {-}{}{}Exception.\discretionary {-}{}{}cpp File Reference}{2}{subsection.5.1}
-\contentsline {subsubsection}{\numberline {5.1.1}Detailed Description}{3}{subsubsection.5.1.1}
-\contentsline {subsection}{\numberline {5.2}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}D\discretionary {-}{}{}M\discretionary {-}{}{}E.\discretionary {-}{}{}md File Reference}{3}{subsection.5.2}
-\contentsline {section}{Index}{4}{section*.8}
+\contentsline {section}{\numberline {2}Namespace Index}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1}Namespace List}{2}{subsection.2.1}
+\contentsline {section}{\numberline {3}Hierarchical Index}{3}{section.3}
+\contentsline {subsection}{\numberline {3.1}Class Hierarchy}{3}{subsection.3.1}
+\contentsline {section}{\numberline {4}Class Index}{3}{section.4}
+\contentsline {subsection}{\numberline {4.1}Class List}{3}{subsection.4.1}
+\contentsline {section}{\numberline {5}File Index}{3}{section.5}
+\contentsline {subsection}{\numberline {5.1}File List}{3}{subsection.5.1}
+\contentsline {section}{\numberline {6}Namespace Documentation}{3}{section.6}
+\contentsline {subsection}{\numberline {6.1}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception Namespace Reference}{3}{subsection.6.1}
+\contentsline {subsubsection}{\numberline {6.1.1}Enumeration Type Documentation}{4}{subsubsection.6.1.1}
+\contentsline {paragraph}{\numberline {6.1.1.1}Backtrace\discretionary {-}{}{}Method}{4}{paragraph.6.1.1.1}
+\contentsline {subsubsection}{\numberline {6.1.2}Function Documentation}{4}{subsubsection.6.1.2}
+\contentsline {paragraph}{\numberline {6.1.2.1}backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}{4}{paragraph.6.1.2.1}
+\contentsline {paragraph}{\numberline {6.1.2.2}disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}{4}{paragraph.6.1.2.2}
+\contentsline {paragraph}{\numberline {6.1.2.3}enable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}{4}{paragraph.6.1.2.3}
+\contentsline {paragraph}{\numberline {6.1.2.4}get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}{4}{paragraph.6.1.2.4}
+\contentsline {paragraph}{\numberline {6.1.2.5}set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}{5}{paragraph.6.1.2.5}
+\contentsline {section}{\numberline {7}Class Documentation}{5}{section.7}
+\contentsline {subsection}{\numberline {7.1}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}:\discretionary {-}{}{}:Backtrace\discretionary {-}{}{}Exception Class Reference}{5}{subsection.7.1}
+\contentsline {subsubsection}{\numberline {7.1.1}Detailed Description}{6}{subsubsection.7.1.1}
+\contentsline {subsubsection}{\numberline {7.1.2}Constructor \& Destructor Documentation}{7}{subsubsection.7.1.2}
+\contentsline {paragraph}{\numberline {7.1.2.1}Backtrace\discretionary {-}{}{}Exception}{7}{paragraph.7.1.2.1}
+\contentsline {paragraph}{\numberline {7.1.2.2}Backtrace\discretionary {-}{}{}Exception}{7}{paragraph.7.1.2.2}
+\contentsline {subsubsection}{\numberline {7.1.3}Member Function Documentation}{7}{subsubsection.7.1.3}
+\contentsline {paragraph}{\numberline {7.1.3.1}backtrace}{7}{paragraph.7.1.3.1}
+\contentsline {paragraph}{\numberline {7.1.3.2}condition}{7}{paragraph.7.1.3.2}
+\contentsline {paragraph}{\numberline {7.1.3.3}print\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace}{7}{paragraph.7.1.3.3}
+\contentsline {paragraph}{\numberline {7.1.3.4}what}{7}{paragraph.7.1.3.4}
+\contentsline {subsubsection}{\numberline {7.1.4}Member Data Documentation}{8}{subsubsection.7.1.4}
+\contentsline {paragraph}{\numberline {7.1.4.1}\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace}{8}{paragraph.7.1.4.1}
+\contentsline {paragraph}{\numberline {7.1.4.2}\discretionary {-}{}{}\_\discretionary {-}{}{}condition}{8}{paragraph.7.1.4.2}
+\contentsline {paragraph}{\numberline {7.1.4.3}\discretionary {-}{}{}\_\discretionary {-}{}{}what}{8}{paragraph.7.1.4.3}
+\contentsline {section}{\numberline {8}File Documentation}{8}{section.8}
+\contentsline {subsection}{\numberline {8.1}Backtrace\discretionary {-}{}{}Exception.\discretionary {-}{}{}cpp File Reference}{8}{subsection.8.1}
+\contentsline {subsubsection}{\numberline {8.1.1}Detailed Description}{9}{subsubsection.8.1.1}
+\contentsline {subsection}{\numberline {8.2}Backtrace\discretionary {-}{}{}Exception.\discretionary {-}{}{}h File Reference}{9}{subsection.8.2}
+\contentsline {subsubsection}{\numberline {8.2.1}Detailed Description}{10}{subsubsection.8.2.1}
+\contentsline {subsection}{\numberline {8.3}R\discretionary {-}{}{}E\discretionary {-}{}{}A\discretionary {-}{}{}D\discretionary {-}{}{}M\discretionary {-}{}{}E.\discretionary {-}{}{}md File Reference}{11}{subsection.8.3}
+\contentsline {section}{Index}{12}{section*.19}

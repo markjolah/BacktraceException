@@ -39,6 +39,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -68,7 +69,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -88,7 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="BacktraceException_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;BacktraceException/BacktraceException.h&quot;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="BacktraceException_8h.html">BacktraceException/BacktraceException.h</a>&quot;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;cstdlib&gt;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
@@ -120,22 +121,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#if  defined(__linux__)</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span><span class="keyword">static</span> BacktraceMethod _backtrace_method = BacktraceMethod::glibc;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor"></span><span class="keyword">static</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cc">BacktraceMethod</a> _backtrace_method = <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">BacktraceMethod::glibc</a>;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">#elif defined(_WIN32)</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor"></span><span class="keyword">static</span> BacktraceMethod _backtrace_method = BacktraceMethod::stackwalk;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor"></span><span class="keyword">static</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cc">BacktraceMethod</a> _backtrace_method = <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccac87739aef758816341a559291c49bbbb">BacktraceMethod::stackwalk</a>;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="namespacebacktrace__exception.html#a024cd6e7707e7f7cbb9283e60907142c">   46</a></span>&#160;BacktraceMethod <a class="code" href="namespacebacktrace__exception.html#a024cd6e7707e7f7cbb9283e60907142c">get_backtrace_method</a>()</div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="namespacebacktrace__exception.html#a024cd6e7707e7f7cbb9283e60907142c">   46</a></span>&#160;<a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cc">BacktraceMethod</a> <a class="code" href="namespacebacktrace__exception.html#a024cd6e7707e7f7cbb9283e60907142c">get_backtrace_method</a>()</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">return</span> _backtrace_method;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;}</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="namespacebacktrace__exception.html#afe7dd97c0deefd1a0e9cb08f9c8089b2">   51</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacebacktrace__exception.html#afe7dd97c0deefd1a0e9cb08f9c8089b2">set_backtrace_method</a>(BacktraceMethod method)</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="namespacebacktrace__exception.html#afe7dd97c0deefd1a0e9cb08f9c8089b2">   51</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="namespacebacktrace__exception.html#afe7dd97c0deefd1a0e9cb08f9c8089b2">set_backtrace_method</a>(<a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cc">BacktraceMethod</a> method)</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;{</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#if defined(__linux__)</span></div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">switch</span>(method) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">case</span> BacktraceMethod::glibc:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">case</span> BacktraceMethod::gdb:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">BacktraceMethod::glibc</a>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a">BacktraceMethod::gdb</a>:</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            _backtrace_method = method;</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">default</span>:</div>
@@ -143,7 +144,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#elif defined(_WIN32)</span></div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">switch</span>(method) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">case</span> BacktraceMethod::stackwalk:</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccac87739aef758816341a559291c49bbbb">BacktraceMethod::stackwalk</a>:</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            _backtrace_method = method;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">default</span>:</div>
@@ -274,22 +275,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;BacktraceException::BacktraceException(std::string what) :</div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="classbacktrace__exception_1_1BacktraceException.html#acce2185f53042c593cdc55bb8f3ef289">  195</a></span>&#160;<a class="code" href="classbacktrace__exception_1_1BacktraceException.html#acce2185f53042c593cdc55bb8f3ef289">BacktraceException::BacktraceException</a>(std::string what) :</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;   _condition(<span class="stringliteral">&quot;unspecified&quot;</span>), _what(what), _backtrace(print_backtrace())</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;{ }</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;BacktraceException::BacktraceException(std::string condition, std::string what) :</div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classbacktrace__exception_1_1BacktraceException.html#ae12ee4db6c4d7ebbd1d1abf0a572642a">  199</a></span>&#160;<a class="code" href="classbacktrace__exception_1_1BacktraceException.html#acce2185f53042c593cdc55bb8f3ef289">BacktraceException::BacktraceException</a>(std::string condition, std::string what) :</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;   _condition(condition), _what(what), _backtrace(print_backtrace())</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;{ }</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;std::string BacktraceException::print_backtrace()</div>
+<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classbacktrace__exception_1_1BacktraceException.html#aef24b0571ea422191026a2292947810a">  203</a></span>&#160;std::string <a class="code" href="classbacktrace__exception_1_1BacktraceException.html#aef24b0571ea422191026a2292947810a">BacktraceException::print_backtrace</a>()</div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;{</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="preprocessor">#ifdef __linux__</span></div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="preprocessor"></span>    <span class="keywordflow">if</span>(!<a class="code" href="namespacebacktrace__exception.html#a68f7b8565eefc4f9b862c25ec47ce2b7">backtraces_enabled</a>()) <span class="keywordflow">return</span> <span class="stringliteral">&quot;Backtraces temporarily disabled.&quot;</span>;</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keywordflow">switch</span>(_backtrace_method) {</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">case</span> BacktraceMethod::glibc:</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">BacktraceMethod::glibc</a>:</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            <span class="keywordflow">return</span> linux_debug::backtrace_glibc();</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">case</span> BacktraceMethod::gdb:</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a">BacktraceMethod::gdb</a>:</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            <span class="keywordflow">return</span> linux_debug::backtrace_gdb();</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;Backtrace method not implemented&quot;</span>;</div>
@@ -305,7 +306,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="namespacebacktrace__exception_html_a024cd6e7707e7f7cbb9283e60907142c"><div class="ttname"><a href="namespacebacktrace__exception.html#a024cd6e7707e7f7cbb9283e60907142c">backtrace_exception::get_backtrace_method</a></div><div class="ttdeci">BacktraceMethod get_backtrace_method()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00046">BacktraceException.cpp:46</a></div></div>
 <div class="ttc" id="namespacebacktrace__exception_html_a134895cbad5bc441a941f1f49b43a78a"><div class="ttname"><a href="namespacebacktrace__exception.html#a134895cbad5bc441a941f1f49b43a78a">backtrace_exception::disable_backtraces</a></div><div class="ttdeci">void disable_backtraces()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00074">BacktraceException.cpp:74</a></div></div>
 <div class="ttc" id="namespacebacktrace__exception_html_afe7dd97c0deefd1a0e9cb08f9c8089b2"><div class="ttname"><a href="namespacebacktrace__exception.html#afe7dd97c0deefd1a0e9cb08f9c8089b2">backtrace_exception::set_backtrace_method</a></div><div class="ttdeci">void set_backtrace_method(BacktraceMethod method)</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00051">BacktraceException.cpp:51</a></div></div>
+<div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">backtrace_exception::BacktraceMethod::glibc</a></div></div>
+<div class="ttc" id="classbacktrace__exception_1_1BacktraceException_html_acce2185f53042c593cdc55bb8f3ef289"><div class="ttname"><a href="classbacktrace__exception_1_1BacktraceException.html#acce2185f53042c593cdc55bb8f3ef289">backtrace_exception::BacktraceException::BacktraceException</a></div><div class="ttdeci">BacktraceException(std::string what)</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00195">BacktraceException.cpp:195</a></div></div>
+<div class="ttc" id="classbacktrace__exception_1_1BacktraceException_html_aef24b0571ea422191026a2292947810a"><div class="ttname"><a href="classbacktrace__exception_1_1BacktraceException.html#aef24b0571ea422191026a2292947810a">backtrace_exception::BacktraceException::print_backtrace</a></div><div class="ttdeci">static std::string print_backtrace()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00203">BacktraceException.cpp:203</a></div></div>
+<div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57cc"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cc">backtrace_exception::BacktraceMethod</a></div><div class="ttdeci">BacktraceMethod</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8h_source.html#l00016">BacktraceException.h:16</a></div></div>
+<div class="ttc" id="BacktraceException_8h_html"><div class="ttname"><a href="BacktraceException_8h.html">BacktraceException.h</a></div><div class="ttdoc">BacktraceException class declaration and inline member functions. </div></div>
 <div class="ttc" id="namespacebacktrace__exception_html_a4e1b86dea1b116c7bac88d89448a808e"><div class="ttname"><a href="namespacebacktrace__exception.html#a4e1b86dea1b116c7bac88d89448a808e">backtrace_exception::enable_backtraces</a></div><div class="ttdeci">void enable_backtraces()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00079">BacktraceException.cpp:79</a></div></div>
+<div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57ccac87739aef758816341a559291c49bbbb"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccac87739aef758816341a559291c49bbbb">backtrace_exception::BacktraceMethod::stackwalk</a></div></div>
+<div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a">backtrace_exception::BacktraceMethod::gdb</a></div></div>
 <div class="ttc" id="namespacebacktrace__exception_html_a68f7b8565eefc4f9b862c25ec47ce2b7"><div class="ttname"><a href="namespacebacktrace__exception.html#a68f7b8565eefc4f9b862c25ec47ce2b7">backtrace_exception::backtraces_enabled</a></div><div class="ttdeci">bool backtraces_enabled()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00084">BacktraceException.cpp:84</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

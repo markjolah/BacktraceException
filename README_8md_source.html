@@ -39,6 +39,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -69,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -85,19 +86,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a href="README_8md.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor"># BacktraceException</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;BacktraceException is a C++ exception type that produces a backtrace when thrown.  It</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;BacktraceException is a C++ exception type that produces a stack backtrace when thrown.  It</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;can capture <span class="keyword">this</span> backtrace with several methods and the backtrace can be disabled.  The</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;goal is <span class="keywordflow">for</span> the library to work on both Linux and windows 64-bit.</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;## Using Backtrace Exception</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">### CMake configuration options</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">## Backtrace Methods</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;## Documentation</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;The BacktraceException Doxygen documentation can be build with the `OPT_DOC` CMake option and is also available on online:</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;  * [BacktraceException HTML Manual](https:<span class="comment">//markjolah.github.io/BacktraceException/index.html)</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  * [BacktraceException PDF Manual](https:<span class="comment">//markjolah.github.io/BacktraceException/pdf/BacktraceException-0.2-reference.pdf)</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  * [BacktraceException github repository](https:<span class="comment">//github.com/markjolah/BacktraceException)</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">## Background</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor"></span>Some exceptions are never meant to be thrown in the absence of programming or system error.  If on of these exceptions is thrown, it normally will be passed far up the stack before it is handled.  When debugging an application it can be useful to quickly identify where a critical exception is being thrown.  However,</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;once the high-level exception handler has received the critical exception, there may not sufficient information to determine exactly which part of the execution is producing the exception.</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;Clearly a debugger can be used to <span class="keywordflow">catch</span> the exception as it is being thrown and eventually trace down the problem.  But, the process of opening up the debugger, setting catchpoints or breakpoints, restarting the application/computation, and waiting <span class="keywordflow">for</span> the failure to reoccur is tedious, especially <span class="keywordflow">if</span> the error occurs seconds, minutes, or hours after the program is started.  A full debugging session is often overkill as well.  A programmer actively debugging will often know exactly what the problem is immediately on inspection of the throwing line of code or upon a quick scan of the stack-backtrace.</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;With BacktraceException, there is no need to <span class="keywordflow">break</span> out the debugger every time a critical exception escapes your numerical simulation or <span class="keywordtype">long</span>-running application.  The BacktraceException <span class="keywordtype">object</span> will capture a stack backtrace as it is being constructed, giving you a quick but very useful view of exactly what was happening when it all went south.</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;This works well in interactive environments like Python and Matlab when running compiled C++ numerical code.  Rather than getting a mysterious `NumericalError(<span class="stringliteral">&quot;Non finite&quot;</span>)` exception message three hours into the computation with no further explanation, you now can <span class="keyword">get</span> a stack backtrace.</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;## Features</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; * Linux: Can use [<a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">glibc</a> backtrace](https:<span class="comment">//www.gnu.org/software/libc/manual/html_node/Backtraces.html), fast efficient, moderately informative.</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; * Linux: Can use [<a class="code" href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a">gdb</a> backtraces](https:<span class="comment">//ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_42.html): much slower, but includes arguments and other info not present in glibc backtraces.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; * Windows: Currently cross-compiles but stack walker traces are not yet implemented.</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; * Used [Glibc demangling](https:<span class="comment">//gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html) for C++ symbols name</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; * Easily installed as a standalone <span class="keyword">package </span>or built alongside CMake or autotools projects.</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;## Using Backtrace Exception</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;### CMake configuration options</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">backtrace_exception::BacktraceMethod::glibc</a></div></div>
+<div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57ccaca3e1c20efd5690f9789a87c66a5047a">backtrace_exception::BacktraceMethod::gdb</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

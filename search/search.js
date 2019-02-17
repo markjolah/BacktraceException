@@ -7,18 +7,26 @@
 
 var indexSectionsWithContent =
 {
-  0: "bdegrs",
+  0: "_bcdegprsw",
   1: "b",
-  2: "br",
-  3: "bdegs"
+  2: "b",
+  3: "br",
+  4: "bcdegpsw",
+  5: "_",
+  6: "b",
+  7: "gs"
 };
 
 var indexSectionNames =
 {
   0: "all",
-  1: "namespaces",
-  2: "files",
-  3: "functions"
+  1: "classes",
+  2: "namespaces",
+  3: "files",
+  4: "functions",
+  5: "variables",
+  6: "enums",
+  7: "enumvalues"
 };
 
 function convertToId(search)

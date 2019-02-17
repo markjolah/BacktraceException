@@ -39,6 +39,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -64,7 +65,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -78,10 +79,29 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">BacktraceException Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>BacktraceException is a C++ exception type that produces a backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-bit.</p>
+<div class="textblock"><p>BacktraceException is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-bit.</p>
+<h2>Documentation</h2>
+<p>The BacktraceException Doxygen documentation can be build with the <code>OPT_DOC</code> CMake option and is also available on online:</p>
+<ul>
+<li><a href="https://markjolah.github.io/BacktraceException/index.html">BacktraceException HTML Manual</a></li>
+<li><a href="https://markjolah.github.io/BacktraceException/pdf/BacktraceException-0.2-reference.pdf">BacktraceException PDF Manual</a></li>
+<li><a href="https://github.com/markjolah/BacktraceException">BacktraceException github repository</a></li>
+</ul>
+<h2>Background</h2>
+<p>Some exceptions are never meant to be thrown in the absence of programming or system error. If on of these exceptions is thrown, it normally will be passed far up the stack before it is handled. When debugging an application it can be useful to quickly identify where a critical exception is being thrown. However, once the high-level exception handler has received the critical exception, there may not sufficient information to determine exactly which part of the execution is producing the exception.</p>
+<p>Clearly a debugger can be used to catch the exception as it is being thrown and eventually trace down the problem. But, the process of opening up the debugger, setting catchpoints or breakpoints, restarting the application/computation, and waiting for the failure to reoccur is tedious, especially if the error occurs seconds, minutes, or hours after the program is started. A full debugging session is often overkill as well. A programmer actively debugging will often know exactly what the problem is immediately on inspection of the throwing line of code or upon a quick scan of the stack-backtrace.</p>
+<p>With BacktraceException, there is no need to break out the debugger every time a critical exception escapes your numerical simulation or long-running application. The BacktraceException object will capture a stack backtrace as it is being constructed, giving you a quick but very useful view of exactly what was happening when it all went south.</p>
+<p>This works well in interactive environments like Python and Matlab when running compiled C++ numerical code. Rather than getting a mysterious <code>NumericalError("Non finite")</code> exception message three hours into the computation with no further explanation, you now can get a stack backtrace.</p>
+<h2>Features</h2>
+<ul>
+<li>Linux: Can use <a href="https://www.gnu.org/software/libc/manual/html_node/Backtraces.html">glibc backtrace</a>, fast efficient, moderately informative.</li>
+<li>Linux: Can use <a href="https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_42.html">gdb backtraces</a>: much slower, but includes arguments and other info not present in glibc backtraces.</li>
+<li>Windows: Currently cross-compiles but stack walker traces are not yet implemented.</li>
+<li>Used <a href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html">Glibc demangling</a> for C++ symbols name</li>
+<li>Easily installed as a standalone package or built alongside CMake or autotools projects.</li>
+</ul>
 <h2>Using Backtrace Exception</h2>
 <h3>CMake configuration options</h3>
-<h2>Backtrace Methods</h2>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,7 +1,35 @@
-Backtrace\-Exception is a C++ exception type that produces a backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-\/bit.
+Backtrace\-Exception is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-\/bit.
+
+\subsubsection*{Documentation}
+
+The Backtrace\-Exception Doxygen documentation can be build with the {\ttfamily O\-P\-T\-\_\-\-D\-O\-C} C\-Make option and is also available on online\-:
+\begin{DoxyItemize}
+\item \href{https://markjolah.github.io/BacktraceException/index.html}{\tt Backtrace\-Exception H\-T\-M\-L Manual}
+\item \href{https://markjolah.github.io/BacktraceException/pdf/BacktraceException-0.2-reference.pdf}{\tt Backtrace\-Exception P\-D\-F Manual}
+\item \href{https://github.com/markjolah/BacktraceException}{\tt Backtrace\-Exception github repository}
+\end{DoxyItemize}
+
+\subsubsection*{Background}
+
+Some exceptions are never meant to be thrown in the absence of programming or system error. If on of these exceptions is thrown, it normally will be passed far up the stack before it is handled. When debugging an application it can be useful to quickly identify where a critical exception is being thrown. However, once the high-\/level exception handler has received the critical exception, there may not sufficient information to determine exactly which part of the execution is producing the exception.
+
+Clearly a debugger can be used to catch the exception as it is being thrown and eventually trace down the problem. But, the process of opening up the debugger, setting catchpoints or breakpoints, restarting the application/computation, and waiting for the failure to reoccur is tedious, especially if the error occurs seconds, minutes, or hours after the program is started. A full debugging session is often overkill as well. A programmer actively debugging will often know exactly what the problem is immediately on inspection of the throwing line of code or upon a quick scan of the stack-\/backtrace.
+
+With Backtrace\-Exception, there is no need to break out the debugger every time a critical exception escapes your numerical simulation or long-\/running application. The Backtrace\-Exception object will capture a stack backtrace as it is being constructed, giving you a quick but very useful view of exactly what was happening when it all went south.
+
+This works well in interactive environments like Python and Matlab when running compiled C++ numerical code. Rather than getting a mysterious {\ttfamily Numerical\-Error(\char`\"{}\-Non finite\char`\"{})} exception message three hours into the computation with no further explanation, you now can get a stack backtrace.
+
+\subsubsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Linux\-: Can use \href{https://www.gnu.org/software/libc/manual/html_node/Backtraces.html}{\tt glibc backtrace}, fast efficient, moderately informative.
+\item Linux\-: Can use \href{https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_42.html}{\tt gdb backtraces}\-: much slower, but includes arguments and other info not present in glibc backtraces.
+\item Windows\-: Currently cross-\/compiles but stack walker traces are not yet implemented.
+\item Used \href{https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html}{\tt Glibc demangling} for C++ symbols name
+\item Easily installed as a standalone package or built alongside C\-Make or autotools projects.
+\end{DoxyItemize}
 
 \subsubsection*{Using Backtrace Exception}
 
 \paragraph*{C\-Make configuration options}
-
-\subsubsection*{Backtrace Methods}
