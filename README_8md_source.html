@@ -87,7 +87,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="README_8md.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;&lt;a href=<span class="stringliteral">&quot;https://travis-ci.org/markjolah/BacktraceException&quot;</span>&gt;&lt;img src=<span class="stringliteral">&quot;https://travis-ci.org/markjolah/BacktraceException.svg?branch=master&quot;</span>/&gt;&lt;/a&gt;</div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor"># BacktraceException</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;[BacktraceException](https:<span class="comment">//markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is a C++ exception type that produces a stack backtrace when thrown.  It</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;[*BacktraceException*](https:<span class="comment">//markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is a C++ exception type that produces a stack backtrace when thrown.  It</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;can capture <span class="keyword">this</span> backtrace with several methods and the backtrace can be disabled.  The</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;goal is <span class="keywordflow">for</span> the library to work on both Linux and windows 64-bit.</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
@@ -116,7 +116,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;## Using Backtrace Exception</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;A [BacktraceException](https:<span class="comment">//markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is used a a base class for application-defined</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;A [*BacktraceException*](https:<span class="comment">//markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is used a a base class for application-defined</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful.</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    struct UnrecoverableError : public BacktraceException {</div>
@@ -126,19 +126,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; * Use `<a class="code" href="namespacebacktrace__exception.html#a4e1b86dea1b116c7bac88d89448a808e">backtrace_exception::enable_backtraces</a>()` or `<a class="code" href="namespacebacktrace__exception.html#a134895cbad5bc441a941f1f49b43a78a">backtrace_exception::disable_backtraces</a>()` to control the generation of backtraces.  When disabled backtrace_exception behaves like a normal `std::exception`.</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; * Build examples from the examples sub-directory with `OPT_EXAMPLES=1`</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    $ ./build.debug.sh -DOPT_EXAMPLES=1</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    $ ./_build/Debug/examples/backtrace_exception_example1</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">### Limitations</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span> * In order to <span class="keyword">get</span> a backtrace, the exception must derive from `BacktraceException`.  Exceptions from third-party libraries or based on [`std::exception`](https:<span class="comment">//en.cppreference.com/w/cpp/error/exception) will not generate a backtrace.</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">### CMake configuration options</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; * `BUILD_SHARED_LIBS` - Build shared libraries [Default: ON]</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; * `BUILD_STATIC_LIBS` - Build <span class="keyword">static</span> libraries [Default: ON]</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    $ ./build.debug.sh -DOPT_EXAMPLES=1</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    $ ./_build/Debug/examples/backtrace_exception_example1</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">### Limitations</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor"></span> * In order to <span class="keyword">get</span> a backtrace, the exception must derive from `BacktraceException`.  Exceptions from third-party libraries or based on [*std::exception*](https:<span class="comment">//en.cppreference.com/w/cpp/error/exception) will not generate a backtrace.</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">### CMake configuration options</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; * `BUILD_SHARED_LIBS` - Build shared libraries [Default: On]</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; * `BUILD_STATIC_LIBS` - Build <span class="keyword">static</span> libraries [Default: On]</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; * `BUILD_TESTING` - Build tests [Default: On <span class="keywordflow">if</span> BUILD_TYPE==Debug]</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; * `OPT_INSTALL_TESTING` - Install tests.</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; * `OPT_DOC` - Build and install documentation (enables `make doc` and `make pdf`) [Default: Off]</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; * `OPT_EXAMPLES` - Build examples [Default: Off]</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; * `OPT_EXPORT_BUILD_TREE` - Enable CMake export and `find_package(BacktraceException)` support from the build-tree.</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
 <div class="ttc" id="namespacebacktrace__exception_html_a134895cbad5bc441a941f1f49b43a78a"><div class="ttname"><a href="namespacebacktrace__exception.html#a134895cbad5bc441a941f1f49b43a78a">backtrace_exception::disable_backtraces</a></div><div class="ttdeci">void disable_backtraces()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00074">BacktraceException.cpp:74</a></div></div>
 <div class="ttc" id="namespacebacktrace__exception_html_ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5"><div class="ttname"><a href="namespacebacktrace__exception.html#ac04b358e6d3eac08b792a7c2e99b57cca0ded6244fb02e7fb8db8e873d25656c5">backtrace_exception::BacktraceMethod::glibc</a></div></div>
 <div class="ttc" id="namespacebacktrace__exception_html_a4e1b86dea1b116c7bac88d89448a808e"><div class="ttname"><a href="namespacebacktrace__exception.html#a4e1b86dea1b116c7bac88d89448a808e">backtrace_exception::enable_backtraces</a></div><div class="ttdeci">void enable_backtraces()</div><div class="ttdef"><b>Definition:</b> <a href="BacktraceException_8cpp_source.html#l00079">BacktraceException.cpp:79</a></div></div>

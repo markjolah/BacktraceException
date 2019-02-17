@@ -1,12 +1,12 @@
 \indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}|hyperpage}{4}
-\indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}!Backtrace\discretionary {-}{}{}Method@{Backtrace\discretionary {-}{}{}Method}|hyperpage}{4}
-\indexentry{Backtrace\discretionary {-}{}{}Method@{Backtrace\discretionary {-}{}{}Method}!backtrace_exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}|hyperpage}{4}
-\indexentry{glibc@{glibc}!backtrace\-\_\-exception@{backtrace\-\_\-exception}|hyperpage}{4}
-\indexentry{backtrace\-\_\-exception@{backtrace\-\_\-exception}!glibc@{glibc}|hyperpage}{4}
-\indexentry{gdb@{gdb}!backtrace\-\_\-exception@{backtrace\-\_\-exception}|hyperpage}{4}
-\indexentry{backtrace\-\_\-exception@{backtrace\-\_\-exception}!gdb@{gdb}|hyperpage}{4}
-\indexentry{stackwalk@{stackwalk}!backtrace\-\_\-exception@{backtrace\-\_\-exception}|hyperpage}{4}
-\indexentry{backtrace\-\_\-exception@{backtrace\-\_\-exception}!stackwalk@{stackwalk}|hyperpage}{4}
+\indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}!Backtrace\discretionary {-}{}{}Method@{Backtrace\discretionary {-}{}{}Method}|hyperpage}{5}
+\indexentry{Backtrace\discretionary {-}{}{}Method@{Backtrace\discretionary {-}{}{}Method}!backtrace_exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}|hyperpage}{5}
+\indexentry{glibc@{glibc}!backtrace\-\_\-exception@{backtrace\-\_\-exception}|hyperpage}{5}
+\indexentry{backtrace\-\_\-exception@{backtrace\-\_\-exception}!glibc@{glibc}|hyperpage}{5}
+\indexentry{gdb@{gdb}!backtrace\-\_\-exception@{backtrace\-\_\-exception}|hyperpage}{5}
+\indexentry{backtrace\-\_\-exception@{backtrace\-\_\-exception}!gdb@{gdb}|hyperpage}{5}
+\indexentry{stackwalk@{stackwalk}!backtrace\-\_\-exception@{backtrace\-\_\-exception}|hyperpage}{5}
+\indexentry{backtrace\-\_\-exception@{backtrace\-\_\-exception}!stackwalk@{stackwalk}|hyperpage}{5}
 \indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}!backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled@{backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}|hyperpage}{5}
 \indexentry{backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled@{backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}!backtrace_exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}|hyperpage}{5}
 \indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}!disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces@{disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}|hyperpage}{5}
@@ -17,7 +17,7 @@
 \indexentry{get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method@{get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}!backtrace_exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}|hyperpage}{5}
 \indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}!set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method@{set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}|hyperpage}{5}
 \indexentry{set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method@{set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}!backtrace_exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}|hyperpage}{5}
-\indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}|hyperpage}{5}
+\indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}|hyperpage}{6}
 \indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}!Backtrace\discretionary {-}{}{}Exception@{Backtrace\discretionary {-}{}{}Exception}|hyperpage}{7}
 \indexentry{Backtrace\discretionary {-}{}{}Exception@{Backtrace\discretionary {-}{}{}Exception}!backtrace_exception::BacktraceException@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}|hyperpage}{7}
 \indexentry{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception@{backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}!Backtrace\discretionary {-}{}{}Exception@{Backtrace\discretionary {-}{}{}Exception}|hyperpage}{7}

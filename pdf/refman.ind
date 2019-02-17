@@ -16,12 +16,12 @@
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}, 
 		\hyperpage{7}
   \item {backtrace\-\_\-exception}
-    \subitem {gdb}, \hyperpage{4}
-    \subitem {glibc}, \hyperpage{4}
-    \subitem {stackwalk}, \hyperpage{4}
+    \subitem {gdb}, \hyperpage{5}
+    \subitem {glibc}, \hyperpage{5}
+    \subitem {stackwalk}, \hyperpage{5}
   \item {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
 		\hyperpage{4}
-    \subitem {Backtrace\discretionary {-}{}{}Method}, \hyperpage{4}
+    \subitem {Backtrace\discretionary {-}{}{}Method}, \hyperpage{5}
     \subitem {backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}, 
 		\hyperpage{5}
     \subitem {disable\discretionary {-}{}{}\_\discretionary {-}{}{}backtraces}, 
@@ -33,7 +33,7 @@
     \subitem {set\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}, 
 		\hyperpage{5}
   \item {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception\discretionary {-}{}{}::\discretionary {-}{}{}Backtrace\discretionary {-}{}{}Exception}, 
-		\hyperpage{5}
+		\hyperpage{6}
     \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace}, 
 		\hyperpage{8}
     \subitem {\discretionary {-}{}{}\_\discretionary {-}{}{}condition}, 
@@ -55,7 +55,7 @@
 		\hyperpage{10}
   \item {Backtrace\discretionary {-}{}{}Method}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
-		\hyperpage{4}
+		\hyperpage{5}
   \item {backtraces\discretionary {-}{}{}\_\discretionary {-}{}{}enabled}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
 		\hyperpage{5}
@@ -81,12 +81,12 @@
   \indexspace
 
   \item {gdb}
-    \subitem {backtrace\-\_\-exception}, \hyperpage{4}
+    \subitem {backtrace\-\_\-exception}, \hyperpage{5}
   \item {get\discretionary {-}{}{}\_\discretionary {-}{}{}backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}method}
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
 		\hyperpage{5}
   \item {glibc}
-    \subitem {backtrace\-\_\-exception}, \hyperpage{4}
+    \subitem {backtrace\-\_\-exception}, \hyperpage{5}
 
   \indexspace
 
@@ -105,7 +105,7 @@
     \subitem {backtrace\discretionary {-}{}{}\_\discretionary {-}{}{}exception}, 
 		\hyperpage{5}
   \item {stackwalk}
-    \subitem {backtrace\-\_\-exception}, \hyperpage{4}
+    \subitem {backtrace\-\_\-exception}, \hyperpage{5}
 
   \indexspace
 

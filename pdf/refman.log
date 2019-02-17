@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2019.2.17)  17 FEB 2019 21:44
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2019.2.17)  17 FEB 2019 21:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -992,7 +992,7 @@ LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
 (Font)              scaled to size 8.99994pt on input line 9.
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 (Font)              scaled to size 7.19995pt on input line 37.
-[2]) (./namespaces.tex) (./hierarchy.tex) (./annotated.tex) [3] (./files.tex) (
+[2]) (./namespaces.tex) (./hierarchy.tex) (./annotated.tex [3]) (./files.tex) (
 ./namespacebacktrace__exception.tex
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
 (Font)              Font shape `T1/phv/m/sl' tried instead on input line 8.
@@ -1015,7 +1015,7 @@ LaTeX Font Info:    Font shape `T1/phv/b/sl' will be
 (Font)              scaled to size 8.99994pt on input line 41.
 [4]
 <namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.pdf, i
-d=222, 323.2075pt x 118.4425pt>
+d=221, 323.2075pt x 118.4425pt>
 File: namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.p
 df Graphic file (type pdf)
 
@@ -1028,14 +1028,15 @@ LaTeX Font Info:    Font shape `T1/phv/bc/it' in size <10> not available
 (Font)              Font shape `T1/phv/bc/sl' tried instead on input line 119.
 LaTeX Font Info:    Font shape `T1/phv/bc/sl' will be
 (Font)              scaled to size 8.99994pt on input line 119.
-) (./classbacktrace__exception_1_1BacktraceException.tex
+) (./classbacktrace__exception_1_1BacktraceException.tex [5 <./namespacebacktra
+ce__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 11--12
 []\T1/pcr/m/n/10 #include $\OML/ztmcm/m/it/10 <$\T1/pcr/m/n/10 /home/travis/bui
 ld/markjolah/-Backtrace-Exception/include/-Backtrace-
  []
 
 
-<classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf, id=223, 1
+<classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf, id=242, 1
 80.675pt x 166.6225pt>
 File: classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf Graph
 ic file (type pdf)
@@ -1044,10 +1045,6 @@ Package pdftex.def Info: classbacktrace__exception_1_1BacktraceException__inher
 it__graph.pdf used on input line 19.
 (pdftex.def)             Requested size: 180.0pt x 166.00172pt.
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[5 <./namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.p
-df>]
 <classbacktrace__exception_1_1BacktraceException__coll__graph.pdf, id=243, 243.
 91125pt x 264.99pt>
 File: classbacktrace__exception_1_1BacktraceException__coll__graph.pdf Graphic 
@@ -1067,9 +1064,9 @@ LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
 (Font)              Font shape `T1/phv/m/sl' tried instead on input line 95.
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
 (Font)              scaled to size 8.99994pt on input line 95.
-
+[7]
 <classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a22929478
-10a_cgraph.pdf, id=282, 323.2075pt x 118.4425pt>
+10a_cgraph.pdf, id=296, 323.2075pt x 118.4425pt>
 File: classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a229
 2947810a_cgraph.pdf Graphic file (type pdf)
 
@@ -1078,16 +1075,13 @@ File: classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a229
 Package pdftex.def Info: classbacktrace__exception_1_1BacktraceException_aef24b
 0571ea422191026a2292947810a_cgraph.pdf used on input line 158.
 (pdftex.def)             Requested size: 322.0pt x 118.00664pt.
-[7]) (./BacktraceException_8cpp.tex <BacktraceException_8cpp__incl.pdf, id=300,
- 553.06625pt x 222.8325pt>
+) (./BacktraceException_8cpp.tex <BacktraceException_8cpp__incl.pdf, id=299, 55
+3.06625pt x 222.8325pt>
 File: BacktraceException_8cpp__incl.pdf Graphic file (type pdf)
 <use BacktraceException_8cpp__incl.pdf>
 Package pdftex.def Info: BacktraceException_8cpp__incl.pdf used on input line 2
 0.
 (pdftex.def)             Requested size: 350.0pt x 141.01424pt.
-
-Underfull \vbox (badness 1558) has occurred while \output is active []
-
 [8 <./classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a229
 2947810a_cgraph.pdf>]
 Underfull \hbox (badness 10000) detected at line 44
@@ -1165,7 +1159,7 @@ Here is how much of TeX's memory you used:
  15172 multiletter control sequences out of 15000+600000
  60350 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 48i,13n,43p,661b,495s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,13n,43p,661b,524s stack positions out of 5000i,500n,10000p,200000b,80000s
 pdfTeX warning (dest): name{BacktraceException_8h_source} has been referenced
  but does not exist, replaced by a fixed one
 
@@ -1181,7 +1175,7 @@ hvb8ac.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb>
 </usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (13 pages, 155378 bytes).
+Output written on refman.pdf (13 pages, 155702 bytes).
 PDF statistics:
  475 PDF objects out of 1000 (max. 8388607)
  432 compressed objects within 5 object streams
