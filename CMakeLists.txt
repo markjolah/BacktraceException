@@ -17,6 +17,7 @@ else()
     option(BUILD_TESTING "Build testing framework" OFF)
 endif()
 option(OPT_DOC "Build documentation" OFF)
+option(OPT_EXAMPLES "Build examples (no installation)" OFF)
 option(OPT_INSTALL_TESTING "Install testing executables" OFF)
 option(OPT_EXPORT_BUILD_TREE "Configure the package so it is usable from the build tree.  Useful for development." OFF)
 
@@ -28,6 +29,7 @@ message(STATUS "OPTION: BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 message(STATUS "OPTION: BUILD_STATIC_LIBS: ${BUILD_STATIC_LIBS}")
 message(STATUS "OPTION: BUILD_TESTING: ${BUILD_TESTING}")
 message(STATUS "OPTION: OPT_DOC: ${OPT_DOC}")
+message(STATUS "OPTION: OPT_EXAMPLES: ${OPT_EXAMPLES}")
 message(STATUS "OPTION: OPT_INSTALL_TESTING: ${OPT_INSTALL_TESTING}")
 message(STATUS "OPTION: OPT_EXPORT_BUILD_TREE: ${OPT_EXPORT_BUILD_TREE}")
 
@@ -55,4 +57,9 @@ endif()
 ### Documentation
 if(OPT_DOC)
     add_subdirectory(doc)
+endif()
+
+### Examples - build-tree only
+if(OPT_EXAMPLES)
+    add_subdirectory(examples)
 endif()

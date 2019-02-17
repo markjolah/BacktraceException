@@ -8,7 +8,7 @@
 # X86_64_GCC4_9_LINUX_GNU_ROOT=<gcc4_9_root>
 #
 # Optional environment variables:
-# OPT_DOC=On - enable documentation build.
+# OPT_DOC - enable documentation build.
 ARCH=gcc4_9
 FULL_ARCH=x86_64-${ARCH}-linux-gnu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"

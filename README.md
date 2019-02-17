@@ -1,6 +1,7 @@
+<a href="https://travis-ci.org/markjolah/BacktraceException"><img src="https://travis-ci.org/markjolah/BacktraceException.svg?branch=master"/></a>
 # BacktraceException
 
-BacktraceException is a C++ exception type that produces a stack backtrace when thrown.  It
+[BacktraceException](https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is a C++ exception type that produces a stack backtrace when thrown.  It
 can capture this backtrace with several methods and the backtrace can be disabled.  The
 goal is for the library to work on both Linux and windows 64-bit.
 
@@ -29,9 +30,26 @@ This works well in interactive environments like Python and Matlab when running 
 
 ## Using Backtrace Exception
 
+A [BacktraceException](https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html) is used a a base class for application-defined
+classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful.
+
+    struct UnrecoverableError : public BacktraceException {
+        UnrecoverableError(std::string what) : BacktraceException("UnrecoverableError",what) {}
+    };
+
+
+ * Use `backtrace_exception::enable_backtraces()` or `backtrace_exception::disable_backtraces()` to control the generation of backtraces.  When disabled backtrace_exception behaves like a normal `std::exception`.
+ * Build examples from the examples sub-directory with `OPT_EXAMPLES=1`
+    $ ./build.debug.sh -DOPT_EXAMPLES=1
+    $ ./_build/Debug/examples/backtrace_exception_example1
+
+### Limitations
+ * In order to get a backtrace, the exception must derive from `BacktraceException`.  Exceptions from third-party libraries or based on [`std::exception`](https://en.cppreference.com/w/cpp/error/exception) will not generate a backtrace.
+
 ### CMake configuration options
 
-
+ * `BUILD_SHARED_LIBS` - Build shared libraries [Default: ON]
+ * `BUILD_STATIC_LIBS` - Build static libraries [Default: ON]
 
 
 
