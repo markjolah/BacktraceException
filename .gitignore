@@ -1,7 +1,7 @@
 test_nfs.sh
 _build
 _install
-_dist
+_dist*
 _*.build
 _*.install
 

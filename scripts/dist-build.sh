@@ -15,8 +15,8 @@ if [ -z $1 ]; then
 else
     INSTALL_DIR=$1
 fi
-VERSION=0.3
-NAME=ParallelRngManager
+VERSION=$(grep -Po "project\([A-Za-z]+ VERSION \K([0-9.]+)" ${SRC_PATH}/CMakeLists.txt)
+NAME=$(grep -Po "project\(\K([A-Za-z]+)" ${SRC_PATH}/CMakeLists.txt)
 INSTALL_DIR_NAME=${NAME}-${VERSION}
 ZIP_FILE=${NAME}-${VERSION}.zip
 TAR_FILE=${NAME}-${VERSION}.tbz2
