@@ -1,40 +1,43 @@
-\href{https://travis-ci.org/markjolah/BacktraceException}{\tt } \subsection*{Backtrace\-Exception}
+\href{https://travis-ci.org/markjolah/BacktraceException}{\tt } \subsection*{Backtrace\+Exception}
 
-\href{https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html}{\tt $\ast$\-Backtrace\-Exception$\ast$} is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. The goal is for the library to work on both Linux and windows 64-\/bit.
+\href{https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html}{\tt {\ttfamily Backtrace\+Exception}} is a C++ exception type that produces a stack backtrace when thrown. It can capture this backtrace with several methods and the backtrace can be disabled. Backtrace exception works on Linux.
 
 \subsubsection*{Documentation}
 
-The Backtrace\-Exception Doxygen documentation can be build with the {\ttfamily O\-P\-T\-\_\-\-D\-O\-C} C\-Make option and is also available on online\-:
+The Backtrace\+Exception Doxygen documentation can be build with the {\ttfamily O\+P\+T\+\_\+\+D\+OC} C\+Make option and is also available on online\+:
 \begin{DoxyItemize}
-\item \href{https://markjolah.github.io/BacktraceException/index.html}{\tt Backtrace\-Exception H\-T\-M\-L Manual}
-\item \href{https://markjolah.github.io/BacktraceException/pdf/BacktraceException-0.2-reference.pdf}{\tt Backtrace\-Exception P\-D\-F Manual}
-\item \href{https://github.com/markjolah/BacktraceException}{\tt Backtrace\-Exception github repository}
+\item \href{https://markjolah.github.io/BacktraceException/index.html}{\tt Backtrace\+Exception H\+T\+ML Manual}
+\item \href{https://markjolah.github.io/BacktraceException/pdf/BacktraceException-0.2-reference.pdf}{\tt Backtrace\+Exception P\+DF Manual}
+\item \href{https://github.com/markjolah/BacktraceException}{\tt Backtrace\+Exception github repository}
 \end{DoxyItemize}
 
 \subsubsection*{Background}
 
-Some exceptions are never meant to be thrown in the absence of programming or system error. If on of these exceptions is thrown, it normally will be passed far up the stack before it is handled. When debugging an application it can be useful to quickly identify where a critical exception is being thrown. However, once the high-\/level exception handler has received the critical exception, there may not sufficient information to determine exactly which part of the execution is producing the exception.
+Some exceptions are never meant to be thrown in the absence of programming or system error. Such an exception is thrown, it is normally passed far up the stack before being handled. When debugging an application it can be useful to quickly identify where a critical exception is being thrown. However, once the high-\/level exception handler has received the critical exception, there may not be sufficient information to determine exactly which part of the execution is producing the exception.
 
-Clearly a debugger can be used to catch the exception as it is being thrown and eventually trace down the problem. But, the process of opening up the debugger, setting catchpoints or breakpoints, restarting the application/computation, and waiting for the failure to reoccur is tedious, especially if the error occurs seconds, minutes, or hours after the program is started. A full debugging session is often overkill as well. A programmer actively debugging will often know exactly what the problem is immediately on inspection of the throwing line of code or upon a quick scan of the stack-\/backtrace.
+Clearly a debugger can be used to catch the exception as it is being thrown and eventually trace down the problem. But, the process of opening up the debugger, setting catch-\/points or break-\/points, restarting the application/computation, and waiting for the failure to reoccur is tedious, especially if the error occurs minutes or hours after the program is started. A full debugging session is often overkill as well. A programmer actively debugging will often know exactly what the problem is immediately on inspection of the throwing line of code or upon a quick scan of the stack-\/backtrace.
 
-With Backtrace\-Exception, there is no need to break out the debugger every time a critical exception escapes your numerical simulation or long-\/running application. The Backtrace\-Exception object will capture a stack backtrace as it is being constructed, giving you a quick but very useful view of exactly what was happening when it all went south.
+In these situations, Backtrace\+Exception prevents the need to break out the debugger every time a critical exception escapes a numerical simulation or long-\/running application. The Backtrace\+Exception object will capture a stack backtrace as it is being constructed and just before it is thrown. The catching code can then log or output a very useful message giving a view of exactly what was happening when it all went south.
 
-This works well in interactive environments like Python and Matlab when running compiled C++ numerical code. Rather than getting a mysterious {\ttfamily Numerical\-Error(\char`\"{}\-Non finite\char`\"{})} exception message three hours into the computation with no further explanation, you now can get a stack backtrace.
+This scheme works well in interactive environments like Python and Matlab that are running compiled C++ numerical code. Rather than getting a mysterious {\ttfamily Numerical\+Error(\char`\"{}\+Non finite\char`\"{})} exception message three hours into the computation with no further explanation, you now can get a stack backtrace.
 
 \subsubsection*{Features}
 
 
 \begin{DoxyItemize}
-\item Linux\-: Can use \href{https://www.gnu.org/software/libc/manual/html_node/Backtraces.html}{\tt glibc backtrace}, fast efficient, moderately informative.
-\item Linux\-: Can use \href{https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_42.html}{\tt gdb backtraces}\-: much slower, but includes arguments and other info not present in glibc backtraces.
-\item Windows\-: Currently cross-\/compiles but stack walker traces are not yet implemented.
+\item Linux\+: Can use \href{https://www.gnu.org/software/libc/manual/html_node/Backtraces.html}{\tt glibc backtrace}, fast efficient, moderately informative.
+\item Linux\+: Can use \href{https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_42.html}{\tt gdb backtraces}\+: much slower, but includes arguments and other info not present in glibc backtraces. Uses {\ttfamily gdb info stack}.
+\begin{DoxyItemize}
+\item G\+DB backtraces also print thread info returned by {\ttfamily gdb info thread}
+\end{DoxyItemize}
+\item Windows\+: Currently cross-\/compiles but stack walker traces are not yet implemented.
 \item Used \href{https://gcc.gnu.org/onlinedocs/libstdc++/manual/ext_demangling.html}{\tt Glibc demangling} for C++ symbols name
-\item Easily installed as a standalone package or built alongside C\-Make or autotools projects.
+\item Easily installed as a standalone package or built alongside C\+Make or autotools projects.
 \end{DoxyItemize}
 
 \subsubsection*{Using Backtrace Exception}
 
-A \href{https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html}{\tt $\ast$\-Backtrace\-Exception$\ast$} is used a a base class for application-\/defined classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful. \begin{DoxyVerb}struct UnrecoverableError : public BacktraceException {
+A \href{https://markjolah.github.io/BacktraceException/classbacktrace__exception_1_1BacktraceException.html}{\tt {\ttfamily Backtrace\+Exception}} is used a a base class for application-\/defined classes of critical errors that would not be recoverable, and a backtrace of the exception throwing site would be useful. \begin{DoxyVerb}struct UnrecoverableError : public BacktraceException {
     UnrecoverableError(std::string what) : BacktraceException("UnrecoverableError",what) {}
 };
 \end{DoxyVerb}
@@ -42,28 +45,30 @@ A \href{https://markjolah.github.io/BacktraceException/classbacktrace__exception
 
 
 \begin{DoxyItemize}
-\item Use {\ttfamily \hyperlink{namespacebacktrace__exception_a4e1b86dea1b116c7bac88d89448a808e}{backtrace\-\_\-exception\-::enable\-\_\-backtraces()}} or {\ttfamily \hyperlink{namespacebacktrace__exception_a134895cbad5bc441a941f1f49b43a78a}{backtrace\-\_\-exception\-::disable\-\_\-backtraces()}} to control the generation of backtraces. When disabled \hyperlink{namespacebacktrace__exception}{backtrace\-\_\-exception} behaves like a normal {\ttfamily std\-::exception}.
-\item Build examples from the examples sub-\/directory with {\ttfamily O\-P\-T\-\_\-\-E\-X\-A\-M\-P\-L\-E\-S=1}
+\item Use {\ttfamily \hyperlink{namespacebacktrace__exception_a4e1b86dea1b116c7bac88d89448a808e}{backtrace\+\_\+exception\+::enable\+\_\+backtraces()}} or {\ttfamily \hyperlink{namespacebacktrace__exception_a134895cbad5bc441a941f1f49b43a78a}{backtrace\+\_\+exception\+::disable\+\_\+backtraces()}} to control the generation of backtraces. When disabled \hyperlink{namespacebacktrace__exception}{backtrace\+\_\+exception} behaves like a normal {\ttfamily std\+::exception}.
+\item Use {\ttfamily \hyperlink{namespacebacktrace__exception_afe7dd97c0deefd1a0e9cb08f9c8089b2}{backtrace\+\_\+exception\+::set\+\_\+backtrace\+\_\+method()}} and {\ttfamily \hyperlink{namespacebacktrace__exception_a024cd6e7707e7f7cbb9283e60907142c}{backtrace\+\_\+exception\+::get\+\_\+backtrace\+\_\+method()}} to set the method used for backtracing.
+\item Build examples from the examples sub-\/directory with C\+Make option {\ttfamily O\+P\+T\+\_\+\+E\+X\+A\+M\+P\+L\+ES=1}
 
-\$ ./build.debug.\-sh -\/\-D\-O\-P\-T\-\_\-\-E\-X\-A\-M\-P\-L\-E\-S=1 \$ ./\-\_\-build/\-Debug/examples/backtrace\-\_\-exception\-\_\-example1
+\$ ./build.debug.\+sh -\/\+D\+O\+P\+T\+\_\+\+E\+X\+A\+M\+P\+L\+ES=1 \$ ./\+\_\+build/\+Debug/examples/backtrace\+\_\+exception\+\_\+example1
 \end{DoxyItemize}
 
 \paragraph*{Limitations}
 
 
 \begin{DoxyItemize}
-\item In order to get a backtrace, the exception must derive from {\ttfamily Backtrace\-Exception}. Exceptions from third-\/party libraries or based on \href{https://en.cppreference.com/w/cpp/error/exception}{\tt $\ast$std\-::exception$\ast$} will not generate a backtrace.
+\item In order to get a backtrace, the exception must derive from {\ttfamily Backtrace\+Exception}. Exceptions from third-\/party libraries or based on \href{https://en.cppreference.com/w/cpp/error/exception}{\tt {\itshape std\+::exception}} will not generate a backtrace.
+\item Windows 64-\/bit backtrace support is planed in the next release. Currently you can cross-\/compile applications using {\ttfamily Backtrace\+Exception} to Win64, but backtraces are disabled.
 \end{DoxyItemize}
 
-\paragraph*{C\-Make configuration options}
+\paragraph*{C\+Make configuration options}
 
 
 \begin{DoxyItemize}
-\item {\ttfamily B\-U\-I\-L\-D\-\_\-\-S\-H\-A\-R\-E\-D\-\_\-\-L\-I\-B\-S} -\/ Build shared libraries \mbox{[}Default\-: On\mbox{]}
-\item {\ttfamily B\-U\-I\-L\-D\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-L\-I\-B\-S} -\/ Build static libraries \mbox{[}Default\-: On\mbox{]}
-\item {\ttfamily B\-U\-I\-L\-D\-\_\-\-T\-E\-S\-T\-I\-N\-G} -\/ Build tests \mbox{[}Default\-: On if B\-U\-I\-L\-D\-\_\-\-T\-Y\-P\-E==Debug\mbox{]}
-\item {\ttfamily O\-P\-T\-\_\-\-I\-N\-S\-T\-A\-L\-L\-\_\-\-T\-E\-S\-T\-I\-N\-G} -\/ Install tests.
-\item {\ttfamily O\-P\-T\-\_\-\-D\-O\-C} -\/ Build and install documentation (enables {\ttfamily make doc} and {\ttfamily make pdf}) \mbox{[}Default\-: Off\mbox{]}
-\item {\ttfamily O\-P\-T\-\_\-\-E\-X\-A\-M\-P\-L\-E\-S} -\/ Build examples \mbox{[}Default\-: Off\mbox{]}
-\item {\ttfamily O\-P\-T\-\_\-\-E\-X\-P\-O\-R\-T\-\_\-\-B\-U\-I\-L\-D\-\_\-\-T\-R\-E\-E} -\/ Enable C\-Make export and {\ttfamily find\-\_\-package(\-Backtrace\-Exception)} support from the build-\/tree. 
+\item {\ttfamily B\+U\+I\+L\+D\+\_\+\+S\+H\+A\+R\+E\+D\+\_\+\+L\+I\+BS} -\/ Build shared libraries \mbox{[}Default\+: On\mbox{]}
+\item {\ttfamily B\+U\+I\+L\+D\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+L\+I\+BS} -\/ Build static libraries \mbox{[}Default\+: On\mbox{]}
+\item {\ttfamily B\+U\+I\+L\+D\+\_\+\+T\+E\+S\+T\+I\+NG} -\/ Build tests \mbox{[}Default\+: On if B\+U\+I\+L\+D\+\_\+\+T\+Y\+PE==Debug\mbox{]}
+\item {\ttfamily O\+P\+T\+\_\+\+I\+N\+S\+T\+A\+L\+L\+\_\+\+T\+E\+S\+T\+I\+NG} -\/ Install tests.
+\item {\ttfamily O\+P\+T\+\_\+\+D\+OC} -\/ Build and install documentation (enables {\ttfamily make doc} and {\ttfamily make pdf}) \mbox{[}Default\+: Off\mbox{]}
+\item {\ttfamily O\+P\+T\+\_\+\+E\+X\+A\+M\+P\+L\+ES} -\/ Build examples \mbox{[}Default\+: Off\mbox{]}
+\item {\ttfamily O\+P\+T\+\_\+\+E\+X\+P\+O\+R\+T\+\_\+\+B\+U\+I\+L\+D\+\_\+\+T\+R\+EE} -\/ Enable C\+Make export and {\ttfamily find\+\_\+package(\+Backtrace\+Exception)} support from the build-\/tree. 
 \end{DoxyItemize}
