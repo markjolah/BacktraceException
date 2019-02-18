@@ -21,6 +21,7 @@
 # Single-Value arguments:
 #   NAME - [required] Name of PROJECT_NAME of the external cmake project
 #   URL - URL of git repository or local path to git repository (can be overwritten with ${PROJECT_NAME}URL environment variable giving alternate URL
+#   GIT_TAG - git tag to use
 #   VERSION - [optional] Version number of dependency required. Leave empty for any version with appropriate BUILD_TYPE_COMPATABILITY
 #   INSTALL_PREFIX - [optional] install location for package [defaults to CMAKE_INSTALL_PREFIX]
 #   CMAKELISTS_TEMPLATE - [optional] Template file for the CMakeLists.txt to the building and installing via ExternalProject_Add [default: Templates/External.CMakeLists.txt.in]
@@ -33,7 +34,7 @@ set(AddExternalDependency_include_path ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL 
 
 macro(add_external_dependency)
     set(options SHARED STATIC TESTING)
-    set(oneArgOpts NAME URL VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
+    set(oneArgOpts NAME URL GIT_TAG VERSION INSTALL_PREFIX CMAKELISTS_TEMPLATE BUILD_TYPE_COMPATABILITY TOOLCHAIN_FILE)
     set(multiArgOpts PASS_CACHE_VARIABLES COMPONENTS)
     cmake_parse_arguments(_ExtProject "${options}" "${oneArgOpts}" "${multiArgOpts}" ${ARGN})
     if(NOT _ExtProject_NAME)
@@ -51,6 +52,10 @@ macro(add_external_dependency)
     set(_ExtProject_URL_ENV $ENV{${_ExtProject_NAME}URL})
     if(_ExtProject_URL_ENV)
         set(_ExtProject_URL $ENV{${_ExtProject_NAME}URL})
+    endif()
+
+    if(NOT _ExtProject_GIT_TAG)
+        set(_ExtProject_GIT_TAG master)
     endif()
 
     if(NOT _ExtProject_BUILD_TYPE_COMPATABILITY)

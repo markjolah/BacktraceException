@@ -88,7 +88,7 @@ if(NOT ARG_EXPORTED_BUILD_TYPES)
     string(TOLOWER "${CMAKE_BUILD_TYPE}" ARG_EXPORTED_BUILD_TYPES)
 endif()
 if(NOT ARG_EXPORTED_BUILD_TYPES)
-    message(FATAL_ERROR "No Exported build-types provided or CMAKE_BUILDT_TYPE is not set")
+    message(FATAL_ERROR "No Exported build-types provided or EXPORTED_BUILD_TYPES is not set")
 endif()
 
 if(NOT ARG_CONFIG_INSTALL_DIR)
