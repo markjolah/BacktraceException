@@ -49,6 +49,7 @@ export_package_wizzard() #setup build-tree and install-tree exports and packagec
 ### Source directories
 add_subdirectory(src)
 
+### Testing
 if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(test)
