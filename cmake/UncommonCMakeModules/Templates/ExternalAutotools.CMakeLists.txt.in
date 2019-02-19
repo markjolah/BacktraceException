@@ -26,8 +26,7 @@ set(INSTALL_COMMAND  @CMAKE_COMMAND@ --build . --target install -- -j${NUM_PROCS
 
 ExternalProject_Add(@_ExtProject_NAME@
     GIT_REPOSITORY @_ExtProject_URL@
-    GIT_TAG master
-    GIT_SHALLOW 1
+    GIT_TAG @_ExtProject_GIT_TAG@
     GIT_PROGRESS 0
     SOURCE_DIR ${SOURCE_DIR}
     BUILD_IN_SOURCE TRUE
