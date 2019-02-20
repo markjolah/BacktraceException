@@ -14,25 +14,16 @@ cmake_minimum_required(VERSION 3.7)
 set(project_name @PROJECT_NAME@)
 set(fixup_target @FIXUP_TARGET@)
 
-# set(install_prefix ${CMAKE_INSTALL_PREFIX}) #this should be set at install time
-# if(install_prefix)
-#     get_filename_component(install_prefix ${install_prefix} REALPATH) #Ensure we have a cannonical path to install at
-#     if(NOT EXISTS ${install_prefix})
-#         set(install_prefix)
-#     endif()
-# endif()
-
 set(target_file_name $<TARGET_FILE_NAME:@FIXUP_TARGET@>)
 set(target_build_dir $<TARGET_FILE_DIR:@FIXUP_TARGET@>)
 set(target_build_file ${target_build_dir}/${target_file_name})
-# set(install_prefix @CMAKE_INSTALL_PREFIX@)
+set(install_prefix @CMAKE_INSTALL_PREFIX@)
 get_filename_component(lib_copy_dest ${target_build_dir} ABSOLUTE) #Destination for libraries to copy in
 
 set(msg_hdr "[fixup_dependencies:build_tree] [${fixup_target}]")
 message(STATUS "${msg_hdr}: file name:${target_file_name}")
 message(STATUS "${msg_hdr}: build dir:${target_build_dir}")
 message(STATUS "${msg_hdr}: build file:${target_build_file}")
-
 
 function(transform_filename_component_list list_name component)
     list(LENGTH ${list_name} ndirs)
