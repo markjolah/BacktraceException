@@ -178,10 +178,13 @@ if(NOT OPT_DISABLE_PKG_CONFIG AND CMAKE_CROSSCOMPILING)
     if(NOT _lib_dirs OR NOT _sysroot)
         message(FATAL_ERROR "[BLASLAPACK] Cross-compiling but couldn't find valid CMAKE_SYSROOT or CMAKE_FIND_ROOT_PATH.  Unknown how to find pkg-config repository.")
     endif()
+    list(REMOVE_DUPLICATES _lib_dirs)
     string(REPLACE ";" ":" _lib_dirs "${_lib_dirs}")
+
     set(ENV{PKG_CONFIG_DIR} "")
     set(ENV{PKG_CONFIG_LIBDIR} "${_lib_dirs}")
     set(ENV{PKG_CONFIG_SYSROOT} "${_sysroot}")
+
     unset(_lib_dirs)
     unset(_sysroot)
 endif()

@@ -35,7 +35,7 @@
 #                               Any - Totally ignore BuildType
 #  CONFIG_INSTALL_DIR - [Default: lib/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
 #  SHARED_CMAKE_INSTALL_DIR - [Default: share/${NAME}/cmake/] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
-#  SHARED_CMAKE_SOURCE_DIR - [Default: ${CMAKE_SOURCE_DIR}/cmake] Relative path from ${CMAKE_INSTALL_PREFIX} at which to install PackageConfig.cmake files
+#  SHARED_CMAKE_SOURCE_DIR - [Default: ${CMAKE_SOURCE_DIR}/cmake] Relative path from ${CMAKE_SOURCE_DIR} from which build-time useage of cmake files
 # Multi-Argument Keywords
 #   PROVIDED_COMPONENTS - List of provided components which enables the version file to check for required components and reject builds with missing required components.
 #                         If this variable is not set, the component check with PackageConfigVersion.cmake is disabled.
