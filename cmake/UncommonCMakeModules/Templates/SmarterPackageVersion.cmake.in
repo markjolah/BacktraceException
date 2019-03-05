@@ -10,7 +10,7 @@ endforeach()
 unset(_BUILD_TYPE_CONFIG_FILES)
 
 #Get all @PROJECT_NAME@_PROVIDED_COMPONENTS
-include("${CMAKE_CURRENT_LIST_DIR}/ConfigVersion/@PROJECT_NAME@ConfigProvidedComponents.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_NAME}/@PROJECT_NAME@ConfigProvidedComponents.cmake")
 
 #Get all @PROJECT_NAME@_SYSTEM_NAMES
 set(@PROJECT_NAME@_SYSTEM_NAMES)
