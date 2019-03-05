@@ -1,19 +1,32 @@
 # Source: SmarterPackageVersion.cmake.in Template
 # Generates @PROJECT_NAME@ConfigVersion.cmake through SmarterPackageVersionFile.cmake
 
-# Each configuration will provide a file named @PROJECT_NAME@ConfigVersionBuildType-<BUILD_TYPE>.cmake
-# which will append to variable @PROJECT_NAME@_BUILD_TYPES.
-set(PACKAGE_BUILD_TYPES)
-file(GLOB CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
-foreach(f ${CONFIG_FILES})
+#Get all @PROJECT_NAME@_BUILD_TYPES.
+set(@PROJECT_NAME@_BUILD_TYPES)
+file(GLOB _BUILD_TYPE_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
+foreach(f ${_BUILD_TYPE_CONFIG_FILES})
     include(${f})
 endforeach()
-include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigProvidedComponents.cmake")  #import @PROJECT_NAME@_PROVIDED_COMPONENTS
+unset(_BUILD_TYPE_CONFIG_FILES)
+
+#Get all @PROJECT_NAME@_PROVIDED_COMPONENTS
+include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigProvidedComponents.cmake")
+
+#Get all @PROJECT_NAME@_CMAKE_SYSTEM_NAMES
+set(@PROJECT_NAME@_CMAKE_SYSTEM_NAMES)
+file(GLOB _SYSTEM_NAME_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionSystemName-*.cmake")
+foreach(f ${_SYSTEM_NAME_CONFIG_FILES})
+    include(${f})
+endforeach()
+unset(_SYSTEM_NAME_CONFIG_FILES)
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
 string(TOLOWER "@ARG_BUILD_TYPE_COMPATIBILITY@" BUILD_TYPE_COMPATIBILITY)
 
-if(${BUILD_TYPE_COMPATIBILITY} STREQUAL exact AND NOT ${BUILD_TYPE} IN_LIST @PROJECT_NAME@_BUILD_TYPES)
+if(NOT ${CMAKE_SYSTEM_NAME} IN_LIST @PROJECT_NAME@_CMAKE_SYSTEM_NAMES)
+    set(PACKAGE_VERSION "@PROJECT_VERSION@ Required System:${CMAKE_SYSTEM_NAME} Provided systems:[${@PROJECT_NAME@_SYSTEM_NAMES}]")
+    set(PACKAGE_VERSION_UNSUITABLE TRUE)
+elseif(${BUILD_TYPE_COMPATIBILITY} STREQUAL exact AND NOT ${BUILD_TYPE} IN_LIST @PROJECT_NAME@_BUILD_TYPES)
     set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Build:${BUILD_TYPE} Provided Builds:[${@PROJECT_NAME@_BUILD_TYPES}]")
     set(PACKAGE_VERSION_UNSUITABLE TRUE)
 elseif(@PROJECT_NAME@_FIND_COMPONENTS)
@@ -21,7 +34,7 @@ elseif(@PROJECT_NAME@_FIND_COMPONENTS)
     foreach(_comp IN LISTS @PROJECT_NAME@_FIND_COMPONENTS)
         if(@PROJECT_NAME@_FIND_REQUIRED_${_comp})
             if(NOT ${_comp} IN_LIST @PROJECT_NAME@_PROVIDED_COMPONENTS)
-                set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PROJECT_NAME@_BUILD_TYPES}] Required Component:${_comp} Provided Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+                set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Component:${_comp} Provided Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
                 set(PACKAGE_VERSION_UNSUITABLE TRUE)
                 break()
             endif()
@@ -33,9 +46,9 @@ if(NOT PACKAGE_VERSION_UNSUITABLE)
     if(NOT PACKAGE_FIND_VERSION)
         #No version specified.  This package has correct build-type so accept.
         if(NOT @PROJECT_NAME@_PROVIDED_COMPONENTS)
-            set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PROJECT_NAME@_BUILD_TYPES}]")
+            set(PACKAGE_VERSION "@PROJECT_VERSION@ Systems:[${@PROJECT_NAME@_SYSTEM_NAMES}] Builds:[${@PROJECT_NAME@_BUILD_TYPES}]")
         else()
-            set(PACKAGE_VERSION "@PROJECT_VERSION@ Builds:[${@PROJECT_NAME@_BUILD_TYPES}] Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+            set(PACKAGE_VERSION "@PROJECT_VERSION@ Systems:[${@PROJECT_NAME@_SYSTEM_NAMES}] Builds:[${@PROJECT_NAME@_BUILD_TYPES}] Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
         endif()
         set(PACKAGE_VERSION_COMPATIBLE TRUE)
     else()

@@ -1,0 +1,3 @@
+# Generated @PROJECT_NAME@ConfigVersionSystemName-@CMAKE_SYSTEM_NAME@.cmake by SmarterPackageVersionFile.cmake
+#
+list(APPEND @PROJECT_NAME@_SYSTEM_NAMES  @CMAKE_SYSTEM_NAME@)

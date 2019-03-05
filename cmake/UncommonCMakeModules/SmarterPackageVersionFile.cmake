@@ -66,19 +66,26 @@ function(install_smarter_package_version_file)
     install(FILES ${ARG_NUMERIC_VERSION_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
 
     #Generate and install <Package>ConfigProvidedComponents.cmake
-    # This files appends EXPORTED_BUILD_TYPES to PACKAGE_BUILD_TYPES when called by find_package for use in main PackageConfigVersion.cmake
+    # Sets @PROJECT_NAME@_PROVIDED_COMPONENTS for use in main @PROJECT_NAME@ConfigVersion.cmake to allow component-based version checking of packages.
     set(ARG_EXPORTED_PROVIDED_COMPONENTS_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersionProvidedComponents.cmake.in)
     set(ARG_EXPORTED_PROVIDED_COMPONENTS_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigProvidedComponents.cmake)
     configure_file(${ARG_EXPORTED_PROVIDED_COMPONENTS_TEMPLATE} ${ARG_EXPORTED_PROVIDED_COMPONENTS_FILE} @ONLY)
     install(FILES ${ARG_EXPORTED_PROVIDED_COMPONENTS_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
 
     #Generate and install <Package>ConfigVersionBuildType-<BUILD_TYPE>.cmake
-    # This files appends EXPORTED_BUILD_TYPES to PACKAGE_BUILD_TYPES when called by find_package for use in main PackageConfigVersion.cmake
+    # Appends @PROJECT_NAME@_BUILD_TYPES with ARG_EXPORTED_BUILD_TYPES for use in main @PROJECT_NAME@ConfigVersion.cmake to allow build-type-based version checking of packages.
     set(ARG_EXPORTED_BUILD_TYPE_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersionBuildType.cmake.in)
-    string(CONCAT ARG_BUILD_TYPE_NAME ${ARG_EXPORTED_BUILD_TYPES})
+    string(CONCAT ARG_BUILD_TYPE_NAME ${ARG_EXPORTED_BUILD_TYPES}) #Allow multiple build-types to be exported at once for multi-build generators.
     set(ARG_EXPORTED_BUILD_TYPE_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigVersionBuildType-${ARG_BUILD_TYPE_NAME}.cmake)
     configure_file(${ARG_EXPORTED_BUILD_TYPE_TEMPLATE} ${ARG_EXPORTED_BUILD_TYPE_FILE} @ONLY)
     install(FILES ${ARG_EXPORTED_BUILD_TYPE_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
+
+    #Generate and install <Package>ConfigVersionSystemName-<CMAKE_SYSTEM_NAME>.cmake
+    # Appends @PROJECT_NAME@_SYSTEM_NAMES with CMAKE_SYSTEM_NAME for use in main @PROJECT_NAME@ConfigVersion.cmake to allow system-name-based version checking of packages.
+    set(ARG_EXPORTED_SYSTEM_NAME_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersionSystemName.cmake.in)
+    set(ARG_EXPORTED_SYSTEM_NAME_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigVersionBuildType-${CMAKE_SYSTEM_NAME}.cmake)
+    configure_file(${ARG_EXPORTED_SYSTEM_NAME_TEMPLATE} ${ARG_EXPORTED_SYSTEM_NAME_FILE} @ONLY)
+    install(FILES ${ARG_EXPORTED_SYSTEM_NAME_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
 
     #Generate and install the primary PackageConfigVersion.cmake file
     set(ARG_CONFIG_VERSION_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersion.cmake.in)
