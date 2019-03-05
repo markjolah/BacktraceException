@@ -155,7 +155,8 @@ install(FILES ${ARG_CONFIG_DIR}/${ARG_PACKAGE_CONFIG_INSTALL_TREE_FILE} RENAME $
 if(ARG_EXPORT_TARGETS_NAME) #set to OFF to disable exporting Targets.cmake file
     install(EXPORT ${ARG_EXPORT_TARGETS_NAME}
             NAMESPACE ${ARG_NAMESPACE}::
-            DESTINATION ${ARG_CONFIG_INSTALL_DIR} COMPONENT Development)
+            DESTINATION ${ARG_CONFIG_INSTALL_DIR}/${CMAKE_SYSTEM_NAME} #Allows per-system targets in the same prefix.
+            COMPONENT Development)
 endif()
 
 #install provided Find<XXX>.cmake modules into the install tree
