@@ -83,7 +83,7 @@ function(install_smarter_package_version_file)
     #Generate and install <Package>ConfigVersionSystemName-<CMAKE_SYSTEM_NAME>.cmake
     # Appends @PROJECT_NAME@_SYSTEM_NAMES with CMAKE_SYSTEM_NAME for use in main @PROJECT_NAME@ConfigVersion.cmake to allow system-name-based version checking of packages.
     set(ARG_EXPORTED_SYSTEM_NAME_TEMPLATE ${ARG_TEMPLATE_DIR}/SmarterPackageVersionSystemName.cmake.in)
-    set(ARG_EXPORTED_SYSTEM_NAME_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigVersionBuildType-${CMAKE_SYSTEM_NAME}.cmake)
+    set(ARG_EXPORTED_SYSTEM_NAME_FILE ${ARG_CONFIG_DIR}/${PROJECT_NAME}ConfigVersionSystemName-${CMAKE_SYSTEM_NAME}.cmake)
     configure_file(${ARG_EXPORTED_SYSTEM_NAME_TEMPLATE} ${ARG_EXPORTED_SYSTEM_NAME_FILE} @ONLY)
     install(FILES ${ARG_EXPORTED_SYSTEM_NAME_FILE} DESTINATION ${ARG_INSTALL_DIR} COMPONENT Development)
 
