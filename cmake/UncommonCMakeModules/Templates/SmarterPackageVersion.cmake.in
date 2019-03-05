@@ -1,16 +1,6 @@
 # Source: SmarterPackageVersion.cmake.in Template
 # Generates @PROJECT_NAME@ConfigVersion.cmake through SmarterPackageVersionFile.cmake
 
-#Get all @PROJECT_NAME@_BUILD_TYPES.
-set(@PROJECT_NAME@_BUILD_TYPES)
-file(GLOB _BUILD_TYPE_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/ConfigVersion/${CMAKE_SYSTEM_NAME}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
-foreach(f ${_BUILD_TYPE_CONFIG_FILES})
-    include(${f})
-endforeach()
-unset(_BUILD_TYPE_CONFIG_FILES)
-
-#Get all @PROJECT_NAME@_PROVIDED_COMPONENTS
-include("${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_NAME}/@PROJECT_NAME@ConfigProvidedComponents.cmake")
 
 #Get all @PROJECT_NAME@_SYSTEM_NAMES
 set(@PROJECT_NAME@_SYSTEM_NAMES)
@@ -20,26 +10,40 @@ foreach(f ${_SYSTEM_NAME_CONFIG_FILES})
 endforeach()
 unset(_SYSTEM_NAME_CONFIG_FILES)
 
-string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
-string(TOLOWER "@ARG_BUILD_TYPE_COMPATIBILITY@" BUILD_TYPE_COMPATIBILITY)
-
 if(NOT ${CMAKE_SYSTEM_NAME} IN_LIST @PROJECT_NAME@_SYSTEM_NAMES)
     set(PACKAGE_VERSION "@PROJECT_VERSION@ Required System:${CMAKE_SYSTEM_NAME} Provided systems:[${@PROJECT_NAME@_SYSTEM_NAMES}]")
     set(PACKAGE_VERSION_UNSUITABLE TRUE)
-elseif(${BUILD_TYPE_COMPATIBILITY} STREQUAL exact AND NOT ${BUILD_TYPE} IN_LIST @PROJECT_NAME@_BUILD_TYPES)
-    set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Build:${BUILD_TYPE} Provided Builds:[${@PROJECT_NAME@_BUILD_TYPES}]")
-    set(PACKAGE_VERSION_UNSUITABLE TRUE)
-elseif(@PROJECT_NAME@_FIND_COMPONENTS)
-    #Check for required components
-    foreach(_comp IN LISTS @PROJECT_NAME@_FIND_COMPONENTS)
-        if(@PROJECT_NAME@_FIND_REQUIRED_${_comp})
-            if(NOT ${_comp} IN_LIST @PROJECT_NAME@_PROVIDED_COMPONENTS)
-                set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Component:${_comp} Provided Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
-                set(PACKAGE_VERSION_UNSUITABLE TRUE)
-                break()
-            endif()
-        endif()
+else()
+    #Get all @PROJECT_NAME@_BUILD_TYPES.
+    set(@PROJECT_NAME@_BUILD_TYPES)
+    file(GLOB _BUILD_TYPE_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/ConfigVersion/${CMAKE_SYSTEM_NAME}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
+    foreach(f ${_BUILD_TYPE_CONFIG_FILES})
+        include(${f})
     endforeach()
+    unset(_BUILD_TYPE_CONFIG_FILES)
+
+    #Get all @PROJECT_NAME@_PROVIDED_COMPONENTS
+    include("${CMAKE_CURRENT_LIST_DIR}/${CMAKE_SYSTEM_NAME}/@PROJECT_NAME@ConfigProvidedComponents.cmake")
+
+
+    string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
+    string(TOLOWER "@ARG_BUILD_TYPE_COMPATIBILITY@" BUILD_TYPE_COMPATIBILITY)
+
+    if(${BUILD_TYPE_COMPATIBILITY} STREQUAL exact AND NOT ${BUILD_TYPE} IN_LIST @PROJECT_NAME@_BUILD_TYPES)
+        set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Build:${BUILD_TYPE} Provided Builds:[${@PROJECT_NAME@_BUILD_TYPES}]")
+        set(PACKAGE_VERSION_UNSUITABLE TRUE)
+    elseif(@PROJECT_NAME@_FIND_COMPONENTS)
+        #Check for required components
+        foreach(_comp IN LISTS @PROJECT_NAME@_FIND_COMPONENTS)
+            if(@PROJECT_NAME@_FIND_REQUIRED_${_comp})
+                if(NOT ${_comp} IN_LIST @PROJECT_NAME@_PROVIDED_COMPONENTS)
+                    set(PACKAGE_VERSION "@PROJECT_VERSION@ Required Component:${_comp} Provided Components:[${@PROJECT_NAME@_PROVIDED_COMPONENTS}]")
+                    set(PACKAGE_VERSION_UNSUITABLE TRUE)
+                    break()
+                endif()
+            endif()
+        endforeach()
+    endif()
 endif()
 
 if(NOT PACKAGE_VERSION_UNSUITABLE)
