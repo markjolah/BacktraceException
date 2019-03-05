@@ -178,7 +178,9 @@ if(ARG_EXPORT_BUILD_TREE)
         configure_file(${module_path} ${ARG_CONFIG_DIR}/${module_name} COPYONLY)
     endforeach()
     #Make a ProjectTargets file for use in the build tree
-    export(EXPORT ${ARG_EXPORT_TARGETS_NAME} FILE ${ARG_CONFIG_DIR}/${ARG_EXPORT_TARGETS_NAME}.cmake NAMESPACE ${ARG_NAMESPACE}::)
+    export(EXPORT ${ARG_EXPORT_TARGETS_NAME}
+           FILE ${ARG_CONFIG_DIR}/${CMAKE_SYSTEM_NAME}/${ARG_EXPORT_TARGETS_NAME}.cmake #Match the ${CMAKE_SYSTEM_NAME} subdir used by install-tree variant
+           NAMESPACE ${ARG_NAMESPACE}::)
     #Add this project build tree to the CMake user package registry
     export(PACKAGE ${ARG_NAME})
 endif()

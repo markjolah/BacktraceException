@@ -3,18 +3,18 @@
 
 #Get all @PROJECT_NAME@_BUILD_TYPES.
 set(@PROJECT_NAME@_BUILD_TYPES)
-file(GLOB _BUILD_TYPE_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
+file(GLOB _BUILD_TYPE_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/ConfigVersion/${CMAKE_SYSTEM_NAME}/@PROJECT_NAME@ConfigVersionBuildType-*.cmake")
 foreach(f ${_BUILD_TYPE_CONFIG_FILES})
     include(${f})
 endforeach()
 unset(_BUILD_TYPE_CONFIG_FILES)
 
 #Get all @PROJECT_NAME@_PROVIDED_COMPONENTS
-include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigProvidedComponents.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/ConfigVersion/@PROJECT_NAME@ConfigProvidedComponents.cmake")
 
 #Get all @PROJECT_NAME@_SYSTEM_NAMES
 set(@PROJECT_NAME@_SYSTEM_NAMES)
-file(GLOB _SYSTEM_NAME_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@ConfigVersionSystemName-*.cmake")
+file(GLOB _SYSTEM_NAME_CONFIG_FILES "${CMAKE_CURRENT_LIST_DIR}/ConfigVersion/@PROJECT_NAME@ConfigVersionSystemName-*.cmake")
 foreach(f ${_SYSTEM_NAME_CONFIG_FILES})
     include(${f})
 endforeach()
