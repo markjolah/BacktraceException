@@ -23,7 +23,7 @@
 #  DISABLE_EXPORT_BUILD_TREE - Disable the export of the build tree, if it would have otherwise been enabled.
 
 # Single Argument Keywords
-#  NAME - [Default: ${PACKAGE_NAME}] The name of the export. The name a client will use use to import with: find_package(NAME).  
+#  NAME - [Default: ${PROJECT_NAME}] The name of the export. The name a client will use use to import with: find_package(NAME).
 #  NAMESPACE - [Default: $NAME}] The namespace in which to place  the export.
 #  EXPORT_TARGETS_NAME - [Default: ${NAME}Targets] The name of the target export (the one used with the install(TARGET EXPORT) keyword)
 #                         set to OFF to disable exporting Targets.cmake file.
