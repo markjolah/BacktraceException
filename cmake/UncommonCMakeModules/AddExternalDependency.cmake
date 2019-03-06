@@ -135,8 +135,7 @@ macro(add_external_dependency)
             message(FATAL_ERROR "[add_external_autotools_dependency] No URL provided.")
         endif()
         message(STATUS "[add_external_dependency] Initializing as ExternalProject URL:${_EXT_URL}")
-        message(STATUS "[add_external_dependency] ExtProjectBuildTypes:${${_EXT_NAME}_BUILD_TYPES}")
-        
+
         if(NOT _EXT_CMAKELISTS_TEMPLATE)
             find_file(_EXT_CMAKELISTS_TEMPLATE NAME External.CMakeLists.txt.in PATHS ${AddExternalDependency_include_path}/Templates NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)
             mark_as_advanced(_EXT_CMAKELISTS_TEMPLATE)

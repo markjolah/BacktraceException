@@ -12,9 +12,11 @@
 # aware RPATH and RUNPATH variables and their respective implications for library search order.
 #
 # Respects the following CMake variables:
-#  * CMAKE_SYSROOT -
+#  * CMAKE_SYSROOT
 #  * CMAKE_FIND_ROOT_PATH
 #  * CMAKE_STAGING_PREFIX
+#  * OPT_FIXUP_DEPENDENCIES_VERBOSE - On=Verbose output if
+#  * OPT_FIXUP_DEPENDENCIES_SILENT - On=Errors and warnings only
 #
 # Options:
 #   COPY_GCC_LIBS - [UNIX only]  [default: off] Copy libraries provided by GCC [i.e. libgcc_s libstdc++, etc.].  This implies
@@ -52,7 +54,9 @@ function(fixup_dependencies)
     cmake_parse_arguments(FIXUP "COPY_GCC_LIBS;COPY_GLIBC_LIBS;LINK_INSTALLED_LIBS"
                                 "COPY_DESTINATION;PARENT_LIB;INSTALL_SCRIPT_TEMPLATE;BUILD_SCRIPT_TEMPLATE;EXPORT_BUILD_TREE;EXPORT_INSTALL_TREE"
                                 "TARGETS;TARGET_DESTINATIONS;PROVIDED_LIB_DIRS;PROVIDED_LIBS;SEARCH_LIB_DIRS;SEARCH_LIB_DIR_SUFFIXES" ${ARGN})
-    set(msg_hdr "[fixup_dependencies:configure-phase]:")
+    if(NOT OPT_FIXUP_DEPENDENCIES_SILENT)
+        set(msg_hdr "[fixup_dependencies:configure-phase]:")
+    endif()
     if(UNIX AND NOT FIXUP_COPY_DESTINATION)
         set(FIXUP_COPY_DESTINATION "lib")  #Must be relative to INSTALL_PREFIX
     endif()
@@ -165,7 +169,6 @@ function(fixup_dependencies)
         list(APPEND FIXUP_DEFAULT_LIBRARY_SEARCH_SUFFIXS bin usr/bin lib usr/lib)
     endif()
 
-
     set(FIXUP_SCRIPT_OUTPUT_DIR ${CMAKE_BINARY_DIR}/FixupDependencies) #Directory where fixup-scripts will be written.
     foreach(FIXUP_TARGET IN LISTS FIXUP_TARGETS)
         if(NOT TARGET ${FIXUP_TARGET})
@@ -182,10 +185,12 @@ function(fixup_dependencies)
                 file(GENERATE OUTPUT ${FIXUP_INSTALL_SCRIPT} INPUT ${FIXUP_INSTALL_SCRIPT_GEN_TMP})
                 install(SCRIPT ${FIXUP_INSTALL_SCRIPT})
                 get_target_property(script ${FIXUP_TARGET} FIXUP_INSTALL_SCRIPT)
-                if(script)
-                    message(STATUS "${msg_hdr} Re-generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
-                else()
-                    message(STATUS "${msg_hdr} Generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                if(NOT OPT_FIXUP_DEPENDENCIES_SILENT)
+                    if(script)
+                        message(STATUS "${msg_hdr} Re-generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                    else()
+                        message(STATUS "${msg_hdr} Generated install-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                    endif()
                 endif()
                 set_target_properties(${FIXUP_TARGET} PROPERTIES FIXUP_INSTALL_SCRIPT ${FIXUP_INSTALL_SCRIPT}) #Mark as fixup-ready.
             endif()
@@ -214,10 +219,10 @@ function(fixup_dependencies)
                 configure_file(${FIXUP_BUILD_SCRIPT_TEMPLATE} ${FIXUP_BUILD_SCRIPT_GEN_TMP} @ONLY)
                 file(GENERATE OUTPUT ${FIXUP_BUILD_SCRIPT} INPUT ${FIXUP_BUILD_SCRIPT_GEN_TMP})
                 set(_build_target "FixupDependencies-${FIXUP_TARGET}")
-#                 get_property(_all_targets GLOBAL PROPERTY FIXUP_ALL_CUSTOM_TARGETS)
                 add_custom_command(TARGET ${FIXUP_TARGET} POST_BUILD COMMAND cmake ARGS -P ${FIXUP_BUILD_SCRIPT} COMMENT "FIXUP Build tree dependencies of target: ${FIXUP_TARGET}")
-#                 set_property(GLOBAL APPEND PROPERTY FIXUP_ALL_CUSTOM_TARGETS ${_build_target})
-                message(STATUS "${msg_hdr} Generated build-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                if(NOT OPT_FIXUP_DEPENDENCIES_SILENT)
+                    message(STATUS "${msg_hdr} Generated build-tree dependency fixup script for target: ${FIXUP_TARGET}")
+                endif()
             endif()
         endif()
     endforeach()
