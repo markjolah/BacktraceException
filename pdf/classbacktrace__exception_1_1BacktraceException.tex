@@ -30,15 +30,17 @@ Collaboration diagram for backtrace\+\_\+exception\+:\+:Backtrace\+Exception\+:\
 \subsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{classbacktrace__exception_1_1BacktraceException_acce2185f53042c593cdc55bb8f3ef289}{Backtrace\+Exception} (std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}{what})
+\hyperlink{classbacktrace__exception_1_1BacktraceException_aa58cdade30cd7c6d60536e1f8d154fe0}{Backtrace\+Exception} (std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a35a4e3e649e4cbdcac45e5c6e0c9a8ec}{message})
 \item 
-\hyperlink{classbacktrace__exception_1_1BacktraceException_ae12ee4db6c4d7ebbd1d1abf0a572642a}{Backtrace\+Exception} (std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_accccd52bdfdbb1ffca58a695dace84f2}{condition}, std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}{what})
+\hyperlink{classbacktrace__exception_1_1BacktraceException_a7487e7b51e59aaae9a5cf0c9e5dc2498}{Backtrace\+Exception} (std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_accccd52bdfdbb1ffca58a695dace84f2}{condition}, std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a35a4e3e649e4cbdcac45e5c6e0c9a8ec}{message})
 \begin{DoxyCompactList}\small\item\em Create a \hyperlink{classbacktrace__exception_1_1BacktraceException}{Backtrace\+Exception} with specified condition. \end{DoxyCompactList}\item 
 virtual const char $\ast$ \hyperlink{classbacktrace__exception_1_1BacktraceException_accccd52bdfdbb1ffca58a695dace84f2}{condition} () const noexcept
 \item 
-const char $\ast$ \hyperlink{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}{what} () const noexceptoverride
+virtual const char $\ast$ \hyperlink{classbacktrace__exception_1_1BacktraceException_a35a4e3e649e4cbdcac45e5c6e0c9a8ec}{message} () const noexcept
 \item 
 virtual const char $\ast$ \hyperlink{classbacktrace__exception_1_1BacktraceException_a7454505fabaa8d6ef8396049f7d4e775}{backtrace} () const noexcept
+\item 
+const char $\ast$ \hyperlink{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}{what} () const noexceptoverride
 \end{DoxyCompactItemize}
 \subsubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -50,7 +52,7 @@ static std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_
 \item 
 std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a3e43ec7625a2390fdfad8fffd4ab126c}{\+\_\+condition}
 \item 
-std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_ad935d6512b6b4a6c4ea79843391b5a1e}{\+\_\+what}
+std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a34f27c079bfdf70ceb66875f3bb7d599}{\+\_\+message}
 \item 
 std\+::string \hyperlink{classbacktrace__exception_1_1BacktraceException_a86f9233184b7611b08faaf19b9490f43}{\+\_\+backtrace}
 \end{DoxyCompactItemize}
@@ -68,32 +70,32 @@ Definition at line 28 of file Backtrace\+Exception.\+h.
 \subsubsection{Constructor \& Destructor Documentation}
 \index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!Backtrace\+Exception@{Backtrace\+Exception}}
 \index{Backtrace\+Exception@{Backtrace\+Exception}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
-\paragraph[{\texorpdfstring{Backtrace\+Exception(std\+::string what)}{BacktraceException(std::string what)}}]{\setlength{\rightskip}{0pt plus 5cm}backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+Backtrace\+Exception (
+\paragraph[{\texorpdfstring{Backtrace\+Exception(std\+::string message)}{BacktraceException(std::string message)}}]{\setlength{\rightskip}{0pt plus 5cm}backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+Backtrace\+Exception (
 \begin{DoxyParamCaption}
-\item[{std\+::string}]{what}
+\item[{std\+::string}]{message}
 \end{DoxyParamCaption}
-)}\hypertarget{classbacktrace__exception_1_1BacktraceException_acce2185f53042c593cdc55bb8f3ef289}{}\label{classbacktrace__exception_1_1BacktraceException_acce2185f53042c593cdc55bb8f3ef289}
+)}\hypertarget{classbacktrace__exception_1_1BacktraceException_aa58cdade30cd7c6d60536e1f8d154fe0}{}\label{classbacktrace__exception_1_1BacktraceException_aa58cdade30cd7c6d60536e1f8d154fe0}
 
 
 Definition at line 195 of file Backtrace\+Exception.\+cpp.
 
 \index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!Backtrace\+Exception@{Backtrace\+Exception}}
 \index{Backtrace\+Exception@{Backtrace\+Exception}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
-\paragraph[{\texorpdfstring{Backtrace\+Exception(std\+::string condition, std\+::string what)}{BacktraceException(std::string condition, std::string what)}}]{\setlength{\rightskip}{0pt plus 5cm}backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+Backtrace\+Exception (
+\paragraph[{\texorpdfstring{Backtrace\+Exception(std\+::string condition, std\+::string message)}{BacktraceException(std::string condition, std::string message)}}]{\setlength{\rightskip}{0pt plus 5cm}backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+Backtrace\+Exception (
 \begin{DoxyParamCaption}
 \item[{std\+::string}]{condition, }
-\item[{std\+::string}]{what}
+\item[{std\+::string}]{message}
 \end{DoxyParamCaption}
-)}\hypertarget{classbacktrace__exception_1_1BacktraceException_ae12ee4db6c4d7ebbd1d1abf0a572642a}{}\label{classbacktrace__exception_1_1BacktraceException_ae12ee4db6c4d7ebbd1d1abf0a572642a}
+)}\hypertarget{classbacktrace__exception_1_1BacktraceException_a7487e7b51e59aaae9a5cf0c9e5dc2498}{}\label{classbacktrace__exception_1_1BacktraceException_a7487e7b51e59aaae9a5cf0c9e5dc2498}
 
 
 Create a \hyperlink{classbacktrace__exception_1_1BacktraceException}{Backtrace\+Exception} with specified condition. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em condition} & A string further classifying the error condition \\
+{\em condition} & A string classifying the error condition \\
 \hline
-{\em what} & A general string describing the error condition. \\
+{\em message} & A message string describing the error condition. \\
 \hline
 \end{DoxyParams}
 
@@ -112,7 +114,7 @@ Definition at line 199 of file Backtrace\+Exception.\+cpp.
 ) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a7454505fabaa8d6ef8396049f7d4e775}{}\label{classbacktrace__exception_1_1BacktraceException_a7454505fabaa8d6ef8396049f7d4e775}
 
 
-Definition at line 58 of file Backtrace\+Exception.\+h.
+Definition at line 59 of file Backtrace\+Exception.\+h.
 
 \index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!condition@{condition}}
 \index{condition@{condition}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
@@ -123,7 +125,18 @@ Definition at line 58 of file Backtrace\+Exception.\+h.
 ) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_accccd52bdfdbb1ffca58a695dace84f2}{}\label{classbacktrace__exception_1_1BacktraceException_accccd52bdfdbb1ffca58a695dace84f2}
 
 
-Definition at line 50 of file Backtrace\+Exception.\+h.
+Definition at line 51 of file Backtrace\+Exception.\+h.
+
+\index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!message@{message}}
+\index{message@{message}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
+\paragraph[{\texorpdfstring{message() const noexcept}{message() const noexcept}}]{\setlength{\rightskip}{0pt plus 5cm}const char $\ast$ backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::message (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a35a4e3e649e4cbdcac45e5c6e0c9a8ec}{}\label{classbacktrace__exception_1_1BacktraceException_a35a4e3e649e4cbdcac45e5c6e0c9a8ec}
+
+
+Definition at line 55 of file Backtrace\+Exception.\+h.
 
 \index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!print\+\_\+backtrace@{print\+\_\+backtrace}}
 \index{print\+\_\+backtrace@{print\+\_\+backtrace}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
@@ -134,7 +147,7 @@ Definition at line 50 of file Backtrace\+Exception.\+h.
 )\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a2292947810a}{}\label{classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a2292947810a}
 
 
-Definition at line 203 of file Backtrace\+Exception.\+cpp.
+Definition at line 211 of file Backtrace\+Exception.\+cpp.
 
 
 
@@ -157,10 +170,25 @@ Here is the call graph for this function\+:\nopagebreak
 \begin{DoxyParamCaption}
 {}
 \end{DoxyParamCaption}
-) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [noexcept]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}{}\label{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}
+) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [noexcept]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}{}\label{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f}
 
 
-Definition at line 54 of file Backtrace\+Exception.\+h.
+Definition at line 203 of file Backtrace\+Exception.\+cpp.
+
+
+
+References \+\_\+backtrace, \+\_\+condition, \+\_\+message, and backtrace\+\_\+exception\+::backtraces\+\_\+enabled().
+
+
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=346pt]{classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef048f_cgraph}
+\end{center}
+\end{figure}
+
 
 
 
@@ -170,21 +198,33 @@ Definition at line 54 of file Backtrace\+Exception.\+h.
 \paragraph[{\texorpdfstring{\+\_\+backtrace}{_backtrace}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+\_\+backtrace\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a86f9233184b7611b08faaf19b9490f43}{}\label{classbacktrace__exception_1_1BacktraceException_a86f9233184b7611b08faaf19b9490f43}
 
 
-Definition at line 46 of file Backtrace\+Exception.\+h.
+Definition at line 47 of file Backtrace\+Exception.\+h.
+
+
+
+Referenced by what().
 
 \index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!\+\_\+condition@{\+\_\+condition}}
 \index{\+\_\+condition@{\+\_\+condition}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
 \paragraph[{\texorpdfstring{\+\_\+condition}{_condition}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+\_\+condition\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a3e43ec7625a2390fdfad8fffd4ab126c}{}\label{classbacktrace__exception_1_1BacktraceException_a3e43ec7625a2390fdfad8fffd4ab126c}
 
 
-Definition at line 44 of file Backtrace\+Exception.\+h.
-
-\index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!\+\_\+what@{\+\_\+what}}
-\index{\+\_\+what@{\+\_\+what}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
-\paragraph[{\texorpdfstring{\+\_\+what}{_what}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+\_\+what\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_ad935d6512b6b4a6c4ea79843391b5a1e}{}\label{classbacktrace__exception_1_1BacktraceException_ad935d6512b6b4a6c4ea79843391b5a1e}
-
-
 Definition at line 45 of file Backtrace\+Exception.\+h.
+
+
+
+Referenced by what().
+
+\index{backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}!\+\_\+message@{\+\_\+message}}
+\index{\+\_\+message@{\+\_\+message}!backtrace\+\_\+exception\+::\+Backtrace\+Exception@{backtrace\+\_\+exception\+::\+Backtrace\+Exception}}
+\paragraph[{\texorpdfstring{\+\_\+message}{_message}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string backtrace\+\_\+exception\+::\+Backtrace\+Exception\+::\+\_\+message\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classbacktrace__exception_1_1BacktraceException_a34f27c079bfdf70ceb66875f3bb7d599}{}\label{classbacktrace__exception_1_1BacktraceException_a34f27c079bfdf70ceb66875f3bb7d599}
+
+
+Definition at line 46 of file Backtrace\+Exception.\+h.
+
+
+
+Referenced by what().
 
 
 

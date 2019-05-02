@@ -2,23 +2,23 @@
 
   \item {\+\_\+backtrace}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{9}
+		\hyperpage{10}
   \item {\+\_\+condition}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{9}
-  \item {\+\_\+what}
+		\hyperpage{10}
+  \item {\+\_\+message}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{9}
+		\hyperpage{10}
 
   \indexspace
 
   \item {backtrace}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{8}
+		\hyperpage{9}
   \item {backtrace\+\_\+exception}, \hyperpage{5}
     \subitem {Backtrace\+Method}, \hyperpage{5}
-    \subitem {backtraces\+\_\+enabled}, \hyperpage{5}
-    \subitem {disable\+\_\+backtraces}, \hyperpage{5}
+    \subitem {backtraces\+\_\+enabled}, \hyperpage{6}
+    \subitem {disable\+\_\+backtraces}, \hyperpage{6}
     \subitem {enable\+\_\+backtraces}, \hyperpage{6}
     \subitem {gdb}, \hyperpage{5}
     \subitem {get\+\_\+backtrace\+\_\+method}, \hyperpage{6}
@@ -26,35 +26,36 @@
     \subitem {set\+\_\+backtrace\+\_\+method}, \hyperpage{6}
     \subitem {stackwalk}, \hyperpage{5}
   \item {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{6}
-    \subitem {\+\_\+backtrace}, \hyperpage{9}
-    \subitem {\+\_\+condition}, \hyperpage{9}
-    \subitem {\+\_\+what}, \hyperpage{9}
-    \subitem {backtrace}, \hyperpage{8}
+		\hyperpage{7}
+    \subitem {\+\_\+backtrace}, \hyperpage{10}
+    \subitem {\+\_\+condition}, \hyperpage{10}
+    \subitem {\+\_\+message}, \hyperpage{10}
+    \subitem {backtrace}, \hyperpage{9}
     \subitem {Backtrace\+Exception}, \hyperpage{8}
-    \subitem {condition}, \hyperpage{8}
-    \subitem {print\+\_\+backtrace}, \hyperpage{8}
-    \subitem {what}, \hyperpage{8}
+    \subitem {condition}, \hyperpage{9}
+    \subitem {message}, \hyperpage{9}
+    \subitem {print\+\_\+backtrace}, \hyperpage{9}
+    \subitem {what}, \hyperpage{9}
   \item {Backtrace\+Exception}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
 		\hyperpage{8}
-  \item {Backtrace\+Exception.\+cpp}, \hyperpage{9}
-  \item {Backtrace\+Exception.\+h}, \hyperpage{10}
+  \item {Backtrace\+Exception.\+cpp}, \hyperpage{10}
+  \item {Backtrace\+Exception.\+h}, \hyperpage{11}
   \item {Backtrace\+Method}
     \subitem {backtrace\+\_\+exception}, \hyperpage{5}
   \item {backtraces\+\_\+enabled}
-    \subitem {backtrace\+\_\+exception}, \hyperpage{5}
+    \subitem {backtrace\+\_\+exception}, \hyperpage{6}
 
   \indexspace
 
   \item {condition}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{8}
+		\hyperpage{9}
 
   \indexspace
 
   \item {disable\+\_\+backtraces}
-    \subitem {backtrace\+\_\+exception}, \hyperpage{5}
+    \subitem {backtrace\+\_\+exception}, \hyperpage{6}
 
   \indexspace
 
@@ -72,13 +73,19 @@
 
   \indexspace
 
-  \item {print\+\_\+backtrace}
+  \item {message}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{8}
+		\hyperpage{9}
 
   \indexspace
 
-  \item {R\+E\+A\+D\+M\+E.\+md}, \hyperpage{12}
+  \item {print\+\_\+backtrace}
+    \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
+		\hyperpage{9}
+
+  \indexspace
+
+  \item {R\+E\+A\+D\+M\+E.\+md}, \hyperpage{13}
 
   \indexspace
 
@@ -91,6 +98,6 @@
 
   \item {what}
     \subitem {backtrace\+\_\+exception\+::\+Backtrace\+Exception}, 
-		\hyperpage{8}
+		\hyperpage{9}
 
 \end{theindex}

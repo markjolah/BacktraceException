@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['print_5fbacktrace',['print_backtrace',['../classbacktrace__exception_1_1BacktraceException.html#aef24b0571ea422191026a2292947810a',1,'backtrace_exception::BacktraceException']]]
+  ['message',['message',['../classbacktrace__exception_1_1BacktraceException.html#a35a4e3e649e4cbdcac45e5c6e0c9a8ec',1,'backtrace_exception::BacktraceException']]]
 ];

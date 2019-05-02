@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.3.8)  8 MAR 2019 03:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.5.2)  2 MAY 2019 17:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1172,8 +1172,14 @@ LaTeX Font Info:    Font shape `T1/phv/b/it' in size <10> not available
 LaTeX Font Info:    Font shape `T1/phv/b/sl' will be
 (Font)              scaled to size 8.99994pt on input line 40.
 
+Underfull \hbox (badness 1205) in paragraph at lines 66--67
+[]\T1/phv/m/n/10 Referenced by backtrace[]_[]exception[]::[]Backtrace[]Exceptio
+n[]::print[]_[]backtrace(), and backtrace[]_[]exception[]::[]Backtrace[]
+ []
+
+
 <namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.pdf, i
-d=217, 323.2075pt x 119.44624pt>
+d=217, 347.2975pt x 166.6225pt>
 File: namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.p
 df Graphic file (type pdf)
 
@@ -1181,9 +1187,8 @@ df Graphic file (type pdf)
 f>
 Package pdftex.def Info: namespacebacktrace__exception_a68f7b8565eefc4f9b862c25
 ec47ce2b7_icgraph.pdf used on input line 74.
-(pdftex.def)             Requested size: 322.0pt x 119.00668pt.
-[5 <./namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.p
-df>]
+(pdftex.def)             Requested size: 346.0pt x 166.0068pt.
+[5]
 LaTeX Font Info:    Font shape `T1/phv/bc/it' in size <10> not available
 (Font)              Font shape `T1/phv/bc/sl' tried instead on input line 118.
 LaTeX Font Info:    Font shape `T1/phv/bc/sl' will be
@@ -1195,7 +1200,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 10--11
  []
 
 
-<classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf, id=243, 1
+<classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf, id=233, 1
 82.6825pt x 164.615pt>
 File: classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf Graph
 ic file (type pdf)
@@ -1203,8 +1208,9 @@ ic file (type pdf)
 Package pdftex.def Info: classbacktrace__exception_1_1BacktraceException__inher
 it__graph.pdf used on input line 18.
 (pdftex.def)             Requested size: 182.0pt x 164.00673pt.
-
-<classbacktrace__exception_1_1BacktraceException__coll__graph.pdf, id=244, 244.
+[6 <./namespacebacktrace__exception_a68f7b8565eefc4f9b862c25ec47ce2b7_icgraph.p
+df>]
+<classbacktrace__exception_1_1BacktraceException__coll__graph.pdf, id=254, 244.
 915pt x 260.975pt>
 File: classbacktrace__exception_1_1BacktraceException__coll__graph.pdf Graphic 
 file (type pdf)
@@ -1212,27 +1218,49 @@ file (type pdf)
 Package pdftex.def Info: classbacktrace__exception_1_1BacktraceException__coll_
 _graph.pdf used on input line 27.
 (pdftex.def)             Requested size: 244.0pt x 260.0067pt.
-[6 <./classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf>] [7 
-<./classbacktrace__exception_1_1BacktraceException__coll__graph.pdf>]
+[7 <./classbacktrace__exception_1_1BacktraceException__inherit__graph.pdf> <./c
+lassbacktrace__exception_1_1BacktraceException__coll__graph.pdf
+
+pdfTeX warning: pdflatex (file ./classbacktrace__exception_1_1BacktraceExceptio
+n__coll__graph.pdf): PDF inclusion: multiple pdfs with page group included in a
+ single page
+>] [8]
 <classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a22929478
-10a_cgraph.pdf, id=302, 323.2075pt x 119.44624pt>
+10a_cgraph.pdf, id=310, 323.2075pt x 119.44624pt>
 File: classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a229
 2947810a_cgraph.pdf Graphic file (type pdf)
 
 <use classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a2292
 947810a_cgraph.pdf>
 Package pdftex.def Info: classbacktrace__exception_1_1BacktraceException_aef24b
-0571ea422191026a2292947810a_cgraph.pdf used on input line 149.
+0571ea422191026a2292947810a_cgraph.pdf used on input line 162.
 (pdftex.def)             Requested size: 322.0pt x 119.00668pt.
-[8 <./classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a229
-2947810a_cgraph.pdf>]) (./BacktraceException_8cpp.tex <BacktraceException_8cpp_
-_incl.pdf, id=322, 554.07pt x 219.82124pt>
+
+<classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6aef0
+48f_cgraph.pdf, id=311, 347.2975pt x 109.40875pt>
+File: classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f
+6aef048f_cgraph.pdf Graphic file (type pdf)
+
+<use classbacktrace__exception_1_1BacktraceException_a865bf08728344df9ed42bb5f6
+aef048f_cgraph.pdf>
+Package pdftex.def Info: classbacktrace__exception_1_1BacktraceException_a865bf
+08728344df9ed42bb5f6aef048f_cgraph.pdf used on input line 188.
+(pdftex.def)             Requested size: 346.0pt x 109.00446pt.
+[9 <./classbacktrace__exception_1_1BacktraceException_aef24b0571ea422191026a229
+2947810a_cgraph.pdf> <./classbacktrace__exception_1_1BacktraceException_a865bf0
+8728344df9ed42bb5f6aef048f_cgraph.pdf
+
+pdfTeX warning: pdflatex (file ./classbacktrace__exception_1_1BacktraceExceptio
+n_a865bf08728344df9ed42bb5f6aef048f_cgraph.pdf): PDF inclusion: multiple pdfs w
+ith page group included in a single page
+>]) (./BacktraceException_8cpp.tex <BacktraceException_8cpp__incl.pdf, id=336, 
+554.07pt x 219.82124pt>
 File: BacktraceException_8cpp__incl.pdf Graphic file (type pdf)
 <use BacktraceException_8cpp__incl.pdf>
 Package pdftex.def Info: BacktraceException_8cpp__incl.pdf used on input line 1
 9.
 (pdftex.def)             Requested size: 350.0pt x 138.85707pt.
-[9 <./BacktraceException_8cpp__incl.pdf>]
+[10 <./BacktraceException_8cpp__incl.pdf>]
 Underfull \hbox (badness 10000) detected at line 45
 [][][]
  []
@@ -1247,20 +1275,20 @@ Underfull \hbox (badness 10000) detected at line 51
 [][][]
  []
 
-) (./BacktraceException_8h.tex <BacktraceException_8h__incl.pdf, id=344, 194.72
+) (./BacktraceException_8h.tex <BacktraceException_8h__incl.pdf, id=357, 194.72
 75pt x 154.5775pt>
 File: BacktraceException_8h__incl.pdf Graphic file (type pdf)
 <use BacktraceException_8h__incl.pdf>
 Package pdftex.def Info: BacktraceException_8h__incl.pdf used on input line 14.
 
 (pdftex.def)             Requested size: 194.0pt x 154.0063pt.
-<BacktraceException_8h__dep__incl.pdf, id=345, 195.73125pt x 154.5775pt>
+<BacktraceException_8h__dep__incl.pdf, id=358, 195.73125pt x 154.5775pt>
 File: BacktraceException_8h__dep__incl.pdf Graphic file (type pdf)
 <use BacktraceException_8h__dep__incl.pdf>
 Package pdftex.def Info: BacktraceException_8h__dep__incl.pdf used on input lin
 e 21.
 (pdftex.def)             Requested size: 195.0pt x 154.00865pt.
-[10 <./BacktraceException_8h__incl.pdf>]
+[11 <./BacktraceException_8h__incl.pdf>]
 Underfull \hbox (badness 2818) in paragraph at lines 37--41
 []\T1/phv/m/n/10 enum [][]backtrace[]_[]exception[]::[]Backtrace[]Method[][] { 
 [][]backtrace[]_[]exception[]::[]Backtrace[]Method[]::glibc[][], [][]backtrace[
@@ -1282,9 +1310,9 @@ Underfull \hbox (badness 10000) detected at line 66
 [][][]
  []
 
-) (./README_8md.tex) [11 <./BacktraceException_8h__dep__incl.pdf>] [12] (./refm
-an.ind [13
+) (./README_8md.tex) [12 <./BacktraceException_8h__dep__incl.pdf>] [13] [14
 
+] (./refman.ind [15
 
 ])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 163.
@@ -1293,20 +1321,20 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 163.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 163.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 163.
 Package rerunfilecheck Info: File `refman.out' has not changed.
-(rerunfilecheck)             Checksum: 0A578FD652948D2E25170287F2D26B25;4994.
+(rerunfilecheck)             Checksum: A886EB108FAE1CFA1F96B36EC5E48EDB;4994.
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 163.
  ) 
 Here is how much of TeX's memory you used:
- 14932 strings out of 494953
- 215051 string characters out of 6180978
- 308277 words of memory out of 5000000
- 17836 multiletter control sequences out of 15000+600000
+ 14943 strings out of 494953
+ 215742 string characters out of 6180978
+ 307389 words of memory out of 5000000
+ 17841 multiletter control sequences out of 15000+600000
  55707 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 53i,15n,92p,843b,565s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,16n,92p,843b,565s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
@@ -1319,10 +1347,10 @@ exlive/texmf-dist/fonts/type1/urw/helvetic/uhvbo8a.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/urw/helvetic/uhvbo8ac.pfb></usr/share/texlive/texmf-dist/fon
 ts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /helvetic/uhvro8a.pfb>
-Output written on refman.pdf (14 pages, 177102 bytes).
+Output written on refman.pdf (16 pages, 181077 bytes).
 PDF statistics:
- 501 PDF objects out of 1000 (max. 8388607)
- 454 compressed objects within 5 object streams
- 108 named destinations out of 1000 (max. 500000)
- 244 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 522 PDF objects out of 1000 (max. 8388607)
+ 471 compressed objects within 5 object streams
+ 113 named destinations out of 1000 (max. 500000)
+ 249 words of extra memory for PDF output out of 10000 (max. 10000000)
 

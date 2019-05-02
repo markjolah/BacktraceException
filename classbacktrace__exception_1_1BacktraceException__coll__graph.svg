@@ -41,8 +41,8 @@
 <path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M109.124,-86.5907C98.7678,-69.7142 83.0702,-44.133 73.5989,-28.6983"/>
 <polygon fill="#9a32cd" stroke="#9a32cd" points="106.303,-88.6862 114.517,-95.3789 112.27,-85.0251 106.303,-88.6862"/>
 <text text-anchor="middle" x="124.5" y="-69.8" font-family="Helvetica,sans-Serif" font-size="9.00"> _condition</text>
-<text text-anchor="middle" x="124.5" y="-59.8" font-family="Helvetica,sans-Serif" font-size="9.00">_backtrace</text>
-<text text-anchor="middle" x="124.5" y="-49.8" font-family="Helvetica,sans-Serif" font-size="9.00">_what</text>
+<text text-anchor="middle" x="124.5" y="-59.8" font-family="Helvetica,sans-Serif" font-size="9.00">_message</text>
+<text text-anchor="middle" x="124.5" y="-49.8" font-family="Helvetica,sans-Serif" font-size="9.00">_backtrace</text>
 </g>
 <!-- Node4 -->
 <g id="node4" class="node"><title>Node4</title>
