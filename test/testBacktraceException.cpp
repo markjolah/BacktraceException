@@ -26,7 +26,7 @@ int tryit()
     try{
         foo();
     } catch(BacktraceException &e) {
-        std::cout<<"Caught BacktraceException:\n\tCondition:"<<e.condition()<<"\n\twhat:"<<e.what()<<"\n\tbacktrace:\n"<<e.backtrace();
+        std::cout<<"Caught BacktraceException:\n\tCondition:"<<e.condition()<<"\n\tmessage:"<<e.message()<<"\n\tbacktrace:\n"<<e.backtrace();
         return 0;
     }
     return -1;

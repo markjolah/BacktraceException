@@ -1,6 +1,6 @@
 /** @file BacktraceException.cpp
  * @author Mark J. Olah (mjo\@cs.unm DOT edu)
- * @date 2017 - 2018
+ * @date 2017 - 2019
  * @copyright Licensed under the Apache License, Version 2.0.  See LICENSE file.
  * @brief BacktraceException class member function definitions
  *
@@ -192,13 +192,21 @@ namespace linux_debug {
 
 #endif
 
-BacktraceException::BacktraceException(std::string what) :
-   _condition("unspecified"), _what(what), _backtrace(print_backtrace())
+BacktraceException::BacktraceException(std::string message) :
+   _condition("unspecified"), _message(message), _backtrace(print_backtrace())
 { }
 
-BacktraceException::BacktraceException(std::string condition, std::string what) :
-   _condition(condition), _what(what), _backtrace(print_backtrace())
+BacktraceException::BacktraceException(std::string condition, std::string message) :
+   _condition(condition), _message(message), _backtrace(print_backtrace())
 { }
+
+const char* BacktraceException::what() const noexcept
+{
+    std::ostringstream w;
+    w<<"BacktraceException: Condition:"<<_condition<<" Message:"<<_message;
+    if(backtraces_enabled()) w<<"\n>>> Backtrace:\n"<<_backtrace<<"\n";
+    return w.str().c_str();
+}
 
 std::string BacktraceException::print_backtrace()
 {
